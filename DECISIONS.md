@@ -65,7 +65,7 @@ File: `contexts.html`
 | Nov 17 | An outside second person cannot open the People Context yet. Only the person on Neuma opens it. | Jared's answer: not yet. | Later | Critical |
 | Nov 17 | A shared team meeting feeds many People Contexts. Does an item from it show in every pair that was in the room, or only when it involves both people? | Not recorded | Superseded | Important |
 | Nov 17 | An item from a shared meeting shows in a People Context only when it involves both people. | Otherwise every pair in the room gets the same team items. | Decided | Critical |
-| Nov 17 | The People Context page leads with a two-way ledger on Summary: You owe them, They owe you, Open between you. The Issues, Actions and Decisions tabs stay as on other Contexts. | Jared picked layout A of three. A relationship has two directions, and one Actions list hides that. | Decided | Important |
+| Nov 17 | The People Context page leads with a two-way ledger on Summary: You owe them, They owe you, Open between you. The Issues, Actions and Decisions tabs stay as on other Contexts. | Jared picked layout A of three. A relationship has two directions, and one Actions list hides that. | Superseded | Important |
 | Nov 17 | Meetings and emails on a People Context get their own display, not a plain Sources tab. | Jared's call. | Decided | Important |
 | Nov 17 | How are meetings and emails displayed on a People Context? Sketched: by topic, as a mixed timeline, or by medium. | Not recorded | Superseded | Important |
 | Nov 17 | A People Context has an Ask button. It asks an AI version of the other person, which answers from the context that person has. | Jared's call. | Decided | Critical |
@@ -77,3 +77,4 @@ File: `contexts.html`
 | Nov 17 | The meeting transcript can be read inside Neuma on the Meetings tab. | It is in Jared's mockup. V2 had no transcript reader. | Decided | Critical |
 | Nov 17 | Emails have their own tab, separate from Meetings: threads on the left with Waiting on you, Waiting on them or Done, and the thread on the right with what Neuma found above the emails. | Claude's design, at Jared's request. Not yet reviewed. | Option | Important |
 | Nov 17 | What does the Follow-up agent on a meeting do? | Not recorded | Open | Medium |
+| Nov 17 | People Context actions are one list, not two. Each row shows its owner with an initials avatar and name. Rows use the Screen 3 Actions row. Open between you stays its own card. | Jared's call. Replaces the You owe and They owe split. | Decided | Important |
