@@ -23,6 +23,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 17 | `person.html` · 13 People Context | CHANGED | You owe Sarah and Sarah owes you are stacked, not side by side. Both use the Actions tab rows from Screen 3: tick, title, one line of detail, date, priority badge, source. Each card has See all and "done hidden · Show". The Actions tab uses the same two cards. Styles now come from Screen 3. | Jared asked for the same UI as Actions. |
 | Nov 17 | `person.html` · 13 People Context | CHANGED | The two action cards merged into one Actions card on Summary and on the Actions tab. Each row leads its meta line with the owner: initials avatar and name. | Jared asked for a single table with owner initials. |
 | Nov 17 | `person.html` · 13 People Context | CHANGED | Summary shows each item once. Actions skips the two already in Needs attention and says "2 more in Needs attention". Open between you is gone. New Recent decisions card: last three, dated, See all. Might be useful rows open their source and have a hover dismiss with Undo. | Review scored the page 7/10 for repeats and dead ends. |
+| Nov 18 | `person.html` · 13 People Context | CHANGED | Recent decisions removed from Summary. Needs attention holds 5, shows 3, with Show 2 more. Emails tab removed. Issues, Actions and Decisions tabs use the Screen 3 cards: sparkle header with search, sort and filter; severity dots and basis on issues; date blocks on decisions; resolved and done hidden behind Show. Tab counts removed. | Jared's review of the tabs. |
 
 ## Not product
 

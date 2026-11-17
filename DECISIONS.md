@@ -75,9 +75,14 @@ File: `contexts.html`
 | Nov 17 | Each person has their own Might be useful list on a People Context. It draws on other Contexts that person can open, and only that person sees it. | Jared's call. Each side brings context the other may not have, without leaking it. | Decided | Critical |
 | Nov 17 | Meetings have their own tab on a People Context: a list with a topic filter on the left, and the meeting on the right with Notes and actions, Transcript and a Follow-up agent button. | Jared's mockup. | Decided | Important |
 | Nov 17 | The meeting transcript can be read inside Neuma on the Meetings tab. | It is in Jared's mockup. V2 had no transcript reader. | Decided | Critical |
-| Nov 17 | Emails have their own tab, separate from Meetings: threads on the left with Waiting on you, Waiting on them or Done, and the thread on the right with what Neuma found above the emails. | Claude's design, at Jared's request. Not yet reviewed. | Option | Important |
+| Nov 17 | Emails have their own tab, separate from Meetings: threads on the left with Waiting on you, Waiting on them or Done, and the thread on the right with what Neuma found above the emails. | Claude's design, at Jared's request. Not yet reviewed. | Superseded | Important |
 | Nov 17 | What does the Follow-up agent on a meeting do? | Not recorded | Open | Medium |
 | Nov 17 | People Context actions are one list, not two. Each row shows its owner with an initials avatar and name. Rows use the Screen 3 Actions row. | Jared's call. Replaces the You owe and They owe split. | Decided | Important |
 | Nov 17 | People Context Summary shows each item once. Actions already in Needs attention are left out of the Actions card, which says how many. Open between you is removed; Issues covers it. | Three of nine Summary rows were repeats. | Decided | Important |
-| Nov 17 | People Context Summary has a Recent decisions card: the last three, dated, with See all. | The record of what the two people agreed should not be a tab away. | Decided | Medium |
+| Nov 17 | People Context Summary has a Recent decisions card: the last three, dated, with See all. | The record of what the two people agreed should not be a tab away. | Superseded | Medium |
 | Nov 17 | Each Might be useful item opens its source Context and can be dismissed, with Undo. | It was a dead end. | Decided | Medium |
+| Nov 18 | People Context Summary has no decisions card. Decisions live on the Decisions tab. | Jared's call. A pre-meeting page does not need the record. | Decided | Medium |
+| Nov 18 | Needs attention on a People Context holds up to 5 items. 3 show, the rest behind Show 2 more. | Same as Screen 3. Five is what a 30-minute 1:1 can cover. | Decided | Medium |
+| Nov 18 | A People Context has no Emails tab. Emails feed issues, actions and decisions, and show as their source. | Jared: the Emails tab is not useful. The Meetings tab is. | Decided | Important |
+| Nov 18 | The Issues, Actions and Decisions tabs on a People Context use the Screen 3 cards and rows. Tabs show no counts. | Consistency with Screen 3. | Decided | Low |
+| Nov 18 | What goes in the right column of the Issues, Actions and Decisions tabs on a People Context? On Screen 3 it holds Patterns, which here became Needs attention. It is empty for now. | Not recorded | Open | Low |
