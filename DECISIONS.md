@@ -67,6 +67,7 @@ File: `README.md, index.html`
 | Nov 12 | V2 includes Onboarding, Contexts, Context, Roll up, AI Tools MCP, Integrations and Settings. Meeting Brief and Slack are not in V2. | Not recorded | Decided | Critical |
 | Nov 12 | The index groups screens in four bands, split by a line: Included V2, Excluded, Prototype, Graveyard. | Not recorded | Decided | Low |
 | Nov 12 | The mockups have a Scope switch in the top bar: V2 or Everything. Deferred features carry `data-later`. V2 hides them and is the default. Everything shows them unmarked, as they will look. Mockup only, never ships. | One file per screen stays the source of truth. Dev builds from V2 view and still sees what is coming, so the build leaves room for it. | Decided | Important |
+| Nov 17 | Neuma V3 is a fork of the Contexts mockups, kept as a git repo at `~/git/neuma-v3` with GitHub as the remote. Git replaces `archive/`, `versions/` and `snapshot.py`. Older history stays in the Contexts folder on Google Drive. | Jared's call. Numbered copies grew to over 400 MB. The repo sits outside Google Drive because Drive sync can corrupt a git repo. | Decided | Medium |
 
 ## Contexts directory (Screen 2)
 

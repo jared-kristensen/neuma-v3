@@ -1,4 +1,4 @@
-# Neuma UI · Contexts
+# Neuma UI · V3
 
 Design mockups for Neuma. Open `index.html` to see every screen.
 
@@ -33,7 +33,7 @@ Shared files, used by every screen:
 
     python3 tools/build_integrations.py
 
-It saves a numbered backup first, then writes `integrations.html`.
+It writes `integrations.html`. Commit first.
 
 `decisions.html` is built too. It reads `DECISIONS.md`. Open questions carried over from the two frozen project docs are listed inside the build file. Run:
 
@@ -43,7 +43,7 @@ It saves a numbered backup first, then writes `integrations.html`.
 
 The brand system is `references/Neuma Brand Identity.html`. Open it in a browser. The live version is in Claude Design: https://claude.ai/design/p/f73210ec-b610-4885-b33f-4002d577904b?file=Neuma+Brand+Identity.html&via=share
 
-The screens do not follow it yet. They use the slate, white and rounded style. A brand-styled onboarding was tried on Nov 11 and reverted (kept as `versions/onboarding/onboarding-v003.html`). Do not restyle a screen to the brand unless asked.
+The screens do not follow it yet. They use the slate, white and rounded style. A brand-styled onboarding was tried on Nov 11 and reverted (kept in the old Contexts folder as `versions/onboarding/onboarding-v003.html`). Do not restyle a screen to the brand unless asked.
 
 The brand rules, for reference:
 
@@ -68,26 +68,23 @@ The top bar has a Scope switch: V2 or Everything. It is part of the mockups only
 
 ## Versioning
 
-The screen file is always the latest version. Edit it in place.
+This folder is a git repo. Git is the only version history. There is no `versions/` or `archive/` folder and no snapshot tool.
 
-Before every change, save the current version first:
+- The repo lives at `~/git/neuma-v3`, outside Google Drive. GitHub is the remote.
+- The screen file is always the latest version. Edit it in place.
+- Commit before a risky change and after every finished change. One change per commit, with a message that says what changed on which screen.
+- To see what changed: `git log --oneline -- rollup.html` and `git diff`.
+- To roll a file back: `git checkout <commit> -- rollup.html`.
+- To try something big, work on a branch and merge it when it is picked.
 
-    python3 tools/snapshot.py feed
-
-That writes `versions/feed/feed-v002.html` (next number). To roll back, copy a version back over the screen file.
-
-Old versions use the current `shared/` files, so a change to shared styles also shows in old versions.
-
-Shared files have no snapshot tool. Copy them into `versions/shared/` with the next number before editing.
-
-`archive/` holds the old single-file mockups (`contexts-v1-001` to `166`, the old meetings and graveyard files). Nothing there is used by the new files.
+History before Nov 17, 2026 is not in git. It stays in the old Contexts folder on Google Drive, under `versions/` and `archive/`.
 
 ## Working with Claude
 
 - One chat per screen or topic. Long chats get slow and expensive.
-- Start a new chat with: "Read README.md in the Contexts folder, then work on `<screen>.html`."
+- Start a new chat with: "Read README.md in the neuma-v3 repo, then work on `<screen>.html`."
 - Claude edits only the screen file you name, plus `shared/` when a change must apply everywhere.
-- After an edit, Claude gives the link with a `#` to the section that changed.
+- Claude commits each finished change, then gives the link with a `#` to the section that changed.
 - `DECISIONS.md` is the only decision log, for design, scope and strategy. Claude logs each decision the moment it is made, mid-chat: date, decision, why, status, importance (Critical, Important, Medium or Low). One line each, under the screen it belongs to, or under Strategy. A changed decision is a new line, and the old one is marked Superseded. Then Claude runs `python3 tools/build_decisions.py`.
 - If a new decision conflicts with a logged one, Claude says so before building.
 - The three docs in the Claude project under `decisions/` are frozen reference detail. Nothing new is written there. Where they disagree with `DECISIONS.md`, the log wins.

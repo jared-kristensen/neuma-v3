@@ -10,6 +10,8 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 |---|---|---|---|---|
 | Nov 13 | `decisions.html` · 12 Decision log | CHANGED (data only) | Rebuilt from `DECISIONS.md` after the log consolidation and seven rulings: 352 decisions, 3 conflicts left. No layout or copy change. | `DECISIONS.md` is now the only decision log. |
 | Nov 17 | `decisions.html` · 12 Decision log | CHANGED (copy) | The header's "Last written" date now comes from the day `DECISIONS.md` last changed. It read "Nov 11", hard-coded in `tools/build_decisions.py`. | The date was wrong after every log change. |
+| Nov 17 | `index.html` | CHANGED (copy) | The intro line says "Earlier versions are in git." It named the `versions/` folder. | Neuma V3 is a git repo. `versions/`, `archive/` and `snapshot.py` are gone. |
+| Nov 17 | `decisions.html` · 12 Decision log | CHANGED (data only) | Rebuilt with the git decision: 353 decisions. | Logged under Scope. |
 
 ## Not product
 

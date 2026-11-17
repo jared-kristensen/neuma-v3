@@ -7,7 +7,7 @@ DECISIONS.md is the only decision log. Decisions and new open questions come
 from its tables. The open questions carried over from the two frozen project
 docs (integrations-decisions.md, onboarding-decisions.md) are kept in QUESTIONS
 below. Close one here when it is settled, and log the decision in DECISIONS.md.
-If decisions.html exists, a numbered backup is saved first.
+Git keeps the history of decisions.html.
 """
 import json, os, re, subprocess, sys
 
@@ -153,8 +153,6 @@ def build():
             'written': '%s %d' % (w.strftime('%b'), w.day)}
     blob = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
     out = os.path.join(ROOT, 'decisions.html')
-    if os.path.exists(out):
-        subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'snapshot.py'), 'decisions'], check=True)
     open(out, 'w', encoding='utf-8').write(TEMPLATE.replace('__DATA__', blob))
     print('Wrote decisions.html: %d decisions, %d questions, %d conflicts' % (len(decisions), len(qs), len(conflicts)))
 

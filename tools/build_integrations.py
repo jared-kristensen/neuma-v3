@@ -1,6 +1,6 @@
 """Builds integrations.html from this file and integrations_detail.py.
 Edit the data or markup here, then run:  python3 tools/build_integrations.py
-It saves a numbered backup with snapshot.py before writing."""
+Git keeps the history. Commit before and after a build."""
 import os, sys, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -308,8 +308,6 @@ page=f'''<!DOCTYPE html>
 </html>
 '''
 OUT = os.path.join(ROOT, 'integrations.html')
-if os.path.exists(OUT) and '--no-backup' not in sys.argv:
-    subprocess.run([sys.executable, os.path.join(HERE, 'snapshot.py'), 'integrations'], cwd=ROOT, check=True)
 import os as _os, sys as _sys; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
 import int_personal
 page = int_personal.apply(page)
