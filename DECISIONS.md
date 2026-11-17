@@ -65,3 +65,9 @@ File: `contexts.html`
 | Nov 17 | An outside second person cannot open the People Context yet. Only the person on Neuma opens it. | Jared's answer: not yet. | Later | Critical |
 | Nov 17 | A shared team meeting feeds many People Contexts. Does an item from it show in every pair that was in the room, or only when it involves both people? | Not recorded | Superseded | Important |
 | Nov 17 | An item from a shared meeting shows in a People Context only when it involves both people. | Otherwise every pair in the room gets the same team items. | Decided | Critical |
+| Nov 17 | The People Context page leads with a two-way ledger on Summary: You owe them, They owe you, Open between you. The Issues, Actions and Decisions tabs stay as on other Contexts. | Jared picked layout A of three. A relationship has two directions, and one Actions list hides that. | Decided | Important |
+| Nov 17 | Meetings and emails on a People Context get their own display, not a plain Sources tab. | Jared's call. | Decided | Important |
+| Nov 17 | How are meetings and emails displayed on a People Context? Sketched: by topic, as a mixed timeline, or by medium. | Not recorded | Open | Important |
+| Nov 17 | A People Context has an Ask button. It asks an AI version of the other person, which answers from the context that person has. | Jared's call. | Decided | Critical |
+| Nov 17 | What can the AI version of a person draw on: only this People Context, everything both people can open, or everything that person has? The third reaches Contexts the asker cannot open, including the person's other People Contexts. | That conflicts with "Only the two people can open their People Context". | Open | Critical |
+| Nov 17 | Who sees patterns on a People Context: each person only their own, both the same, or nobody at first? | A pattern about one person would be shown to that person. | Open | Critical |
