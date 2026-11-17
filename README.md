@@ -87,6 +87,7 @@ History before Nov 17, 2026 is not in git. It stays in the old Contexts folder o
 - Claude commits each finished change, then gives the link with a `#` to the section that changed.
 - `DECISIONS.md` is the only decision log, for design, scope and strategy. Claude logs each decision the moment it is made, mid-chat: date, decision, why, status, importance (Critical, Important, Medium or Low). One line each, under the screen it belongs to, or under Strategy. A changed decision is a new line, and the old one is marked Superseded. Then Claude runs `python3 tools/build_decisions.py`.
 - If a new decision conflicts with a logged one, Claude says so before building.
+- `TODO.md` is the to-do log: work that is decided or needed and not yet done. Claude adds an item when Jared asks, and marks it Done when it ships.
 - The V3 log started fresh on Nov 17, 2026. The V2 log and the three docs in the Claude project under `decisions/` are reference only. They do not bind V3.
 - For a new concept, Claude shows 2 or 3 rough sketches side by side, each rated out of 10, and builds the polished version only after one is picked.
 - Claude adds every screen change to `HANDOFF-next.md` before the chat ends. At export, that file is renamed with the date.
