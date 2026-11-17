@@ -68,6 +68,8 @@ File: `README.md, index.html`
 | Nov 12 | The index groups screens in four bands, split by a line: Included V2, Excluded, Prototype, Graveyard. | Not recorded | Decided | Low |
 | Nov 12 | The mockups have a Scope switch in the top bar: V2 or Everything. Deferred features carry `data-later`. V2 hides them and is the default. Everything shows them unmarked, as they will look. Mockup only, never ships. | One file per screen stays the source of truth. Dev builds from V2 view and still sees what is coming, so the build leaves room for it. | Decided | Important |
 | Nov 17 | Neuma V3 is a fork of the Contexts mockups, kept as a git repo at `~/git/neuma-v3` with GitHub as the remote. Git replaces `archive/`, `versions/` and `snapshot.py`. Older history stays in the Contexts folder on Google Drive. | Jared's call. Numbered copies grew to over 400 MB. The repo sits outside Google Drive because Drive sync can corrupt a git repo. | Decided | Medium |
+| Nov 17 | In Neuma V3 the left nav is Feed, Contexts, Agents, Automations, Sources, Settings, in that order. | Jared's call for V3. Not recorded further. | Decided | Critical |
+| Nov 17 | What are Agents, Automations and Sources in the V3 left nav, and which nav items do Members see? The CEO Feed is still logged as parked, and Integrations as admin only. | Not recorded | Open | Critical |
 
 ## Contexts directory (Screen 2)
 
@@ -344,7 +346,7 @@ File: `integrations.html` · Source: `integrations-decisions.md`
 
 | First seen | Decision | Why | Status | Importance |
 |---|---|---|---|---|
-| Nov 11 or earlier | Members' sidebar shows Contexts and Settings only. | Not recorded | Decided | Low |
+| Nov 11 or earlier | Members' sidebar shows Contexts and Settings only. | Not recorded | Superseded | Low |
 | Nov 11 or earlier | A company connection is set up by the tool's own admin. Neuma admins manage it after. | Not recorded | Decided | Medium |
 | Nov 11 or earlier | Neuma keeps every transcript that is in a Context, including ones past the latest 10. Retention only deletes what isn't in a Context. | Not recorded | Decided | Critical |
 | Nov 11 or earlier | Neuma never answers questions from a transcript that isn't in a Context. | Not recorded | Decided | Critical |
@@ -415,7 +417,7 @@ File: `contexts.html` · Source: `integrations-decisions.md` and `onboarding-dec
 
 | First seen | Decision | Why | Status | Importance |
 |---|---|---|---|---|
-| Nov 11 | Views live in a second nav: All, Yours, Shared with you, then saved views, then Suggested. | Not recorded | Decided | Medium |
+| Nov 11 | Views live in a second nav: All, Yours, Shared with you, then saved views, then Suggested. | Not recorded | Superseded | Medium |
 | Nov 10 | Views are private. Nobody else sees or changes them. | Not recorded | Decided | Medium |
 | Nov 11 | The table footer reads "Showing 1–25 of 47" with arrows. With no rows it reads "0 Contexts" and hides the arrows. | Not recorded | Decided | Low |
 | Nov 11 | Filter sits beside search: Access, Type and Tags. Filters apply as you pick. | Not recorded | Decided | Low |
@@ -441,6 +443,8 @@ File: `contexts.html` · Source: `integrations-decisions.md` and `onboarding-dec
 | Nov 11 | The Suggested badge only shows when there is something to suggest. | Not recorded | Decided | Low |
 | Nov 11 | Suggestions come from outside domains with 3 or more transcripts in the last 60 days. Neuma suggests and never auto-creates. | People in sales mostly have one-off meetings, so recurring-only gives them a thin first visit. | Later | Medium |
 | Nov 11 | The bottom-left account block shows name and domain only. No role. | Not recorded | Decided | Low |
+| Nov 17 | In Neuma V3 the Contexts sub nav is All, Yours, Shared with you, then People, Accounts, Meetings, Projects, Teams. | Jared's call for V3. It replaces the sample views 1/1s, Teams, Projects, Sales, Clients and Recruitment. | Decided | Important |
+| Nov 17 | Do saved views and Suggested stay in the V3 Contexts sub nav, and is each of People, Accounts, Meetings, Projects and Teams a Context type or a filter? | Not recorded | Open | Important |
 
 ## Recurring meetings become Contexts
 
