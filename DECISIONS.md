@@ -43,8 +43,10 @@ File: `contexts.html`
 |---|---|---|---|---|
 | Nov 17 | The Contexts sub nav is All, Yours, Shared with you, then People, Accounts, Meetings, Projects, Teams. Saved views and Suggested stay below. | The five replace the V2 sample views. | Decided | Important |
 | Nov 17 | People, Accounts, Meetings, Projects and Teams are Context types. Each is also a saved view in the sub nav, filtered by type. | Not recorded | Decided | Critical |
-| Nov 17 | Where do Roll ups sit among the five Context types? In the Screen 2 mockup they show under All, Yours and Shared with you only. | Not recorded | Open | Medium |
-| Nov 17 | What order do the five types take in the sub nav? Proposed: People, Teams, Accounts, Projects, Meetings. | Who first, then what, then Meetings as the catch-all. | Open | Low |
+| Nov 17 | Where do Roll ups sit among the five Context types? In the Screen 2 mockup they show under All, Yours and Shared with you only. | Not recorded | Superseded | Medium |
+| Nov 17 | Roll ups stay in V3. They are not one of the five types. They show under All, Yours and Shared with you. | Jared's answer: Roll ups still exist. The placement is the current mockup. | Decided | Important |
+| Nov 17 | What order do the five types take in the sub nav? Proposed: People, Teams, Accounts, Projects, Meetings. | Who first, then what, then Meetings as the catch-all. | Superseded | Low |
+| Nov 17 | The type order stays People, Accounts, Meetings, Projects, Teams. | Jared's call, over the proposed reorder. | Decided | Low |
 
 ## People Contexts
 
@@ -57,6 +59,9 @@ File: `contexts.html`
 | Nov 17 | Every meeting both people joined counts towards their People Context, not only meetings with just the two of them. | Not recorded | Decided | Critical |
 | Nov 17 | Only the two people can open their People Context. Super admin cannot. | Not recorded | Decided | Critical |
 | Nov 17 | The second person in a People Context can be outside the company. | Not recorded | Decided | Critical |
-| Nov 17 | Where do the emails in a People Context come from: connected inboxes, forwarding to the Context, or a live read through the person's AI tool? | V2 ruled out connecting inboxes. | Open | Critical |
-| Nov 17 | When the second person is outside the company, can they open the People Context, or only the person on Neuma? | Not recorded | Open | Critical |
-| Nov 17 | A shared team meeting feeds many People Contexts. Does an item from it show in every pair that was in the room, or only when it involves both people? | Not recorded | Open | Important |
+| Nov 17 | Where do the emails in a People Context come from: connected inboxes, forwarding to the Context, or a live read through the person's AI tool? | V2 ruled out connecting inboxes. | Superseded | Critical |
+| Nov 17 | Emails in a People Context come from connected inboxes. Neuma connects to email in V3. | Jared's answer. V2 had ruled inboxes out. | Decided | Critical |
+| Nov 17 | When the second person is outside the company, can they open the People Context, or only the person on Neuma? | Not recorded | Superseded | Critical |
+| Nov 17 | An outside second person cannot open the People Context yet. Only the person on Neuma opens it. | Jared's answer: not yet. | Later | Critical |
+| Nov 17 | A shared team meeting feeds many People Contexts. Does an item from it show in every pair that was in the room, or only when it involves both people? | Not recorded | Superseded | Important |
+| Nov 17 | An item from a shared meeting shows in a People Context only when it involves both people. | Otherwise every pair in the room gets the same team items. | Decided | Critical |
