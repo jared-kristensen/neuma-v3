@@ -20,6 +20,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 17 | `person.html` · 13 People Context | NEW | The People Context page for Sarah M. Header with rhythm line, lock and Ask button. Tabs: Summary, Issues, Actions, Decisions, Meetings, Emails. Summary has Needs attention (both people), the two-way ledger, Open between you, and Might be useful (only you). Meetings and Emails are list and detail. Ask opens a right panel with cited answers. | V3 People Context decisions. The Ask scope and the Follow-up agent are open questions. |
 | Nov 17 | `contexts.html` · 2 Contexts directory | CHANGED | A People row opens `person.html`. | The People Context page exists now. |
 | Nov 17 | `shared/nav.js` | CHANGED | People Context added to the top bar. | New screen. |
+| Nov 17 | `person.html` · 13 People Context | CHANGED | You owe Sarah and Sarah owes you are stacked, not side by side. Both use the Actions tab rows from Screen 3: tick, title, one line of detail, date, priority badge, source. Each card has See all and "done hidden · Show". The Actions tab uses the same two cards. Styles now come from Screen 3. | Jared asked for the same UI as Actions. |
 
 ## Not product
 

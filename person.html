@@ -38,6 +38,7 @@
   #person .lm { font-size:11.5px; color:#94a3b8; display:flex; align-items:center; gap:6px; }
   #person .dot { width:6px; height:6px; border-radius:50%; background:#10b981; display:inline-block; }
   #person .sec { font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#94a3b8; margin:18px 0 6px; }
+  #person [data-zlrow].is-done .zl-ttl { text-decoration:line-through; color:#94a3b8; }
   #person .ts { font-family:'JetBrains Mono',monospace; font-size:11px; color:#94a3b8; width:48px; flex:none; padding-top:3px; }
 </style>
 </head>
@@ -96,10 +97,8 @@
               <div class="card-h mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Needs attention</span><span class="text-[11px] font-semibold nm-rank-text">suggested by Neuma</span><span class="who">You and Sarah</span></div>
               <div data-na></div>
             </div>
-            <div class="grid grid-cols-2 gap-5">
-              <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-owe="you"></div></div>
-              <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-owe="them"></div></div>
-            </div>
+            <div data-s3-mirror data-acts="you"></div>
+            <div data-s3-mirror data-acts="them"></div>
             <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-open></div></div>
           </div>
           <div class="card mb-card sm">
@@ -111,9 +110,8 @@
 
         <div data-pane="issues" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="issues"></div></div>
         <div data-pane="actions" class="hidden mt-6 max-w-[820px] space-y-5">
-          <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span></div><div data-list="actYou"></div></div>
-          <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span></div><div data-list="actThem"></div></div>
-          <div class="card"><div class="card-h"><span class="card-t">Done</span></div><div data-list="actDone"></div></div>
+          <div data-s3-mirror data-acts="you" data-full></div>
+          <div data-s3-mirror data-acts="them" data-full></div>
         </div>
         <div data-pane="decisions" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="decisions"></div></div>
 
@@ -170,8 +168,41 @@
     ['The Q1 targets draft is due today', 'You owe it. Agreed in your 1:1 on Nov 12.']
   ];
   $('[data-na]').innerHTML = NA.map(function(x, i){ return '<div class="row flex items-start gap-3"><span class="w-[20px] shrink-0 flex justify-center pt-[3px]"><span class="mb-rk nm-rank-text" style="font-size:14px">' + (i + 1) + '</span></span><div><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + '</div></div></div>'; }).join('');
-  $('[data-owe="you"]').innerHTML = row('Send the Q1 targets draft', 'Due today · 1:1, Nov 12', true) + row('Reply on the Pendo renewal quote', 'Email · waiting 3 days');
-  $('[data-owe="them"]').innerHTML = row('Initech handover plan', '2 days late · Sales standup, Nov 10', true) + row('Book of business numbers for Q4', 'Email · asked Nov 13');
+  // ── Actions: the same rows as the Actions tab on Screen 3 (tick, title, one line, date, priority, source)
+  var PRI = {Critical:'bg-rose-50 text-rose-700', High:'bg-amber-50 text-amber-700', Medium:'bg-slate-100 text-slate-600', Low:'bg-slate-50 text-slate-500'};
+  var CHEV = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var TICK = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var THUMB = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>';
+  var ACTS = {
+    you: {title:'You owe Sarah', open:[
+      ['Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1],
+      ['Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14']],
+      done:[['Intro Sarah to the Figma admin', 'Done Nov 6', 'Medium', '1:1 · Nov 5']]},
+    them: {title:'Sarah owes you', open:[
+      ['Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1],
+      ['Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13']],
+      done:[['Share the Pendo usage report', 'Done Nov 4', 'Medium', '1:1 · Oct 29']]}
+  };
+  function actRow(a, done){
+    var when = done ? a[1] : a[2], pri = done ? a[2] : a[3], src = done ? a[3] : a[4], late = !done && a[5];
+    return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow><div class="flex items-start gap-2.5">'
+      + '<span class="w-[18px] shrink-0 flex justify-center pt-[2px]"><button type="button" class="zl-tick" data-zltick title="Mark complete">' + TICK + '</button></span>'
+      + '<div class="flex-1 min-w-0"><div class="zl-ttl text-[13.5px] font-medium text-slate-900 leading-snug">' + e(a[0]) + '</div>'
+      + (done ? '' : '<p class="zl-clamp1 mt-0.5 text-[12.5px] leading-[1.5] text-slate-500">' + e(a[1]) + '</p>')
+      + '<div class="mt-1.5 flex items-center gap-1.5 text-[11px] text-slate-400"><span' + (late ? ' class="text-rose-600 font-medium"' : '') + '>' + e(when) + '</span><span class="text-slate-300">·</span>'
+      + '<button type="button" class="badge ' + PRI[pri] + ' inline-flex items-center gap-0.5" style="padding:1px 4px 1px 6px;font-size:10.5px;" title="Change priority">' + pri + CHEV + '</button>'
+      + '<span class="text-slate-300">·</span><span>' + e(src) + '</span>'
+      + '<span class="ml-auto flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
+      + '</div></div></div></div>';
+  }
+  $$('[data-acts]').forEach(function(box){
+    var k = box.getAttribute('data-acts'), A = ACTS[k], full = box.hasAttribute('data-full');
+    box.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100"><span class="text-[13px] font-semibold text-slate-900">' + A.title + '</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + A.open.length + '</span>'
+      + (full ? '' : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="actions">See all →</a>') + '</div>'
+      + '<div class="divide-y divide-slate-100" data-open-rows>' + A.open.map(function(a){ return actRow(a, false); }).join('') + '</div>'
+      + '<div class="hidden divide-y divide-slate-100 border-t border-slate-100" data-done-rows>' + A.done.map(function(a){ return actRow(a, true); }).join('') + '</div>'
+      + '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle>' + A.done.length + ' done hidden <span class="text-brand-600 ml-1">Show</span></button></div>';
+  });
   $('[data-open]').innerHTML = row('Who leads the Initech deal', 'Raised in 3 meetings · last on Nov 12') + row('Timeline for Sarah’s promotion case', 'Raised Nov 5 · goes to Mia R. in Q1');
   var USEFUL = [
     ['Initech asked for one point of contact through the handover.', 'Initech · Account', 'Nov 11'],
@@ -183,9 +214,6 @@
   // ── Issues, Actions, Decisions
   var LISTS = {
     issues: [['Who leads the Initech deal', 'Said by Sarah M. · Nov 5 · raised in 3 meetings'], ['Timeline for Sarah’s promotion case', 'Said by Sarah M. · Nov 5'], ['Handover dates keep slipping', 'Identified by Neuma · seen across 4 meetings']],
-    actYou: [['Send the Q1 targets draft', 'Due today · 1:1, Nov 12', 1], ['Reply on the Pendo renewal quote', 'Email · waiting 3 days']],
-    actThem: [['Initech handover plan', '2 days late · Sales standup, Nov 10', 1], ['Book of business numbers for Q4', 'Email · asked Nov 13']],
-    actDone: [['Intro Sarah to the Figma admin', 'You · done Nov 6'], ['Share the Pendo usage report', 'Sarah · done Nov 4']],
     decisions: [['Sarah’s promotion case goes to Mia R. in Q1', '1:1 · Nov 5'], ['Sarah keeps Pendo and Figma through the renewals', '1:1 · Oct 29'], ['Initech handover moves to the Sales standup agenda', 'Sales standup · Nov 10'], ['1:1s move to Thursdays', 'Email · Oct 22'], ['Q1 targets are set per account, not per CSM', '1:1 · Nov 12']]
   };
   Object.keys(LISTS).forEach(function(k){ $('[data-list="' + k + '"]').innerHTML = LISTS[k].map(function(x){ return row(x[0], x[1], x[2]); }).join(''); });
@@ -289,6 +317,8 @@
   // ── Wiring
   function tab(t){ $$('[data-ptabs] .tab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
   sec.addEventListener('click', function(ev){
+    var tk = ev.target.closest('[data-zltick]'); if (tk) { tk.closest('[data-zlrow]').classList.toggle('is-done'); return; }
+    var dt = ev.target.closest('[data-done-toggle]'); if (dt) { var box = dt.parentNode, rows = box.querySelector('[data-done-rows]'), on = rows.classList.toggle('hidden'); dt.innerHTML = on ? rows.children.length + ' done hidden <span class="text-brand-600 ml-1">Show</span>' : '<span class="text-brand-600">Hide done</span>'; return; }
     var t = ev.target.closest('[data-t]'); if (t) { tab(t.getAttribute('data-t')); history.replaceState(null, '', '#' + t.getAttribute('data-t')); return; }
     var m = ev.target.closest('[data-m]'); if (m) { st.m = m.getAttribute('data-m'); mlist(); return; }
     var mt = ev.target.closest('[data-mtab]'); if (mt) { st.mtab = mt.getAttribute('data-mtab'); mdetail(); return; }
