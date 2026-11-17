@@ -187,6 +187,7 @@
   var TOOLS = '<div class="ml-auto flex items-center gap-1.5"><button type="button" class="btn-out inline-flex items-center justify-center bg-slate-50" style="width:28px;height:26px;padding:0;" title="Search"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><span class="text-slate-400">Sort:</span><span>Default</span>' + '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="6 9 12 15 18 9"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button></div>';
   function head(title, n, full, tab){ return '<div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100">' + (full ? SPARK : '') + '<span class="text-[13px] font-semibold text-slate-900">' + title + '</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + n + '</span>' + (full ? TOOLS : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="' + tab + '">See all →</a>') + '</div>'; }
   function hiddenBtn(n, word){ return '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle data-word="' + word + '">' + n + ' ' + word + ' hidden <span class="text-brand-600 ml-1">Show</span></button>'; }
+  var XI = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   function actRow(a, done){
     var w = WHO[a[0]], isMeet = a[3].charAt(0) === 'm';
     return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow data-owner="' + a[0] + '"><div class="flex items-start gap-2.5">'
@@ -196,8 +197,9 @@
       + '<span class="w-4 h-4 shrink-0 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold" title="' + w[0] + '">' + a[0] + '</span>'
       + '<span class="whitespace-nowrap">' + e(a[2]) + '</span><span class="text-slate-300">·</span>'
       + '<a class="truncate text-slate-500 hover:text-slate-900 hover:underline decoration-slate-300 underline-offset-[3px] cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + e(SRC[a[3]][1]) + '">' + e(SRC[a[3]][0]) + '</a>'
-      + '<span class="ml-auto shrink-0 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
-      + '</div></div></div></div>';
+      + '<span class="ml-auto shrink-0 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button>'
+      + '<button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 w-6 h-6" data-act-x title="Dismiss">' + XI + '</button></span>'
+      + '</div></div></div><div class="hidden items-center gap-2 text-[12px] text-slate-400" data-zlgone><span class="flex-1">Dismissed</span><button type="button" class="underline hover:text-slate-700" data-act-undo>Undo</button></div></div>';
   }
   $$('[data-acts]').forEach(function(box){
     var full = box.hasAttribute('data-full');
@@ -213,7 +215,7 @@
     ['Pendo’s champion flagged budget pressure before the renewal.', 'Pendo · Account', 'Nov 13'],
     ['Mia R. wants promotion cases in by Dec 5.', 'Weekly leadership sync · Meeting', 'Nov 9']
   ];
-  var XI = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  XI = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   $('[data-useful]').innerHTML = USEFUL.map(function(x){ return '<div class="row group relative pr-10 cursor-pointer" data-useful-row title="Open ' + e(x[1].split(' · ')[0]) + '">'
     + '<div data-u-body><div class="rt">' + e(x[0]) + '</div><div class="rm"><span class="text-slate-600 font-medium group-hover:underline decoration-slate-300 underline-offset-[3px]">' + e(x[1].split(' · ')[0]) + '</span> · ' + e(x[1].split(' · ')[1]) + ' · ' + x[2] + '</div></div>'
     + '<div data-u-gone class="hidden items-center gap-2 text-[12px] text-slate-400"><span class="flex-1">Dismissed</span><button type="button" class="underline hover:text-slate-700" data-u-undo>Undo</button></div>'
@@ -319,6 +321,9 @@
   // ── Wiring
   function tab(t){ $$('[data-ptabs] .tab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
   sec.addEventListener('click', function(ev){
+    var ax = ev.target.closest('[data-act-x]'); if (ax) { ax.closest('[data-zlrow]').classList.add('is-gone'); return; }
+    var au = ev.target.closest('[data-act-undo]'); if (au) { au.closest('[data-zlrow]').classList.remove('is-gone'); return; }
+    if (ev.target.closest('.is-gone')) return;
     var gm = ev.target.closest('[data-goto-m]'); if (gm) { st.topic = 'all'; $('[data-mtopic]').value = 'all'; st.m = gm.getAttribute('data-goto-m'); st.mtab = 'notes'; tab('meetings'); mlist(); history.replaceState(null, '', '#meetings'); return; }
     var nm = ev.target.closest('[data-na-more]'); if (nm) { var open = nm.textContent === 'Show 2 more'; $$('[data-na-row]').forEach(function(r, i){ if (i > 2) r.classList.toggle('hidden', !open); }); nm.textContent = open ? 'Show less' : 'Show 2 more'; return; }
     var tk = ev.target.closest('[data-zltick]'); if (tk) { tk.closest('[data-zlrow]').classList.toggle('is-done'); return; }

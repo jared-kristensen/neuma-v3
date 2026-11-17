@@ -29,6 +29,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Source references are grey, not blue: on action rows (meeting or email) and in Might be useful. They darken and underline on hover. The › after Might be useful sources is gone. | Blue was too loud for a reference. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | The hover underline on source references is light grey (slate-300), offset 3px, not the text colour. | A softer cue that still marks the reference as its own link inside a clickable row. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Action row sources are short: "Weekly 1:1", "Sales standup" or "Email". The full meeting title or email subject is the hover tooltip. | Repeated full titles looked odd. |
+| Nov 18 | `person.html` · 13 People Context | CHANGED | Action rows have Dismiss (×) on hover, beside thumbs up. The row becomes "Dismissed · Undo", using the Screen 3 dismissed state. Works on Summary and the Actions tab. | Jared asked for dismiss, as on Screen 3. |
 
 ## Not product
 
