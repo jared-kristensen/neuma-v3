@@ -167,8 +167,8 @@
   // One list. Owner is shown on each row with their initials.
   var WHO = {JK:['Jared K.', 'from-amber-400 to-pink-500'], SM:['Sarah M.', 'from-emerald-400 to-teal-500']};
   // Source of each action: a meeting (opens it on the Meetings tab) or an email thread.
-  var SRC = {m1:'Weekly 1:1 Sarah / Jared: Q1 targets and Initech', m2:'Sales team standup: Initech handover', m3:'Weekly 1:1 Sarah / Jared: promotion case', m4:'Weekly 1:1 Sarah / Jared: Pendo and Figma renewals', m5:'Sales team standup: Initech onboarding question',
-    e1:'Email: Pendo renewal quote', e2:'Email: Book of business numbers', e3:'Email: January offsite', e4:'Email: Pendo champion contact'};
+  var SRC = {m1:['Weekly 1:1', 'Weekly 1:1 Sarah / Jared: Q1 targets and Initech'], m2:['Sales standup', 'Sales team standup: Initech handover'], m3:['Weekly 1:1', 'Weekly 1:1 Sarah / Jared: promotion case'], m4:['Weekly 1:1', 'Weekly 1:1 Sarah / Jared: Pendo and Figma renewals'], m5:['Sales standup', 'Sales team standup: Initech onboarding question'],
+    e1:['Email', 'Pendo renewal quote'], e2:['Email', 'Book of business numbers'], e3:['Email', 'January offsite'], e4:['Email', 'Pendo champion contact']};
   var ACTS = {open:[
       ['JK', 'Send the Q1 targets draft', '5 days ago', 'm1', 'na'],
       ['SM', 'Initech handover plan', '1 week ago', 'm2', 'na'],
@@ -195,7 +195,7 @@
       + '<div class="mt-1 flex items-center gap-1.5 text-[11.5px] text-slate-400 min-w-0">'
       + '<span class="w-4 h-4 shrink-0 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold" title="' + w[0] + '">' + a[0] + '</span>'
       + '<span class="whitespace-nowrap">' + e(a[2]) + '</span><span class="text-slate-300">·</span>'
-      + '<a class="truncate text-slate-500 hover:text-slate-900 hover:underline decoration-slate-300 underline-offset-[3px] cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + (isMeet ? 'Open the meeting' : 'Open in Gmail') + '">' + e(SRC[a[3]]) + '</a>'
+      + '<a class="truncate text-slate-500 hover:text-slate-900 hover:underline decoration-slate-300 underline-offset-[3px] cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + e(SRC[a[3]][1]) + '">' + e(SRC[a[3]][0]) + '</a>'
       + '<span class="ml-auto shrink-0 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
       + '</div></div></div></div>';
   }
