@@ -30,6 +30,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 18 | `person.html` · 13 People Context | CHANGED | The hover underline on source references is light grey (slate-300), offset 3px, not the text colour. | A softer cue that still marks the reference as its own link inside a clickable row. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Action row sources are short: "Weekly 1:1", "Sales standup" or "Email". The full meeting title or email subject is the hover tooltip. | Repeated full titles looked odd. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Action rows have Dismiss (×) on hover, beside thumbs up. The row becomes "Dismissed · Undo", using the Screen 3 dismissed state. Works on Summary and the Actions tab. | Jared asked for dismiss, as on Screen 3. |
+| Nov 18 | `person.html` · 13 People Context | CHANGED | Needs attention rows have thumbs up and Dismiss on hover. No tick. Dismiss shows "Dismissed for you. Sarah still sees it." with Undo. | Needs attention is shared and is not a task list. |
 
 ## Not product
 
