@@ -97,8 +97,7 @@
               <div class="card-h mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Needs attention</span><span class="text-[11px] font-semibold nm-rank-text">suggested by Neuma</span><span class="who">You and Sarah</span></div>
               <div data-na></div>
             </div>
-            <div data-s3-mirror data-acts="you"></div>
-            <div data-s3-mirror data-acts="them"></div>
+            <div data-s3-mirror data-acts></div>
             <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-open></div></div>
           </div>
           <div class="card mb-card sm">
@@ -110,8 +109,7 @@
 
         <div data-pane="issues" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="issues"></div></div>
         <div data-pane="actions" class="hidden mt-6 max-w-[820px] space-y-5">
-          <div data-s3-mirror data-acts="you" data-full></div>
-          <div data-s3-mirror data-acts="them" data-full></div>
+          <div data-s3-mirror data-acts data-full></div>
         </div>
         <div data-pane="decisions" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="decisions"></div></div>
 
@@ -173,35 +171,37 @@
   var CHEV = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   var TICK = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   var THUMB = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>';
-  var ACTS = {
-    you: {title:'You owe Sarah', open:[
-      ['Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1],
-      ['Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14']],
-      done:[['Intro Sarah to the Figma admin', 'Done Nov 6', 'Medium', '1:1 · Nov 5']]},
-    them: {title:'Sarah owes you', open:[
-      ['Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1],
-      ['Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13']],
-      done:[['Share the Pendo usage report', 'Done Nov 4', 'Medium', '1:1 · Oct 29']]}
-  };
+  // One list. Owner is shown on each row with their initials.
+  var WHO = {JK:['Jared K.', 'from-amber-400 to-pink-500'], SM:['Sarah M.', 'from-emerald-400 to-teal-500']};
+  var ACTS = {open:[
+      ['JK', 'Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1],
+      ['SM', 'Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1],
+      ['JK', 'Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14'],
+      ['SM', 'Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13']],
+    done:[
+      ['JK', 'Intro Sarah to the Figma admin', '', 'Done Nov 6', 'Medium', '1:1 · Nov 5'],
+      ['SM', 'Share the Pendo usage report', '', 'Done Nov 4', 'Medium', '1:1 · Oct 29']]};
   function actRow(a, done){
-    var when = done ? a[1] : a[2], pri = done ? a[2] : a[3], src = done ? a[3] : a[4], late = !done && a[5];
-    return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow><div class="flex items-start gap-2.5">'
+    var w = WHO[a[0]], late = !done && a[6];
+    return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow data-owner="' + a[0] + '"><div class="flex items-start gap-2.5">'
       + '<span class="w-[18px] shrink-0 flex justify-center pt-[2px]"><button type="button" class="zl-tick" data-zltick title="Mark complete">' + TICK + '</button></span>'
-      + '<div class="flex-1 min-w-0"><div class="zl-ttl text-[13.5px] font-medium text-slate-900 leading-snug">' + e(a[0]) + '</div>'
-      + (done ? '' : '<p class="zl-clamp1 mt-0.5 text-[12.5px] leading-[1.5] text-slate-500">' + e(a[1]) + '</p>')
-      + '<div class="mt-1.5 flex items-center gap-1.5 text-[11px] text-slate-400"><span' + (late ? ' class="text-rose-600 font-medium"' : '') + '>' + e(when) + '</span><span class="text-slate-300">·</span>'
-      + '<button type="button" class="badge ' + PRI[pri] + ' inline-flex items-center gap-0.5" style="padding:1px 4px 1px 6px;font-size:10.5px;" title="Change priority">' + pri + CHEV + '</button>'
-      + '<span class="text-slate-300">·</span><span>' + e(src) + '</span>'
+      + '<div class="flex-1 min-w-0"><div class="zl-ttl text-[13.5px] font-medium text-slate-900 leading-snug">' + e(a[1]) + '</div>'
+      + (done ? '' : '<p class="zl-clamp1 mt-0.5 text-[12.5px] leading-[1.5] text-slate-500">' + e(a[2]) + '</p>')
+      + '<div class="mt-1.5 flex items-center gap-1.5 text-[11px] text-slate-400">'
+      + '<span class="inline-flex items-center gap-1 text-slate-600"><span class="w-4 h-4 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold">' + a[0] + '</span>' + w[0] + '</span><span class="text-slate-300">·</span>'
+      + '<span' + (late ? ' class="text-rose-600 font-medium"' : '') + '>' + e(a[3]) + '</span><span class="text-slate-300">·</span>'
+      + '<button type="button" class="badge ' + PRI[a[4]] + ' inline-flex items-center gap-0.5" style="padding:1px 4px 1px 6px;font-size:10.5px;" title="Change priority">' + a[4] + CHEV + '</button>'
+      + '<span class="text-slate-300">·</span><span>' + e(a[5]) + '</span>'
       + '<span class="ml-auto flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
       + '</div></div></div></div>';
   }
   $$('[data-acts]').forEach(function(box){
-    var k = box.getAttribute('data-acts'), A = ACTS[k], full = box.hasAttribute('data-full');
-    box.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100"><span class="text-[13px] font-semibold text-slate-900">' + A.title + '</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + A.open.length + '</span>'
+    var full = box.hasAttribute('data-full');
+    box.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100"><span class="text-[13px] font-semibold text-slate-900">Actions</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + ACTS.open.length + '</span>'
       + (full ? '' : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="actions">See all →</a>') + '</div>'
-      + '<div class="divide-y divide-slate-100" data-open-rows>' + A.open.map(function(a){ return actRow(a, false); }).join('') + '</div>'
-      + '<div class="hidden divide-y divide-slate-100 border-t border-slate-100" data-done-rows>' + A.done.map(function(a){ return actRow(a, true); }).join('') + '</div>'
-      + '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle>' + A.done.length + ' done hidden <span class="text-brand-600 ml-1">Show</span></button></div>';
+      + '<div class="divide-y divide-slate-100">' + ACTS.open.map(function(a){ return actRow(a, false); }).join('') + '</div>'
+      + '<div class="hidden divide-y divide-slate-100 border-t border-slate-100" data-done-rows>' + ACTS.done.map(function(a){ return actRow(a, true); }).join('') + '</div>'
+      + '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle>' + ACTS.done.length + ' done hidden <span class="text-brand-600 ml-1">Show</span></button></div>';
   });
   $('[data-open]').innerHTML = row('Who leads the Initech deal', 'Raised in 3 meetings · last on Nov 12') + row('Timeline for Sarah’s promotion case', 'Raised Nov 5 · goes to Mia R. in Q1');
   var USEFUL = [
