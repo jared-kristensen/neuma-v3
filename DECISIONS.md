@@ -69,7 +69,9 @@ File: `README.md, index.html`
 | Nov 12 | The mockups have a Scope switch in the top bar: V2 or Everything. Deferred features carry `data-later`. V2 hides them and is the default. Everything shows them unmarked, as they will look. Mockup only, never ships. | One file per screen stays the source of truth. Dev builds from V2 view and still sees what is coming, so the build leaves room for it. | Decided | Important |
 | Nov 17 | Neuma V3 is a fork of the Contexts mockups, kept as a git repo at `~/git/neuma-v3` with GitHub as the remote. Git replaces `archive/`, `versions/` and `snapshot.py`. Older history stays in the Contexts folder on Google Drive. | Jared's call. Numbered copies grew to over 400 MB. The repo sits outside Google Drive because Drive sync can corrupt a git repo. | Decided | Medium |
 | Nov 17 | In Neuma V3 the left nav is Feed, Contexts, Agents, Automations, Sources, Settings, in that order. | Jared's call for V3. Not recorded further. | Decided | Critical |
-| Nov 17 | What are Agents, Automations and Sources in the V3 left nav, and which nav items do Members see? The CEO Feed is still logged as parked, and Integrations as admin only. | Not recorded | Open | Critical |
+| Nov 17 | What are Agents, Automations and Sources in the V3 left nav, and which nav items do Members see? The CEO Feed is still logged as parked, and Integrations as admin only. | Not recorded | Superseded | Critical |
+| Nov 17 | Agents, Automations and Sources are new pages in V3. They are blank for now. Sources is not Integrations renamed. | Jared's answer. Answers the open question above. | Decided | Critical |
+| Nov 17 | Every Member sees all six left nav items in V3. | Jared's answer. | Decided | Important |
 
 ## Contexts directory (Screen 2)
 
@@ -444,7 +446,9 @@ File: `contexts.html` · Source: `integrations-decisions.md` and `onboarding-dec
 | Nov 11 | Suggestions come from outside domains with 3 or more transcripts in the last 60 days. Neuma suggests and never auto-creates. | People in sales mostly have one-off meetings, so recurring-only gives them a thin first visit. | Later | Medium |
 | Nov 11 | The bottom-left account block shows name and domain only. No role. | Not recorded | Decided | Low |
 | Nov 17 | In Neuma V3 the Contexts sub nav is All, Yours, Shared with you, then People, Accounts, Meetings, Projects, Teams. | Jared's call for V3. It replaces the sample views 1/1s, Teams, Projects, Sales, Clients and Recruitment. | Decided | Important |
-| Nov 17 | Do saved views and Suggested stay in the V3 Contexts sub nav, and is each of People, Accounts, Meetings, Projects and Teams a Context type or a filter? | Not recorded | Open | Important |
+| Nov 17 | Do saved views and Suggested stay in the V3 Contexts sub nav, and is each of People, Accounts, Meetings, Projects and Teams a Context type or a filter? | Not recorded | Superseded | Important |
+| Nov 17 | People, Accounts, Meetings, Projects and Teams are Context types. Each is also a saved view in the sub nav, filtered by type. Saved views and Suggested stay. | Jared's answer. Answers the open question above. | Decided | Critical |
+| Nov 17 | Where do Roll ups sit among the five Context types? In the Screen 2 mockup they show under All, Yours and Shared with you only. | Not recorded | Open | Medium |
 
 ## Recurring meetings become Contexts
 
