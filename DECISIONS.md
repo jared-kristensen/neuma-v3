@@ -449,6 +449,9 @@ File: `contexts.html` · Source: `integrations-decisions.md` and `onboarding-dec
 | Nov 17 | Do saved views and Suggested stay in the V3 Contexts sub nav, and is each of People, Accounts, Meetings, Projects and Teams a Context type or a filter? | Not recorded | Superseded | Important |
 | Nov 17 | People, Accounts, Meetings, Projects and Teams are Context types. Each is also a saved view in the sub nav, filtered by type. Saved views and Suggested stay. | Jared's answer. Answers the open question above. | Decided | Critical |
 | Nov 17 | Where do Roll ups sit among the five Context types? In the Screen 2 mockup they show under All, Yours and Shared with you only. | Not recorded | Open | Medium |
+| Nov 17 | A People Context is created automatically between two individuals. It holds their actions, decisions, meetings and emails. | Jared's call for V3. | Decided | Critical |
+| Nov 17 | Emails in a People Context conflict with the Nov 11 line that Neuma does not connect to inboxes or ingest email. Where do the emails come from? | Not recorded | Open | Critical |
+| Nov 17 | People Contexts: which meetings count (only the two of them, or any meeting both joined), who can open one, who owns it, and can the second person be outside the company? | Not recorded | Open | Critical |
 
 ## Recurring meetings become Contexts
 
