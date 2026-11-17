@@ -3,10 +3,9 @@
 
     python3 tools/build_decisions.py
 
-DECISIONS.md is the only decision log. Decisions and new open questions come
-from its tables. The open questions carried over from the two frozen project
-docs (integrations-decisions.md, onboarding-decisions.md) are kept in QUESTIONS
-below. Close one here when it is settled, and log the decision in DECISIONS.md.
+DECISIONS.md is the only decision log. Decisions and open questions come from
+its tables. The V3 log started fresh on Nov 17, 2026. The V2 log and its
+carried-over questions are in git history and in the old Contexts folder.
 Git keeps the history of decisions.html.
 """
 import json, os, re, subprocess, sys
@@ -14,82 +13,14 @@ import json, os, re, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # (log, number, status, title, detail, proposal, names Jason)
-QUESTIONS = [
- ('int', 1, 'Open', 'Company or individual transcript connections as the default', 'An individual connection gets hosted meetings, plus shared transcripts where the tool\'s API allows it. Attendee access is untested on Zoom. Teams has no individual path. Transcript access rule 1 depends on this test.', '', False),
- ('int', 2, 'Open', 'Meetings on someone else\'s account', 'A customer\'s Zoom or a partner\'s Teams is outside any connection. For sales teams that is a big share of calls. Options: a notetaker that joins the call, the Zoom app (Screen 5.2), or uploads.', '', False),
- ('int', 3, 'Open', 'Who can press Reconnect', '', 'The tool admin only, with "Ask [admin]" for everyone else.', False),
- ('int', 4, 'Open', 'Description parsing copy', 'Neuma reads event descriptions once to find Zoom links, then discards them. The UI says "never reads". Pick the copy: "never keeps", or don\'t parse.', '', False),
- ('int', 5, 'Open', 'Custom account filters', 'Which fields, and how the builder works.', '', False),
- ('int', 6, 'Open', 'Parent accounts as Roll ups', 'Should parent accounts become Roll ups automatically?', '', False),
- ('int', 7, 'Open', 'Channel picker design', 'Shared by connect and Add channels.', '', False),
- ('int', 8, 'Open', 'Add past meeting, and removing a meeting from a Context', 'Both need Context screens, including what attendees can do.', '', False),
- ('int', 9, 'Open', 'Pre-meeting and post-meeting automations', 'Lead time, and triggering post-meeting on transcript arrival. Upcoming meetings need "+ Add to Context" somewhere outside Settings.', '', False),
- ('int', 10, 'Open', 'Does HubSpot follow the Salesforce pattern?', 'Including following CRM visibility.', '', False),
- ('int', 11, 'Open', 'Upgrade prompt from personal to company connections', 'Where it lives beyond Settings, and how often it shows.', '', False),
- ('int', 12, 'Closed', 'Controls on member connections', 'Closed Nov 11. Replaced by one switch per tool: "Members can connect their own". Allow lists and per-request approval stay later.', '', False),
- ('int', 13, 'Closed', 'Workspace joining', 'Decided Nov 11 in the onboarding log: same-domain sign-ups join automatically as Members. How IT becomes admin when the creator leaves is still open there.', '', False),
- ('int', 14, 'Open', 'The engine never answers from a transcript outside a Context', 'Confirm with Jason. The access rule depends on it.', '', True),
- ('int', 15, 'Open', 'Where reporting lines come from for manager access', 'Direct and indirect reports.', 'The manager field in Google or Microsoft directories.', False),
- ('int', 16, 'Open', 'Content-based matching', '"Neuma thinks this was a demo." It fixes generic titles, but Neuma would read every transcript to sort them. Not v1.', '', False),
- ('int', 17, 'Closed', 'Taking part is the permission', 'Closed Nov 11. Replaced by Transcript access: only the host, or someone who can already see the transcript in the meeting tool, can add a meeting. Still worth confirming with Jason and testing with a customer\'s IT.', '', True),
- ('int', 18, 'Open', 'Rules: knowing which attendees are external', 'Companies with several domains and contractors on personal email need handling.', 'Source them from the workspace\'s verified domains.', False),
- ('int', 19, 'Open', 'Rules: CRM conditions', '"Account stage is Negotiation", "Account owner is me".', '', False),
- ('int', 20, 'Open', 'Rules: finding demos without Call type', 'Demos are found by title and outside attendees. Is that reliable enough for sales leaders, or does Call type come back when Gong is connected?', '', False),
- ('int', 21, 'Open', 'The v1 signal for bringing rules back', 'Track how often people add non-recurring meetings by hand to the same Context. Frequent repeats mean rules should come back.', '', False),
- ('int', 22, 'Open', 'Show "Added by [name]" in Sources in v1?', 'Before rules return.', '', False),
- ('int', 23, 'Open', 'Is 10 the right default reading cap?', 'And is the cap set for the whole workspace only, or can a Context override it?', '', False),
- ('int', 24, 'Closed', 'Source access default', 'Closed Nov 11. Off by default, and only the Owner turns it on.', '', False),
- ('int', 25, 'Open', 'Source access on a shared Roll up', 'Can a Roll up Viewer\'s AI tool read sources in Contexts they can\'t open?', 'No. Roll up Viewers get the Roll up only.', False),
- ('int', 26, 'Closed', 'Source access inside Neuma', 'Closed Nov 11. One setting for Neuma and AI tools. Slack threads and emails shown in full today need to follow it.', '', False),
- ('int', 27, 'Open', 'Save a digest per meeting from day one?', 'Summary, topics, quotes and items, made when the meeting is read. It would let long-term patterns run later without re-reading old transcripts.', '', False),
- ('int', 28, 'Open', 'Where See all users browse every Context', '"All Contexts" is out of the sidebar. Options: an Access filter option "Everyone at Acme GTM", or search only.', '', False),
- ('int', 29, 'Open', 'Slack channels as a Context source', 'Slack\'s API terms don\'t allow storing messages. Options: remove channels as a source, keep summaries only, or look channels up live without storing. Create Context and Integrations still show channels.', '', False),
- ('int', 30, 'Open', 'Settings › Access is admin-only, but the See all list is for everyone', '', 'Split it: a read-only See all list for everyone, with the controls for admins.', False),
- ('int', 31, 'Open', 'Workspace name still says Acme GTM on some screens', 'Onboarding, Contexts and Settings now use the domain, acmegtm.com.', '', False),
- ('int', 32, 'Open', 'People who join a series later', 'Someone added to a recurring invite in month six would see summaries from before they were there. More to build.', 'A person sees a series from the date they joined the invite.', False),
- ('int', 33, 'Open', 'Hand-built and account Contexts under Transcript access', 'When one meeting is added to a hand-built Context, do its attendees see the whole Context? And is pulling reps\' meetings into account Contexts an admin-level exception to rule 1?', 'Attendees see only that meeting\'s summary.', False),
- ('int', 34, 'Open', 'Can Make private be undone with one click?', 'Decided Nov 13: the people who lose access are not told. Undo is still open.', '', False),
- ('int', 35, 'Open', 'Does "Members can connect their own" ship in the first version?', 'The "3 people connected their own" line and list ship either way. Also open: whether the line shows on a tool already connected for the company.', '', False),
- ('int', 36, 'Open', 'Where the Owner switches source access on', 'Not mocked and not decided.', 'One switch in Share on Screen 3, "Let viewers read full transcripts", with a confirm. Editors read transcripts without the switch.', False),
- ('onb', 1, 'Open', 'The only admin leaves the company', '', 'Anyone who proves control of the domain can claim admin, self-serve. Prompt the creator to add a second admin once a few people join.', False),
- ('onb', 2, 'Open', 'Who owns a leaver\'s Contexts', 'When the owner is deactivated: their manager, the admin, or the new host of the series?', '', False),
- ('onb', 3, 'Open', 'Owner while the host isn\'t on Neuma', 'The Owner decides who reads the full transcript, so this matters more now. When the host joins, does ownership move to them?', 'The person who brought the transcripts in owns it until the host joins.', False),
- ('onb', 4, 'Open', 'Can admins switch joining to request to join?', 'If so, waiting must not block. Mocked as "Ask an admin first" in Settings › Workspace.', '', False),
- ('onb', 5, 'Open', 'Tell admins when someone joins', 'By email, and whether to ask before joining. Not decided.', '', False),
- ('onb', 6, 'Open', 'Screens that still say Acme GTM', 'Screen 2 · Empty also still has the old layout, with no second nav.', '', False),
- ('onb', 7, 'Open', 'People who join a series later', 'Same as question 32 in the integrations log.', 'A person sees a series from the date they joined the invite.', False),
- ('onb', 8, 'Open', 'Reading order on the first visit', '', 'Read the series with the soonest next meeting first, so the first rows turn Ready early.', False),
- ('onb', 9, 'Open', 'Heading on Sign in', '"Create your Neuma account" is wrong for returning users.', '"Sign in to Neuma".', False),
- ('onb', 10, 'Open', 'See all is never announced to the first person', 'Tell the workspace when an admin grants it?', '', False),
- ('onb', 11, 'Open', 'Row highlight when a Context turns ready', 'A row briefly highlights in 11.2 when it turns ready with the page open. Keep it?', '', False),
- ('onb', 12, 'Open', 'An in-person series that never gets a transcript', '', 'After a few missed meetings, offer once: "Record it with a notetaker, or hide it."', False),
- ('onb', 13, 'Open', 'Roll ups in the second nav', '', 'A fourth built-in under Shared with you. Filter drops Access and Type and becomes Tags only.', False),
- ('onb', 14, 'Open', 'A calendar that disconnects later', 'Expired sign-in or revoked access.', 'A warning line above the Contexts table, and in Settings › Your connections.', False),
- ('onb', 15, 'Open', 'Member views that aren\'t drawn', 'A Member\'s Settings (two tabs) and onboarding step 2 (Just me only).', '', False),
-]
+QUESTIONS = []
 
 # Places where the logs disagree. `match` finds the line in DECISIONS.md.
-CONFLICTS = [
- {'t': 'Only you patterns against issues identified by Neuma', 'match': 'Only the owner sees Patterns', 'kind': 'Conflict',
-  'a': ['Decision log, Nov 4 or earlier', 'Only the owner sees Patterns.'],
-  'b': ['Decision log, Nov 13', 'Issues identified by Neuma come from patterns and show to everyone in the Context, with how many meetings they were seen across.']},
- {'t': 'Slack channels as a source', 'match': 'For messages, admins choose all channels', 'kind': 'Conflict',
-  'a': ['Decision log', 'For messages, admins choose all channels or specific ones. Later.'],
-  'b': ['Decision log, Nov 11', 'Neuma does not ingest Slack. Slack\'s API terms stop third parties keeping copies of Slack data.']},
- {'t': 'Agents can\'t write to Neuma yet', 'match': 'read only in v1', 'kind': 'Blocks this idea',
-  'a': ['Decision log, Nov 10', 'The MCP server is read only in v1. Write tools come later.'],
-  'b': ['This prototype', 'Agents write decisions into a Context. That needs a write tool.']},
-]
+CONFLICTS = []
 
 SOURCES = [
- {'name': 'DECISIONS.md', 'where': 'Contexts folder', 'by': 'Claude, from the notes written on the screens', 'when': 'Nov 11', 'what': '',
+ {'name': 'DECISIONS.md', 'where': 'neuma-v3 repo', 'by': 'Claude, as Jared decides in chat', 'when': 'From Nov 17', 'what': '',
   'sections': []},
- {'name': 'integrations-decisions.md', 'where': 'Claude project', 'by': 'Claude, in the Integrations design session', 'when': 'Nov 5 to Nov 11',
-  'what': '36 questions, 5 closed.',
-  'sections': ['Sign-up: bottom up and top down', 'Personal connections on a company tool', 'Transcript access', 'Access', 'Reading cap and source access', 'Asking across tools', 'Slack API terms', 'Contexts directory', 'Recurring meetings become Contexts', 'Access to Contexts', 'Roles', 'Settings: admin tabs', 'Roll ups', 'Processing cost', 'What comes in', 'Privacy', 'Add meeting transcripts drawer', 'Integration pages', 'Series matching', 'Salesforce and account Contexts', 'Later: Email into a Context', 'Later: Rules', 'Later: Teams']},
- {'name': 'onboarding-decisions.md', 'where': 'Claude project', 'by': 'Claude, in the onboarding design session', 'when': 'Nov 11',
-  'what': '15 open questions. 9 closed, not shown here.',
-  'sections': ['Transcript access', 'Flow', 'First version scope', 'Contexts states', 'Meeting link matching', 'Second nav and views', 'New and ready', 'Hover peek', 'Row menu', 'Deleting and hiding Contexts', 'Sign in', 'Frame', 'Copy voice', 'Workspace', 'Meeting tool step', 'Notetaker matching', 'Later: Suggested Contexts from domains']},
 ]
 
 def parse_log():
@@ -137,10 +68,8 @@ def build():
         conflicts.append(dict(c, ref=hit[0]['id']))
     src = json.loads(json.dumps(SOURCES))
     own = [d for d in decisions if not d['src']]
-    src[0]['what'] = '%d decisions from screen notes, %d with a why. %d open questions and options. Also holds the backfill from the two project docs.' % (
+    src[0]['what'] = '%d decisions, %d with a why. %d open questions and options.' % (
         len(own), sum(1 for d in own if d['why']), len(logq))
-    for i, k in ((1, 'int'), (2, 'onb')):
-        src[i]['what'] = '%d decisions, split into single lines in DECISIONS.md on Nov 11. %s' % (sum(1 for d in decisions if d['src'] == k), src[i]['what'])
     # "Last written" in the header: the day DECISIONS.md last changed, Sydney time
     import datetime
     try:
@@ -381,12 +310,14 @@ TEMPLATE = r"""<!DOCTYPE html>
   function renderS(){
     var dn = D.decisions.length, openQ = D.questions.filter(function(x){ return x.status !== 'Closed'; }), items = D.decisions.concat(openQ);
     var h = '<div class="grid grid-cols-[1fr_360px] gap-6 items-start"><div class="space-y-5 min-w-0">';
+    if (D.conflicts.length) {
     h += '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 dl-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#nm-sidebar-s12)" fill-rule="evenodd"/></svg><span class="text-[13px] font-semibold text-slate-900">Needs attention</span><span class="text-[11px] font-semibold dl-rank">the logs disagree</span></div><div class="divide-y divide-slate-100">';
     D.conflicts.forEach(function(c, i){
       h += '<div class="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer" data-open="' + c.ref + '"><span class="w-[20px] shrink-0 text-center dl-rank text-[14px] leading-[20px]">' + (i + 1) + '</span><div class="min-w-0 flex-1"><div class="flex items-center gap-2"><span class="text-[13.5px] font-medium text-slate-900 leading-snug">' + esc(c.t) + '</span><span class="badge ' + (c.kind === 'Conflict' ? 'bg-rose-50 text-rose-700' : c.kind === 'Naming' ? 'bg-slate-100 text-slate-600' : 'bg-amber-50 text-amber-700') + '">' + esc(c.kind) + '</span></div>'
         + [c.a, c.b].map(function(s){ return '<div class="mt-1 text-[12.5px] leading-[1.5] text-slate-600"><span class="text-slate-400">' + esc(s[0]) + '</span> ' + esc(s[1]) + '</div>'; }).join('') + '</div>' + rv(c.ref) + '</div>';
     });
     h += '</div></div>';
+    }
     h += '<div class="rounded-xl border border-slate-200 bg-white p-4"><div class="text-[13px] font-semibold text-slate-900">Where the log stands</div><div class="mt-3 grid grid-cols-4 gap-3">'
       + stat(dn, 'Decisions') + stat(D.decisions.filter(function(d){ return d.why; }).length + ' of ' + dn, 'Have a why') + stat(openQ.length, 'Open questions') + stat(openQ.filter(function(x){ return x.p; }).length, 'Have a proposal')
       + '</div><div class="mt-3 grid grid-cols-4 gap-3">' + ['Critical', 'Important', 'Medium', 'Low'].map(function(v){ return stat(D.decisions.filter(function(d){ return d.imp === v; }).length, v + ' decisions'); }).join('') + '</div><div class="mt-3 grid grid-cols-2 gap-3">' + ['jared', 'jason'].map(function(w){ var n = reviewed(w, items), pct = Math.round(100 * n / items.length); return '<div class="rounded-lg border border-slate-200 px-3 py-2.5"><div class="flex items-center justify-between text-[12.5px]"><span class="font-medium text-slate-800">' + WHO[w][1] + '</span><span class="num text-slate-500">' + n + ' of ' + items.length + ' reviewed</span></div><div class="dotbar mt-2"><span style="right:' + (100 - pct) + '%"></span></div></div>'; }).join('') + '</div></div>';
@@ -421,7 +352,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     if (isQ) { if (x.d) h += sec('Detail', esc(x.d)); if (x.p) h += sec('Proposed', esc(x.p)); }
     else h += sec('Why', x.why ? esc(x.why) : '<span class="text-slate-400">Not recorded. The screen states no reason.</span>');
     if (cf) h += '<div class="rounded-lg border border-rose-200 bg-rose-50/60 px-3 py-2.5"><div class="text-[12px] font-semibold text-rose-700">' + esc(cf.kind === 'Conflict' ? 'The logs disagree' : cf.kind) + ' · ' + esc(cf.t) + '</div>' + [cf.a, cf.b].map(function(s){ return '<div class="mt-1.5 text-[12.5px] leading-[1.5] text-slate-700"><span class="text-slate-500">' + esc(s[0]) + '</span> ' + esc(s[1]) + '</div>'; }).join('') + '</div>';
-    h += sec('Written by', '<span class="dl-agent" style="color:#334155">' + SPARK + 'Claude · ' + BY[x.log || x.src || 'log'] + '</span><div class="mt-1 text-slate-500">' + (isQ ? LOGS[x.log] + ', question ' + x.n + (x.log === 'log' ? '' : '. Kept in the Claude project.') : (x.src ? LOGS[x.src] + '. Added to DECISIONS.md in the Nov 11 backfill.' : 'DECISIONS.md, built Nov 11 from the notes on the screen.')) + '</div>');
+    h += sec('Written by', '<span class="dl-agent" style="color:#334155">' + SPARK + 'Claude · ' + BY[x.log || x.src || 'log'] + '</span><div class="mt-1 text-slate-500">' + (isQ ? LOGS[x.log] + ', question ' + x.n + (x.log === 'log' ? '' : '. Kept in the Claude project.') : (x.src ? LOGS[x.src] + '. Added to DECISIONS.md in the Nov 11 backfill.' : 'DECISIONS.md, the V3 decision log.')) + '</div>');
     if (x.area) h += sec('Where', esc(x.area) + (x.file ? ' · <a class="text-brand-700 hover:underline" href="' + x.file + '">Open ' + esc(x.file) + '</a>' : ''));
     h += '<div><div class="eyebrow">Review</div>' + (o && (o.v || o.note) ? '<div class="mt-2 rounded-lg border border-slate-200 px-3 py-2 text-[12.5px] text-slate-700"><span class="font-medium">' + WHO[other()][1] + '</span> ' + (o.v === 'agree' ? 'agreed.' : o.v === 'push' ? 'pushed back.' : 'left a note.') + (o.note ? '<div class="mt-1 text-slate-600">' + esc(o.note) + '</div>' : '') + '</div>' : '')
       + '<div class="mt-2 flex items-center gap-2"><span class="text-[12px] text-slate-500 mr-1">You are ' + WHO[who][1] + '</span>' + rv(x.id, true) + '</div>'
