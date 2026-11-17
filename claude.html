@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Neuma · Claude</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="shared/tailwind-config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/neuma.css">
+<style>
+  /* ── Screen 10 · AI chat client frame (generic) ── */
+  .cl { background:#faf9f6; color:#1f1e1d; font-size:15px; }
+  .cl-side { background:#f3f1ec; border-right:1px solid #e8e5dd; }
+  .cl-row { padding:6px 12px; border-radius:8px; font-size:13.5px; color:#44403c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cl-row.on { background:#e8e5dd; color:#1f1e1d; }
+  .cl-user { background:#efece5; border-radius:14px; padding:10px 14px; max-width:520px; margin-left:auto; line-height:1.5; }
+  .cl-ans { line-height:1.65; font-size:15px; }
+  .cl-ans p + p { margin-top:10px; }
+  .cl-tool { border:1px solid #e5e2da; background:#fff; border-radius:10px; }
+  .cl-tool summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:13px; color:#57534e; }
+  .cl-tool summary::-webkit-details-marker { display:none; }
+  .cl-tool[open] summary .cl-chev { transform:rotate(90deg); }
+  .cl-chev { transition:transform .15s; color:#a8a29e; }
+  .cl-io { border-top:1px solid #f0ede6; padding:8px 10px 10px; font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11.5px; line-height:1.55; color:#44403c; }
+  .cl-io .k { color:#a8a29e; }
+  .cl-cite { display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 4px; border-radius:5px; background:#eef2ff; color:#4338ca; font-size:11px; font-weight:600; vertical-align:1px; cursor:pointer; }
+  .cl-input { border:1px solid #e5e2da; background:#fff; border-radius:14px; padding:12px 14px; font-size:14.5px; color:#a8a29e; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+  .cl-mark { width:16px; height:16px; border-radius:4px; background:#0f172a; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .cl-grp { font-size:13.5px; color:#78716c; }
+  .cl-grp > summary, .cl-step > summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:4px 0; }
+  .cl-grp > summary::-webkit-details-marker, .cl-step > summary::-webkit-details-marker { display:none; }
+  .cl-grp > summary:hover, .cl-step > summary:hover { color:#44403c; }
+  .cl-grp[open] > summary > .cl-chev, .cl-step[open] > summary > .cl-chev { transform:rotate(90deg); }
+  .cl-steps { margin:4px 0 0 7px; padding-left:16px; border-left:1px solid #e7e5e0; }
+  .cl-tn { margin-left:auto; font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:#a8a29e; }
+  .cl-json { margin:4px 0 8px 18px; border:1px solid #ebe8e1; border-radius:8px; background:#fff; padding:8px 10px; }
+  .cl-json pre { font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.5; color:#44403c; white-space:pre-wrap; margin:2px 0 6px; }
+  .cl-jh { font-size:11px; font-weight:600; color:#a8a29e; }
+  .cl-chip { display:inline-flex; align-items:center; gap:4px; height:20px; padding:0 7px 0 3px; border-radius:6px; background:#efece5; color:#57534e; font-size:11.5px; vertical-align:1px; cursor:pointer; white-space:nowrap; }
+  .cl-chip:hover { background:#e7e3da; }
+  .cl-chip .cl-mark { width:14px; height:14px; }
+  .cl-ib { width:28px; height:28px; border:1px solid #e5e2da; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; color:#57534e; font-size:15px; }
+  .cl-send { width:30px; height:30px; border-radius:8px; background:#c96442; display:inline-flex; align-items:center; justify-content:center; }
+  .cl.gpt { background:#fff; color:#0d0d0d; }
+  .cl.gpt .cl-bar { background:#f9f9f9; border-color:#ececec; }
+  .cl.gpt .cl-side { background:#f9f9f9; border-color:#ececec; }
+  .cl.gpt .cl-row { color:#0d0d0d; }
+  .cl.gpt .cl-row.on { background:#ececec; }
+  .cl.gpt .cl-user { background:#f4f4f4; border-radius:22px; }
+  .cl.gpt .cl-input { border-color:#e5e5e5; border-radius:28px; box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .cl.gpt .cl-ib { border-radius:999px; }
+  .cl.gpt .cl-send { background:#0d0d0d; border-radius:999px; }
+  .cl.gpt .cl-chip { background:#f4f4f4; border-radius:999px; color:#5d5d5d; }
+  .cl.gpt .cl-json { border-color:#ececec; }
+  .cl.gpt .cl-steps { border-color:#ececec; }
+  .cl.gpt [data-model] { display:none; }
+  .cl.gpt .cl-send { margin-left:auto; }
+</style>
+</head>
+<body class="antialiased">
+<script>document.write('<scr'+'ipt src="shared/nav.js?t='+Date.now()+'"></scr'+'ipt>')</script>
+
+<!-- ═════════════════════  SCREEN 10 — CLAUDE · ASK WITH THE NEUMA MCP  ═════════════════════ -->
+<section id="claude" class="max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 10</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Claude · Ask with the Neuma MCP</h2></div>
+    <div class="text-sm text-slate-500 max-w-[760px] text-right">Claude starts from what Neuma already knows, then digs into sources only when the question needs it. Full sources are on for Globex pilot, so Claude can reach a meeting from May, older than the latest 10 the summary uses. Open “Used Neuma” to see each step, and open a step to see what was sent and returned.</div>
+  </div>
+
+  <div class="flex items-center mb-3"><div class="ml-auto flex items-center gap-2 text-[11.5px] text-slate-400">AI tool<div class="inline-flex rounded-md bg-slate-100 p-0.5"><button type="button" data-app-btn="cl" class="px-2.5 py-0.5 rounded text-[11.5px] font-medium bg-white text-slate-900 shadow-sm">Claude</button><button type="button" data-app-btn="gpt" class="px-2.5 py-0.5 rounded text-[11.5px] font-medium text-slate-500">ChatGPT</button></div></div></div>
+  <div class="grid grid-cols-[1fr_300px] gap-6 items-start">
+    <!-- Chat window -->
+    <div class="cl rounded-2xl border border-slate-200 overflow-hidden shadow-card" data-app-frame>
+      <div class="cl-bar h-9 bg-[#ece9e2] flex items-center px-4 gap-2 border-b border-[#e0ddd5]">
+        <span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span>
+        <div class="mx-auto text-[12px] text-stone-500">Claude</div>
+      </div>
+      <div class="grid grid-cols-[230px_1fr] h-[960px]">
+        <aside class="cl-side p-3 flex flex-col gap-1 overflow-hidden">
+          <div class="px-3 py-2 text-[15px] font-semibold text-stone-800">Claude</div>
+          <div class="cl-row">+ New chat</div>
+          <div class="cl-row">Chats</div>
+          <div class="cl-row">Projects</div>
+          <div class="px-3 pt-4 pb-1 text-[11.5px] font-medium text-stone-400">Starred</div>
+          <div class="cl-row flex items-center gap-2">Globex account <span class="ml-auto inline-flex items-center gap-1 text-[10.5px] text-stone-500"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Globex pilot</span></div>
+          <div class="px-3 pt-4 pb-1 text-[11.5px] font-medium text-stone-400">Recents</div>
+          <div class="cl-row on">Globex SSO and what we promised</div>
+          <div class="cl-row">Board prep notes</div>
+          <div class="cl-row">Hiring plan draft</div>
+          <div class="cl-row">Acme QBR agenda</div>
+        </aside>
+
+        <div class="flex flex-col min-h-0">
+          <div class="flex-1 min-h-0 overflow-y-auto px-12 pt-8 pb-4">
+            <div class="max-w-[720px] mx-auto space-y-6">
+              <div class="cl-user">What did Globex’s CTO say about SSO, and what have we promised them so far?</div>
+
+              <details class="cl-grp" open><summary><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span><span>Used Neuma</span><span class="text-stone-400">· 4 steps</span><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg></summary><div class="cl-steps"><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Found the Context</span><span class="cl-tn">list_contexts</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "query": "Globex"
+}</pre><div class="cl-jh">Response</div><pre>{
+  "contexts": [
+    {
+      "name": "Globex pilot",
+      "meetings": 14,
+      "sources": 31,
+      "full_sources": true
+    }
+  ]
+}</pre></div></details><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Read the Context</span><span class="cl-tn">get_context</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "context": "Globex pilot"
+}</pre><div class="cl-jh">Response</div><pre>{
+  "summary": "From the latest 10 meetings",
+  "issues": [
+    {
+      "text": "SSO required before rollout",
+      "status": "open",
+      "quote": "We can’t roll out past the pilot team without SSO.",
+      "speaker": "Dana L. (CTO)",
+      "date": "Oct 22",
+      "source": "Globex security review",
+      "link": "neuma://globex-pilot/oct-22"
+    }
+  ],
+  "actions": [
+    {
+      "text": "Okta SSO beta",
+      "owner": "Jason M.",
+      "due": "Dec 1",
+      "status": "open"
+    },
+    {
+      "text": "Security questionnaire to Dana",
+      "owner": "Priya S.",
+      "due": "Nov 14",
+      "status": "open"
+    },
+    {
+      "text": "Pilot at 40 seats until SSO ships",
+      "owner": "Jared K.",
+      "status": "open"
+    }
+  ]
+}</pre></div></details><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Searched sources</span><span class="cl-tn">search_sources</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "context": "Globex pilot",
+  "query": "SSO"
+}</pre><div class="cl-jh">Response</div><pre>{
+  "passages": [
+    {
+      "source": "Globex security review",
+      "date": "Oct 22",
+      "speaker": "Dana L. (CTO)",
+      "text": "We can’t roll out past the pilot team without SSO."
+    },
+    {
+      "source": "Globex discovery call",
+      "date": "May 28",
+      "speaker": "Dana L.",
+      "text": "Okta is non-negotiable for anything company-wide."
+    },
+    {
+      "source": "Globex weekly sync",
+      "date": "Nov 4",
+      "speaker": "Jason M.",
+      "text": "SSO beta is on track for Dec 1."
+    }
+  ]
+}</pre></div></details><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Opened a transcript</span><span class="cl-tn">get_source</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "source": "Globex security review · Oct 22"
+}</pre><div class="cl-jh">Response</div><pre>{
+  "type": "transcript",
+  "length": "40 min",
+  "words": 6200
+}</pre></div></details></div></details>
+
+              <div class="cl-ans">
+                <p><span class="font-semibold">SSO is a blocker for Globex’s rollout.</span> Dana L., their CTO, said they can’t go past the pilot team without it <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Security review · Oct 22</span>. She first raised it in May, asking specifically for Okta <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Discovery call · May 28</span>.</p>
+                <p class="font-semibold">What we’ve promised</p>
+                <ul class="mt-1 space-y-1.5 list-disc pl-5">
+                  <li>Okta SSO in beta by Dec 1. Owner Jason M. <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Weekly sync · Nov 4</span></li>
+                  <li>A security questionnaire back to Dana by Nov 14. Owner Priya S. <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Security review · Oct 22</span></li>
+                  <li>Pilot extended to 40 seats until SSO ships. Owner Jared K. <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Security review · Oct 22</span></li>
+                </ul>
+                <p class="mt-2.5">The questionnaire is due in four days and is still open.</p>
+              </div>
+            </div>
+          </div>
+          <div class="px-12 pb-6"><div class="max-w-[720px] mx-auto"><div class="cl-input"><div>Reply to Claude…</div><div class="mt-3 flex items-center gap-2"><span class="cl-ib">+</span><span class="cl-ib"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span><span class="ml-auto text-[12.5px] text-stone-500" data-model>Opus 5.5 ⌄</span><span class="cl-send"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="space-y-4">
+      <div class="rounded-xl border border-slate-200 bg-white p-5">
+        <div class="eyebrow">How Claude uses Neuma</div>
+        <ol class="mt-3 space-y-3 text-[13px] leading-[1.55] text-slate-600 list-decimal pl-4">
+          <li><span class="font-medium text-slate-900">Find the Context.</span> Only Contexts the person can open.</li>
+          <li><span class="font-medium text-slate-900">Read what Neuma knows.</span> Summary from the latest 10. Issues, actions and decisions from every meeting Neuma has read, each with its quote and link. Most questions stop here.</li>
+          <li><span class="font-medium text-slate-900">Search sources.</span> Passages from every transcript and file in the Context, including ones older than the latest 10.</li>
+          <li><span class="font-medium text-slate-900">Open a source.</span> The full transcript, when a passage isn’t enough.</li>
+        </ol>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-5">
+        <div class="eyebrow">Who pays</div>
+        <p class="mt-3 text-[13px] leading-[1.55] text-slate-600">Neuma pays for reading the latest 10. Searching and opening sources run on the person’s own Claude usage.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-5">
+        <div class="eyebrow">Governed</div>
+        <ul class="mt-3 space-y-3 text-[13px] leading-[1.55] text-slate-600">
+          <li><span class="font-medium text-slate-900">Steps 3 and 4 need Full sources on.</span> A switch on each Context, in Share. Only the Owner changes it.</li>
+          <li><span class="font-medium text-slate-900">Every read is logged.</span> Each search and open goes to the admin audit log.</li>
+          <li><span class="font-medium text-slate-900">Every claim links back.</span> Citations open the meeting or message in Neuma.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════  SCREEN 10.1 — CLAUDE · SOURCE ACCESS OFF  ═════════════════════ -->
+<section id="claude-off" class="max-w-[1440px] mx-auto px-8 pt-12 pb-16">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 10.1</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Claude · Full sources off</h2></div>
+    <div class="text-sm text-slate-500 max-w-[760px] text-right">Same question, but Full sources are off for Globex pilot. Claude answers from what Neuma already extracted, including the quote attached to the issue, and says what it couldn’t reach.</div>
+  </div>
+  <div class="flex items-center mb-3"><div class="ml-auto flex items-center gap-2 text-[11.5px] text-slate-400">AI tool<div class="inline-flex rounded-md bg-slate-100 p-0.5"><button type="button" data-app-btn="cl" class="px-2.5 py-0.5 rounded text-[11.5px] font-medium bg-white text-slate-900 shadow-sm">Claude</button><button type="button" data-app-btn="gpt" class="px-2.5 py-0.5 rounded text-[11.5px] font-medium text-slate-500">ChatGPT</button></div></div></div>
+  <div class="grid grid-cols-[1fr_300px] gap-6 items-start">
+    <div class="cl rounded-2xl border border-slate-200 overflow-hidden shadow-card" data-app-frame>
+      <div class="cl-bar h-9 bg-[#ece9e2] flex items-center px-4 gap-2 border-b border-[#e0ddd5]">
+        <span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span>
+        <div class="mx-auto text-[12px] text-stone-500">Claude</div>
+      </div>
+      <div class="px-12 pt-8 pb-8">
+        <div class="max-w-[720px] mx-auto space-y-6">
+          <div class="cl-user">What did Globex’s CTO say about SSO, and what have we promised them so far?</div>
+          <details class="cl-grp" open><summary><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span><span>Used Neuma</span><span class="text-stone-400">· 2 steps</span><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg></summary><div class="cl-steps"><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Read the Context</span><span class="cl-tn">get_context</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "context": "Globex pilot"
+}</pre><div class="cl-jh">Response</div><pre>{
+  "summary": "From the latest 10 meetings",
+  "issues": [
+    {
+      "text": "SSO required before rollout",
+      "status": "open",
+      "quote": "We can’t roll out past the pilot team without SSO.",
+      "speaker": "Dana L. (CTO)",
+      "date": "Oct 22",
+      "source": "Globex security review",
+      "link": "neuma://globex-pilot/oct-22"
+    }
+  ],
+  "actions": [
+    {
+      "text": "Okta SSO beta",
+      "owner": "Jason M.",
+      "due": "Dec 1",
+      "status": "open"
+    },
+    {
+      "text": "Security questionnaire to Dana",
+      "owner": "Priya S.",
+      "due": "Nov 14",
+      "status": "open"
+    },
+    {
+      "text": "Pilot at 40 seats until SSO ships",
+      "owner": "Jared K.",
+      "status": "open"
+    }
+  ]
+}</pre></div></details><details class="cl-step"><summary><svg class="cl-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg><span>Searched sources</span><span class="cl-tn">search_sources</span></summary><div class="cl-json"><div class="cl-jh">Request</div><pre>{
+  "context": "Globex pilot",
+  "query": "SSO"
+}</pre><div class="cl-jh">Response</div><pre class="text-amber-700">{
+  "error": "Full sources are off for Globex pilot.",
+  "can_turn_on": "Jared K. (Owner)"
+}</pre></div></details></div></details>
+          <div class="cl-ans">
+            <p><span class="font-semibold">SSO is a blocker for Globex’s rollout.</span> Dana L., their CTO, said “we can’t roll out past the pilot team without SSO” <span class="cl-chip"><span class="cl-mark"><svg width="10" height="10" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="#F59DA6" fill-rule="evenodd"/></svg></span>Security review · Oct 22</span>.</p>
+            <p>Open actions: Okta SSO beta by Dec 1 (Jason M.), the security questionnaire by Nov 14 (Priya S.), and 40 pilot seats until SSO ships (Jared K.).</p>
+            <p class="text-stone-500">That’s what Neuma attached to its items. Full sources are off for this Context, so I can’t search earlier meetings or open full transcripts. Jared K. can turn it on.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-white p-5">
+      <div class="eyebrow">What still works</div>
+      <ul class="mt-3 space-y-3 text-[13px] leading-[1.55] text-slate-600">
+        <li><span class="font-medium text-slate-900">Summary, issues, actions and decisions.</span> get_context always works for anyone with access.</li>
+        <li><span class="font-medium text-slate-900">Quotes on items.</span> Every issue, action and decision carries its quote, speaker, date and link, so answers still have evidence.</li>
+        <li><span class="font-medium text-slate-900">No reading the sources.</span> With Full sources off, Claude can list a Context’s sources by title and date, but can’t search them or open a full transcript.</li>
+        <li><span class="font-medium text-slate-900">Says why.</span> The tool tells Claude who can turn it on, so the person knows who to ask.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═════════════════════  SCREEN 10.2 — CLAUDE · BUILD NOTES  ═════════════════════ -->
+<section id="claude-build" class="max-w-[1440px] mx-auto px-8 pt-12 pb-16">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 10.2</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Claude · Build notes</h2></div>
+    <div class="text-sm text-slate-500 max-w-[760px] text-right">What the Neuma MCP server does, for whoever builds it. Neuma enforces access and serves five tools. Claude does the searching and reasoning on the person’s own usage.</div>
+  </div>
+  <div class="rounded-xl border border-slate-200 bg-white p-5 mb-4"><div class="eyebrow mb-3">Tools</div><table class="w-full border border-slate-200 rounded-lg overflow-hidden"><tr><th class="px-3 py-2.5 text-left align-top text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-50">Tool</th><th class="px-3 py-2.5 text-left align-top text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-50">Input</th><th class="px-3 py-2.5 text-left align-top text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-50">Returns</th><th class="px-3 py-2.5 text-left align-top text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-50">Needs Full sources</th><th class="px-3 py-2.5 text-left align-top text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-50">Notes</th></tr><tr><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">list_contexts</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">query</code> (optional)</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Contexts the person can open: <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">id</code>, name, owner, meeting count, source count, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">full_sources</code>, last activity.</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">No</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Matches on name, people and accounts. Claude calls it first when the person doesn’t name a Context.</td></tr><tr><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">get_context</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">context_id</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Summary and patterns from the latest 10 transcripts. Issues, actions and decisions from every meeting Neuma has read, each with <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">status</code>, owner, due, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">quote</code>, speaker, date, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">source_id</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">link</code>.</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">No</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">The main tool. Answers most questions. Works with Full sources off.</td></tr><tr><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">list_sources</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">context_id</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">type</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">from</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">to</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">attendee</code> (all optional except <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">context_id</code>)</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Every source in the Context: <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">source_id</code>, type (transcript or file in the first version), title, date, attendees, length, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">extracted</code> (false for a meeting added past the latest 10), <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">link</code>.</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">No</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Built from metadata. No LLM. Matches the Sources tab, which a Viewer can see with Full sources off.</td></tr><tr><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">search_sources</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">context_id</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">query</code>, optional filters as above, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">limit</code> (default 20)</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Passages: <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">source_id</code>, title, date, speaker, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">text</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">timestamp</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">link</code>.</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Yes</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Postgres full-text search in v1. Claude retries with other wordings itself.</td></tr><tr><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">get_source</code></td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">source_id</code>, <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">mode</code> (passages or full, default passages), <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">query</code> (for passages)</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">passages: sections a few minutes either side of each match, plus the source’s summary. full: the whole transcript with speakers and timestamps. Always a <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">link</code>.</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Yes</td><td class="px-3 py-2.5 text-left align-top text-[12.5px] text-slate-700 border-t border-slate-100">Claude picks full for questions about the whole meeting, or when passages don’t settle it.</td></tr></table></div>
+  <div class="grid grid-cols-3 gap-4"><div class="rounded-xl border border-slate-200 bg-white p-5"><div class="eyebrow">Connection</div><ul class="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-slate-600"><li><span class="font-medium text-slate-900">Remote MCP server.</span> Hosted by Neuma. People add it in Claude, ChatGPT or any MCP client from Settings › Your connections › AI tools.</li><li><span class="font-medium text-slate-900">Signs in as the person.</span> OAuth with their Neuma account. Every call runs as that person, never as a service account.</li><li><span class="font-medium text-slate-900">Read only in v1.</span> No tool changes anything in Neuma.</li></ul></div><div class="rounded-xl border border-slate-200 bg-white p-5"><div class="eyebrow">Every call</div><ul class="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-slate-600"><li><span class="font-medium text-slate-900">Check access first.</span> Return only Contexts the person owns or that are shared with them: Owner, Editor, Viewer, or an approved manager request.</li><li><span class="font-medium text-slate-900">Super admin doesn’t widen it.</span> A Super admin can open any Context in Neuma, but an AI tool only reaches the ones they own or that are shared with them. Asked about another, the tool says “That Context isn’t shared with you. Open it in Neuma.”</li><li><span class="font-medium text-slate-900">Check Full sources.</span> search_sources and get_source need the Context’s switch on. list_sources works without it, since it returns titles, dates and attendees only.</li><li><span class="font-medium text-slate-900">Only sources in a Context.</span> Never return anything outside a Context. A removed or deleted source disappears from every tool at once.</li><li><span class="font-medium text-slate-900">Log it.</span> Every search_sources and get_source call goes to the admin audit log: person, Context, source, tool, time.</li><li><span class="font-medium text-slate-900">Link everything.</span> Every item, passage and source carries a link that opens Neuma at that source, at the timestamp for transcripts.</li></ul></div><div class="rounded-xl border border-slate-200 bg-white p-5"><div class="eyebrow">Errors</div><ul class="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-slate-600"><li><span class="font-medium text-slate-900"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">not_found</code></span> The Context or source doesn’t exist, or the person can’t open it. One error for both, so nothing leaks.</li><li><span class="font-medium text-slate-900"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">not_shared</code></span> Super admins only, for a Context they can open in Neuma but that isn’t shared with them. They can already see it exists, so nothing leaks.</li><li><span class="font-medium text-slate-900"><code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">full_sources_off</code></span> Include <code class="text-[11.5px] text-slate-900" style="font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace">can_turn_on</code> with the Owner’s name, so Claude can say who to ask.</li></ul></div></div>
+  <div class="grid grid-cols-2 gap-4 mt-4"><div class="rounded-xl border border-slate-200 bg-white p-5"><div class="eyebrow">What the AI tool should do</div><ul class="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-slate-600"><li><span class="font-medium text-slate-900">Start with get_context.</span> Go to sources only when the question needs quotes, older meetings or detail.</li><li><span class="font-medium text-slate-900">Several Contexts match.</span> Answer from each and label the parts. Ask only when the question is unclear.</li><li><span class="font-medium text-slate-900">Nothing matches.</span> Say so and list the closest Contexts.</li><li><span class="font-medium text-slate-900">Cite.</span> Every claim links to its source.</li><li><span class="font-medium text-slate-900">Put these rules in each tool’s description.</span> ChatGPT ignores server-level instructions, so the descriptions are what every client reads.</li></ul></div><div class="rounded-xl border border-slate-200 bg-white p-5"><div class="eyebrow">Later</div><ul class="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-slate-600"><li><span class="font-medium text-slate-900">Meaning-based search.</span> Embeddings behind search_sources if keyword search misses things in large Contexts. The tool stays the same.</li><li><span class="font-medium text-slate-900">Pin a Context to a Claude Project.</span> Every chat in that project starts from it.</li><li><span class="font-medium text-slate-900">Summaries for sources never read.</span> Made the first time someone opens one, then kept.</li><li><span class="font-medium text-slate-900">Long-term patterns.</span> Patterns across months, separate from the latest-10 patterns.</li><li><span class="font-medium text-slate-900">Write tools.</span> Mark an action done, add a note. Editors only.</li></ul></div></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-5 mt-4"><div class="eyebrow">ChatGPT</div><ul class="mt-3 grid grid-cols-2 gap-x-8 gap-y-2.5 text-[13px] leading-[1.55] text-slate-600">
+<li><span class="font-medium text-slate-900">Same server, same tools.</span> ChatGPT adds it as a custom connector (an “app”) with the server URL and the same OAuth sign-in.</li>
+<li><span class="font-medium text-slate-900">Needs Developer Mode.</span> Not on Free. Business, Enterprise and Edu get full support. Plus and Pro get read-only connectors, which covers ours.</li>
+<li><span class="font-medium text-slate-900">Tools only.</span> ChatGPT doesn’t read prompts or resources from MCP servers. Everything goes through the five tools.</li>
+<li><span class="font-medium text-slate-900">Deep research and company knowledge.</span> OpenAI has expected tools named search and fetch for these. If still required, add them as aliases for search_sources and get_source. Check OpenAI’s current docs.</li>
+<li><span class="font-medium text-slate-900">Searches differently.</span> ChatGPT may retry wordings less than Claude. Watch answer quality. It’s the first reason to add meaning-based search.</li>
+<li><span class="font-medium text-slate-900">Test both.</span> A Business workspace and a Plus account. Connector support is still beta and moves often.</li>
+</ul></div>
+</section>
+
+<script>(function(){
+var MAP=[["Reply to Claude…","Ask anything"],["Used Neuma","Called Neuma"],["Claude","ChatGPT"]],orig=new Map();
+var roots=[document.getElementById("claude"),document.getElementById("claude-off")];
+function nodes(){var out=[];roots.forEach(function(r){var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);while(w.nextNode())out.push(w.currentNode);});return out;}
+function set(app){
+  document.querySelectorAll("[data-app-frame]").forEach(function(f){f.classList.toggle("gpt",app==="gpt");});
+  nodes().forEach(function(n){if(n.parentNode.closest("[data-app-btn]"))return;if(!orig.has(n))orig.set(n,n.nodeValue);var t=orig.get(n);if(app==="gpt")MAP.forEach(function(m){t=t.split(m[0]).join(m[1]);});n.nodeValue=t;});
+  document.querySelectorAll("[data-app-btn]").forEach(function(b){var on=b.getAttribute("data-app-btn")===app;b.className="px-2.5 py-0.5 rounded text-[11.5px] font-medium "+(on?"bg-white text-slate-900 shadow-sm":"text-slate-500");});
+}
+document.querySelectorAll("[data-app-btn]").forEach(function(b){b.addEventListener("click",function(){set(b.getAttribute("data-app-btn"));});});
+})();</script>
+</body>
+</html>

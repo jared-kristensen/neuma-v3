@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Neuma · Feed</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="shared/tailwind-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/neuma.css">
+</head>
+<body class="antialiased">
+<script>document.write('<scr'+'ipt src="shared/nav.js?t='+Date.now()+'"></scr'+'ipt>')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ru-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs></svg>
+<!-- ═════════════════════  SCREEN 1 · FOR YOU (v166)  ═════════════════════ -->
+<style>
+  #for-you .fy-card { border-radius:14px; background:#fff; border:1px solid #eceef3; box-shadow:0 1px 2px rgb(11 14 46 / .04); padding:16px 20px 14px; transition:opacity .25s; }
+  #for-you .fy-fb { width:28px; height:28px; border-radius:9999px; display:inline-flex; align-items:center; justify-content:center; color:#94a3b8; cursor:pointer; }
+  #for-you .fy-fb:hover { background:#f1f5f9; color:#0f172a; }
+  #for-you .fy-fb.on { color:#2a2fa6; background:#eef1ff; }
+  #for-you .fy-card.gone { opacity:0; }
+  #for-you .fy-src { font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#64748b; }
+  #for-you .fy-ico { width:30px; height:30px; border-radius:9999px; background:#f1f5f9; display:inline-flex; align-items:center; justify-content:center; font-size:15px; line-height:1; flex-shrink:0; }
+  #for-you .fy-mode { font-size:9.5px; font-weight:700; letter-spacing:.08em; padding:1px 6px; border-radius:5px; }
+  #for-you .fy-mode.know { background:#f1f5f9; color:#475569; } #for-you .fy-mode.decide { background:#fffbeb; color:#b45309; } #for-you .fy-mode.do { background:#eef1ff; color:#2a2fa6; }
+  #for-you .fy-pri { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:9999px; background:#3a48e6; color:#fff; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  #for-you .fy-pri:hover { background:#2a2fa6; }
+  #for-you .fy-sec { display:inline-flex; align-items:center; padding:3px 11px; border-radius:9999px; border:1px solid #d9dde5; background:#fff; color:#0f172a; font-size:12px; font-weight:500; cursor:pointer; white-space:nowrap; }
+  #for-you .fy-sec:hover { background:#f8fafc; }
+  #for-you .fy-draft { display:flex; align-items:center; gap:10px; border:1px solid #bcc7ff; border-radius:10px; background:#f8f8f6; padding:7px 12px; font-size:12.5px; color:#334155; }
+  #for-you .fy-opt { border:1px solid #eceef3; border-radius:10px; background:#fafaf9; padding:8px 12px; font-size:12.5px; }
+</style>
+<section id="for-you" class="mb max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 1</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">For you · CEO</h2></div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">Built from the four Audience Republic Contexts: Ben &amp; Jared 1:1, Sales huddle, CS huddle and Adelaide Festival Centre. Dated Dec 4, 2025, the last call in the material. Left: what needs the CEO this week. The drafted work sits behind each button. Right: what repeats across Contexts. Thumbs up and dismiss train what shows next.</div>
+  </div>
+  <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-card" style="background:#f6f6f3">
+    <div class="flex min-h-[900px]">
+      <aside class="w-[240px] border-r border-slate-200 bg-white/60 px-4 pt-8 pb-6 flex flex-col shrink-0">
+        <div class="flex items-center gap-2 mb-8 px-2"><svg width="28" height="28" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#ru-g)" fill-rule="evenodd"/></svg><div class="nm-wordmark text-[18px]">neuma</div></div>
+        <nav class="flex flex-col gap-0.5"><a class="nav-link active flex items-center justify-between">For you<span class="num font-mono text-[10.5px] text-slate-400" data-fy-n></span></a><a href="contexts.html#contexts" class="nav-link">Contexts</a><a class="nav-link">Settings</a></nav>
+        <div class="mt-auto pt-4 border-t border-slate-200"><button class="user-chip w-full flex items-center gap-2 text-xs px-2 py-1.5 rounded-md hover:bg-slate-100 text-left"><div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center text-white text-[11px] font-semibold shrink-0">JK</div><div class="flex-1 min-w-0"><div class="font-medium text-slate-800 truncate">Jared K.</div><div class="text-slate-500 truncate">Audience Republic</div></div></button></div>
+      </aside>
+      <main class="flex-1 min-w-0 px-10 pt-9 pb-14">
+        <div class="flex items-baseline gap-3"><h1 class="text-[24px] font-semibold tracking-tight text-slate-900">Good morning, Jared</h1><span class="text-[13px] text-slate-500">Thursday, Dec 4</span><span class="hidden" data-fy-sub></span></div>
+        <div class="mt-5 grid grid-cols-[minmax(0,640px)_340px] gap-8 items-start">
+          <div class="space-y-3 min-w-0" data-fy-list></div>
+          <div class="space-y-4">
+            <div class="rounded-xl border border-slate-200 bg-white overflow-hidden mb-card">
+              <div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#ru-g)" fill-rule="evenodd"/></svg><span class="text-[13px] font-semibold text-slate-900">Patterns</span><span class="text-[11px] font-semibold nm-rank-text">across 4 Contexts</span></div>
+              <div class="divide-y divide-slate-100" data-fy-pats></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+<script>
+// Screen 1 · For you, CEO feed from the four Audience Republic Contexts (v166)
+(function(){
+  var list = document.querySelector('#for-you [data-fy-list]'); if (!list) return;
+  var M = {know:'Know', decide:'Decide', do:'Do'};
+  var BULB = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-slate-400"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>';
+  var SEND = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+  function pri(t, done, icon){ return '<button type="button" class="fy-pri" data-fy-go="'+done+'">'+(icon||'')+t+'</button>'; }
+  function sec(t, dismiss){ return '<button type="button" class="fy-sec"'+(dismiss?' data-fy-x':'')+'>'+t+'</button>'; }
+  function draft(to, text){ return '<div class="fy-draft"><span class="shrink-0 text-[11px] font-semibold text-brand-700">Draft</span><span class="shrink-0 text-slate-400">'+to+'</span><span class="truncate" title="'+text.replace(/"/g,'&quot;')+'">'+text+'</span></div>'; }
+  function opts(a, b){ return '<div class="grid grid-cols-2 gap-2"><div class="fy-opt" style="border-color:#bcc7ff"><span class="font-semibold text-slate-900">'+a[0]+'</span> <span class="text-[10.5px] font-semibold nm-rank-text ml-1">Neuma suggests</span><div class="mt-0.5 text-slate-500">'+a[1]+'</div></div><div class="fy-opt"><span class="font-semibold text-slate-900">'+b[0]+'</span><div class="mt-0.5 text-slate-500">'+b[1]+'</div></div></div>'; }
+  var C = [
+    { m:'do', ico:'🏟️', src:'Adelaide Festival Centre · Retention risk', time:'Check-in Jan 13', t:'AFC is reviewing every data system. Julia’s patience is wearing thin.',
+      why:'Said on Dec 2. New CEO, new strategic plan. Subscriber counts have been raised on 4 calls, with “an engineer is looking into it” each time.',
+      body: draft('To David','Before AFC’s Jan 13 check-in I need dates for three things: the subscriber counts, the shared live filters bug, and the automation session Julia asked for on Oct 28.'),
+      btns: pri('Send to David','Sent to David',SEND) },
+    { m:'decide', ico:'💬', src:'CS huddle · Integration bug', time:'4 or 5 integrations', t:'Fix the opt-out bug across every integration, ahead of feature work?',
+      why:'Moshtix and Tixxar mark customers’ contacts as globally opted out, so they can’t email them. Untitled Group and Asbury Hall are affected. Four or five integrations share the same code, and there’s no integrations engineer.',
+      btns: pri('Make it a P1','Raised as a P1. David and Jason told.')+sec('Leave with CS') },
+    { m:'decide', ico:'💬', src:'CS huddle · Mixed messages', time:'Since Nov 20', t:'Is support moving to Salesforce in December, or next year?',
+      why:'AudienceView told Elle December. Xavier says mid to late next year. Meanwhile the team keeps investing in Intercom and training Fin.',
+      btns: pri('Ask Kirk for a date','Sent to Kirk',SEND)+sec('Tell the team: Intercom stays') },
+    { m:'know', ico:'💬', src:'CS huddle · Decision made', time:'Nov 27', t:'Existing customers keep their pricing. A new price book applies to new customers first.',
+      why:'Most customers pay well below list. Cult Lab pays about €8K for 360K contacts, and list for 450K is about €38K. The huddle’s worry: a new price book pushes them to Mailchimp.',
+      btns: '' },
+    { m:'know', ico:'💬', src:'CS huddle · Bug time', time:'Review starts today', t:'Bugs may be driving churn, and nobody can prove it yet',
+      why:'The churn form puts 7.1% of churn down to bugs, from half-filled exit forms. Engineering holds bug time at 20 to 30% until CS proves otherwise.',
+      btns: '' },
+    { m:'do', ico:'🎉', src:'Adelaide Festival Centre · Win', time:'By Dec 2', t:'Jeremy cleared AFC’s August tracker. All but two items fixed.',
+      why:'AFC had waited on it since Cherie left. The contacts added by mistake were also removed by Dec 2 without disturbing their reporting.',
+      body: draft('#team','Jeremy worked through every item on AFC’s August tracker. All but two are fixed and waiting for release. That’s how we keep a client who is reviewing every system. Thanks Jeremy.'),
+      btns: pri('Post to #team','Posted to #team',SEND) }
+  ];
+  var UP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>';
+  var X = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  list.innerHTML = C.map(function(o){
+    var p = o.src.split(' · ');
+    var fb = '<span class="ml-auto flex items-center gap-0.5"><button type="button" class="fy-fb" title="Useful. Show more like this" data-fy-up>'+UP+'</button><button type="button" class="fy-fb" title="Not useful. Show fewer like this" data-fy-x>'+X+'</button></span>';
+    return '<div class="fy-card" data-fy-card data-m="'+o.m+'">'
+      + '<div class="flex items-start gap-3"><div class="flex-1 text-[16px] font-semibold tracking-tight text-slate-900 leading-snug">'+o.t+'</div><span class="fy-mode '+o.m+' shrink-0 mt-[3px]">'+M[o.m].toUpperCase()+'</span></div>'
+      + '<p class="mt-1.5 text-[13.5px] leading-[1.55] text-slate-600">'+o.why+'</p>'
+      + '<div class="mt-2.5 flex items-center gap-1.5 text-[12px] text-slate-400"><span class="text-[13px] leading-none">'+o.ico+'</span><a href="context.html#context-summary" class="text-slate-500 hover:text-slate-800 hover:underline">'+p[0]+'</a><span>·</span><span>'+(p[1]||'')+'</span><span>·</span><span>'+o.time+'</span>'+(o.btns?'':fb)+'</div>'
+      + (o.btns ? '<div class="mt-3.5 flex items-center gap-2">'+o.btns+fb+'</div>' : '')+'</div>';
+  }).join('');
+  var P = [
+    ['Promises made in meetings go quiet.','The automation session Julia asked for on Oct 28. The SMS opt-out question from May 29. Venues West pricing from Feb 17. Ben’s commission, raised three times. Several of these were yours.','4 Contexts'],
+    ['Every departure takes customer knowledge with it.','AFC has had four or five account managers and re-explains their workflow each time. Cherie’s dashboards broke with no notes. Kenny’s discounts ended with him. Key tools ran through Ben’s login.','3 Contexts'],
+    ['Revenue holds by holding price.','Hive matches every proposal we send. Shadowbox, Concourse, Mint Festival and Cult Lab renewed without paying more. Cult Lab pays about a fifth of list.','2 Contexts'],
+    ['Customers build workarounds instead of waiting.','AFC runs SMS, reporting and data clean-up outside the platform. Stuko Made Nice’s developers have waited weeks on API docs that don’t match the API.','2 Contexts'],
+    ['The numbers in front of you are off.','Pricing calls counted as demos. Close dates left in the past. A churn form built from half-filled answers. AFC’s own subscriber counts disagree with each other.','3 Contexts'],
+    ['Our biggest advantage has no owner.','Integrations are named as the edge over competitors. There has been no integrations engineer since the last one left, and integrations caused the opt-out bug.','2 Contexts']
+  ];
+  document.querySelector('#for-you [data-fy-pats]').innerHTML = P.slice(0,4).map(function(p){ return '<div class="group px-4 py-2.5"><div class="text-[12.5px] font-medium text-slate-900 leading-snug">'+p[0]+'</div><p class="mt-0.5 text-[11.5px] leading-[1.45] text-slate-500">'+p[1]+'</p><div class="mt-1 text-[11px] text-slate-400">'+p[2]+'</div></div>'; }).join('')+'<button type="button" class="w-full px-4 py-2 text-left text-[12px] font-medium text-brand-600 hover:bg-slate-50">Show 2 more</button>';
+  var sub = document.querySelector('#for-you [data-fy-sub]'), nav = document.querySelector('#for-you [data-fy-n]');
+  function cnt(m){ return list.querySelectorAll('[data-fy-card]'+(m?'[data-m="'+m+'"]':'')).length; }
+  function update(){ var n = cnt(); nav.textContent = n || ''; sub.textContent = n ? cnt('decide')+' to decide, '+cnt('do')+' to approve, '+cnt('know')+' to know' : 'You’re caught up'; }
+  update();
+  function remove(c){ c.classList.add('gone'); setTimeout(function(){ c.remove(); update(); }, 250); }
+  list.addEventListener('click', function(e){
+    var go = e.target.closest('[data-fy-go]'), x = e.target.closest('[data-fy-x]'), c = e.target.closest('[data-fy-card]');
+    var up = e.target.closest('[data-fy-up]'); if (up) { up.classList.toggle('on'); return; }
+    if (x) { remove(c); return; }
+    if (go) { c.innerHTML = '<div class="flex items-center gap-2.5 text-[13px] text-slate-700"><span class="fy-ico" style="background:#ecfdf5;color:#059669">✓</span>'+go.getAttribute('data-fy-go')+'<button type="button" class="ml-auto text-[12px] text-slate-500 hover:text-slate-900">Undo</button></div>'; setTimeout(function(){ remove(c); }, 1400); }
+  });
+})();
+</script>
+
+
+</body>
+</html>

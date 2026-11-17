@@ -1,0 +1,492 @@
+#!/usr/bin/env python3
+"""Build decisions.html (Screen 12, Decision log) from DECISIONS.md.
+
+    python3 tools/build_decisions.py
+
+DECISIONS.md is the only decision log. Decisions and new open questions come
+from its tables. The open questions carried over from the two frozen project
+docs (integrations-decisions.md, onboarding-decisions.md) are kept in QUESTIONS
+below. Close one here when it is settled, and log the decision in DECISIONS.md.
+If decisions.html exists, a numbered backup is saved first.
+"""
+import json, os, re, subprocess, sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# (log, number, status, title, detail, proposal, names Jason)
+QUESTIONS = [
+ ('int', 1, 'Open', 'Company or individual transcript connections as the default', 'An individual connection gets hosted meetings, plus shared transcripts where the tool\'s API allows it. Attendee access is untested on Zoom. Teams has no individual path. Transcript access rule 1 depends on this test.', '', False),
+ ('int', 2, 'Open', 'Meetings on someone else\'s account', 'A customer\'s Zoom or a partner\'s Teams is outside any connection. For sales teams that is a big share of calls. Options: a notetaker that joins the call, the Zoom app (Screen 5.2), or uploads.', '', False),
+ ('int', 3, 'Open', 'Who can press Reconnect', '', 'The tool admin only, with "Ask [admin]" for everyone else.', False),
+ ('int', 4, 'Open', 'Description parsing copy', 'Neuma reads event descriptions once to find Zoom links, then discards them. The UI says "never reads". Pick the copy: "never keeps", or don\'t parse.', '', False),
+ ('int', 5, 'Open', 'Custom account filters', 'Which fields, and how the builder works.', '', False),
+ ('int', 6, 'Open', 'Parent accounts as Roll ups', 'Should parent accounts become Roll ups automatically?', '', False),
+ ('int', 7, 'Open', 'Channel picker design', 'Shared by connect and Add channels.', '', False),
+ ('int', 8, 'Open', 'Add past meeting, and removing a meeting from a Context', 'Both need Context screens, including what attendees can do.', '', False),
+ ('int', 9, 'Open', 'Pre-meeting and post-meeting automations', 'Lead time, and triggering post-meeting on transcript arrival. Upcoming meetings need "+ Add to Context" somewhere outside Settings.', '', False),
+ ('int', 10, 'Open', 'Does HubSpot follow the Salesforce pattern?', 'Including following CRM visibility.', '', False),
+ ('int', 11, 'Open', 'Upgrade prompt from personal to company connections', 'Where it lives beyond Settings, and how often it shows.', '', False),
+ ('int', 12, 'Closed', 'Controls on member connections', 'Closed Nov 11. Replaced by one switch per tool: "Members can connect their own". Allow lists and per-request approval stay later.', '', False),
+ ('int', 13, 'Closed', 'Workspace joining', 'Decided Nov 11 in the onboarding log: same-domain sign-ups join automatically as Members. How IT becomes admin when the creator leaves is still open there.', '', False),
+ ('int', 14, 'Open', 'The engine never answers from a transcript outside a Context', 'Confirm with Jason. The access rule depends on it.', '', True),
+ ('int', 15, 'Open', 'Where reporting lines come from for manager access', 'Direct and indirect reports.', 'The manager field in Google or Microsoft directories.', False),
+ ('int', 16, 'Open', 'Content-based matching', '"Neuma thinks this was a demo." It fixes generic titles, but Neuma would read every transcript to sort them. Not v1.', '', False),
+ ('int', 17, 'Closed', 'Taking part is the permission', 'Closed Nov 11. Replaced by Transcript access: only the host, or someone who can already see the transcript in the meeting tool, can add a meeting. Still worth confirming with Jason and testing with a customer\'s IT.', '', True),
+ ('int', 18, 'Open', 'Rules: knowing which attendees are external', 'Companies with several domains and contractors on personal email need handling.', 'Source them from the workspace\'s verified domains.', False),
+ ('int', 19, 'Open', 'Rules: CRM conditions', '"Account stage is Negotiation", "Account owner is me".', '', False),
+ ('int', 20, 'Open', 'Rules: finding demos without Call type', 'Demos are found by title and outside attendees. Is that reliable enough for sales leaders, or does Call type come back when Gong is connected?', '', False),
+ ('int', 21, 'Open', 'The v1 signal for bringing rules back', 'Track how often people add non-recurring meetings by hand to the same Context. Frequent repeats mean rules should come back.', '', False),
+ ('int', 22, 'Open', 'Show "Added by [name]" in Sources in v1?', 'Before rules return.', '', False),
+ ('int', 23, 'Open', 'Is 10 the right default reading cap?', 'And is the cap set for the whole workspace only, or can a Context override it?', '', False),
+ ('int', 24, 'Closed', 'Source access default', 'Closed Nov 11. Off by default, and only the Owner turns it on.', '', False),
+ ('int', 25, 'Open', 'Source access on a shared Roll up', 'Can a Roll up Viewer\'s AI tool read sources in Contexts they can\'t open?', 'No. Roll up Viewers get the Roll up only.', False),
+ ('int', 26, 'Closed', 'Source access inside Neuma', 'Closed Nov 11. One setting for Neuma and AI tools. Slack threads and emails shown in full today need to follow it.', '', False),
+ ('int', 27, 'Open', 'Save a digest per meeting from day one?', 'Summary, topics, quotes and items, made when the meeting is read. It would let long-term patterns run later without re-reading old transcripts.', '', False),
+ ('int', 28, 'Open', 'Where See all users browse every Context', '"All Contexts" is out of the sidebar. Options: an Access filter option "Everyone at Acme GTM", or search only.', '', False),
+ ('int', 29, 'Open', 'Slack channels as a Context source', 'Slack\'s API terms don\'t allow storing messages. Options: remove channels as a source, keep summaries only, or look channels up live without storing. Create Context and Integrations still show channels.', '', False),
+ ('int', 30, 'Open', 'Settings › Access is admin-only, but the See all list is for everyone', '', 'Split it: a read-only See all list for everyone, with the controls for admins.', False),
+ ('int', 31, 'Open', 'Workspace name still says Acme GTM on some screens', 'Onboarding, Contexts and Settings now use the domain, acmegtm.com.', '', False),
+ ('int', 32, 'Open', 'People who join a series later', 'Someone added to a recurring invite in month six would see summaries from before they were there. More to build.', 'A person sees a series from the date they joined the invite.', False),
+ ('int', 33, 'Open', 'Hand-built and account Contexts under Transcript access', 'When one meeting is added to a hand-built Context, do its attendees see the whole Context? And is pulling reps\' meetings into account Contexts an admin-level exception to rule 1?', 'Attendees see only that meeting\'s summary.', False),
+ ('int', 34, 'Open', 'Can Make private be undone with one click?', 'Decided Nov 13: the people who lose access are not told. Undo is still open.', '', False),
+ ('int', 35, 'Open', 'Does "Members can connect their own" ship in the first version?', 'The "3 people connected their own" line and list ship either way. Also open: whether the line shows on a tool already connected for the company.', '', False),
+ ('int', 36, 'Open', 'Where the Owner switches source access on', 'Not mocked and not decided.', 'One switch in Share on Screen 3, "Let viewers read full transcripts", with a confirm. Editors read transcripts without the switch.', False),
+ ('onb', 1, 'Open', 'The only admin leaves the company', '', 'Anyone who proves control of the domain can claim admin, self-serve. Prompt the creator to add a second admin once a few people join.', False),
+ ('onb', 2, 'Open', 'Who owns a leaver\'s Contexts', 'When the owner is deactivated: their manager, the admin, or the new host of the series?', '', False),
+ ('onb', 3, 'Open', 'Owner while the host isn\'t on Neuma', 'The Owner decides who reads the full transcript, so this matters more now. When the host joins, does ownership move to them?', 'The person who brought the transcripts in owns it until the host joins.', False),
+ ('onb', 4, 'Open', 'Can admins switch joining to request to join?', 'If so, waiting must not block. Mocked as "Ask an admin first" in Settings › Workspace.', '', False),
+ ('onb', 5, 'Open', 'Tell admins when someone joins', 'By email, and whether to ask before joining. Not decided.', '', False),
+ ('onb', 6, 'Open', 'Screens that still say Acme GTM', 'Screen 2 · Empty also still has the old layout, with no second nav.', '', False),
+ ('onb', 7, 'Open', 'People who join a series later', 'Same as question 32 in the integrations log.', 'A person sees a series from the date they joined the invite.', False),
+ ('onb', 8, 'Open', 'Reading order on the first visit', '', 'Read the series with the soonest next meeting first, so the first rows turn Ready early.', False),
+ ('onb', 9, 'Open', 'Heading on Sign in', '"Create your Neuma account" is wrong for returning users.', '"Sign in to Neuma".', False),
+ ('onb', 10, 'Open', 'See all is never announced to the first person', 'Tell the workspace when an admin grants it?', '', False),
+ ('onb', 11, 'Open', 'Row highlight when a Context turns ready', 'A row briefly highlights in 11.2 when it turns ready with the page open. Keep it?', '', False),
+ ('onb', 12, 'Open', 'An in-person series that never gets a transcript', '', 'After a few missed meetings, offer once: "Record it with a notetaker, or hide it."', False),
+ ('onb', 13, 'Open', 'Roll ups in the second nav', '', 'A fourth built-in under Shared with you. Filter drops Access and Type and becomes Tags only.', False),
+ ('onb', 14, 'Open', 'A calendar that disconnects later', 'Expired sign-in or revoked access.', 'A warning line above the Contexts table, and in Settings › Your connections.', False),
+ ('onb', 15, 'Open', 'Member views that aren\'t drawn', 'A Member\'s Settings (two tabs) and onboarding step 2 (Just me only).', '', False),
+]
+
+# Places where the logs disagree. `match` finds the line in DECISIONS.md.
+CONFLICTS = [
+ {'t': 'Only you patterns against issues identified by Neuma', 'match': 'Only the owner sees Patterns', 'kind': 'Conflict',
+  'a': ['Decision log, Nov 4 or earlier', 'Only the owner sees Patterns.'],
+  'b': ['Decision log, Nov 13', 'Issues identified by Neuma come from patterns and show to everyone in the Context, with how many meetings they were seen across.']},
+ {'t': 'Slack channels as a source', 'match': 'For messages, admins choose all channels', 'kind': 'Conflict',
+  'a': ['Decision log', 'For messages, admins choose all channels or specific ones. Later.'],
+  'b': ['Decision log, Nov 11', 'Neuma does not ingest Slack. Slack\'s API terms stop third parties keeping copies of Slack data.']},
+ {'t': 'Agents can\'t write to Neuma yet', 'match': 'read only in v1', 'kind': 'Blocks this idea',
+  'a': ['Decision log, Nov 10', 'The MCP server is read only in v1. Write tools come later.'],
+  'b': ['This prototype', 'Agents write decisions into a Context. That needs a write tool.']},
+]
+
+SOURCES = [
+ {'name': 'DECISIONS.md', 'where': 'Contexts folder', 'by': 'Claude, from the notes written on the screens', 'when': 'Nov 11', 'what': '',
+  'sections': []},
+ {'name': 'integrations-decisions.md', 'where': 'Claude project', 'by': 'Claude, in the Integrations design session', 'when': 'Nov 5 to Nov 11',
+  'what': '36 questions, 5 closed.',
+  'sections': ['Sign-up: bottom up and top down', 'Personal connections on a company tool', 'Transcript access', 'Access', 'Reading cap and source access', 'Asking across tools', 'Slack API terms', 'Contexts directory', 'Recurring meetings become Contexts', 'Access to Contexts', 'Roles', 'Settings: admin tabs', 'Roll ups', 'Processing cost', 'What comes in', 'Privacy', 'Add meeting transcripts drawer', 'Integration pages', 'Series matching', 'Salesforce and account Contexts', 'Later: Email into a Context', 'Later: Rules', 'Later: Teams']},
+ {'name': 'onboarding-decisions.md', 'where': 'Claude project', 'by': 'Claude, in the onboarding design session', 'when': 'Nov 11',
+  'what': '15 open questions. 9 closed, not shown here.',
+  'sections': ['Transcript access', 'Flow', 'First version scope', 'Contexts states', 'Meeting link matching', 'Second nav and views', 'New and ready', 'Hover peek', 'Row menu', 'Deleting and hiding Contexts', 'Sign in', 'Frame', 'Copy voice', 'Workspace', 'Meeting tool step', 'Notetaker matching', 'Later: Suggested Contexts from domains']},
+]
+
+def parse_log():
+    text = open(os.path.join(ROOT, 'DECISIONS.md'), encoding='utf-8').read()
+    start = text.index('## Scope')
+    decisions, questions = [], []
+    for block in re.split(r'\n## ', text[start + 3:]):
+        lines = block.strip().split('\n')
+        area = lines[0].strip()
+        m = re.search(r'File: `([^`]+)`', block)
+        files = m.group(1) if m else ''
+        html = re.search(r'[\w-]+\.html', files)
+        for ln in lines:
+            if not ln.startswith('|'):
+                continue
+            cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+            if len(cells) not in (4, 5) or cells[0] == 'First seen' or set(cells[0]) <= set('-'):
+                continue
+            seen, t, why, status = cells[:4]
+            imp = cells[4] if len(cells) == 5 else ''
+            src = 'int' if 'Source: `integrations-decisions.md`' in block else 'onb' if 'Source: `onboarding-decisions.md`' in block else ''
+            row = {'area': area, 'src': src, 'imp': imp, 'file': html.group(0) if html else '', 'seen': seen, 't': t,
+                   'why': '' if why == 'Not recorded' else why, 'status': status}
+            (questions if status in ('Open', 'Option') else decisions).append(row)
+    return decisions, questions
+
+def build():
+    decisions, logq = parse_log()
+    for i, d in enumerate(decisions, 1):
+        d['id'] = 'D-%02d' % i
+    qs = []
+    for i, q in enumerate(logq, 1):
+        qs.append({'id': 'L-%d' % i, 'log': 'log', 'n': i, 'status': q['status'], 't': q['t'].rstrip('.'),
+                   'd': ('Why: ' + q['why']) if q['why'] else '', 'p': '', 'jason': False,
+                   'area': q['area'], 'seen': q['seen'], 'file': q['file'], 'imp': q['imp']})
+    for log, n, status, t, d, p, jason in QUESTIONS:
+        qs.append({'id': '%s-%d' % ('I' if log == 'int' else 'O', n), 'log': log, 'n': n, 'status': status,
+                   't': t, 'd': d, 'p': p, 'jason': jason})
+    conflicts = []
+    for c in CONFLICTS:
+        hit = [x for x in decisions + qs if c['match'] in x['t']]
+        if not hit:
+            sys.exit('Conflict has no matching line in DECISIONS.md: ' + c['match'])
+        hit[0]['cf'] = c['t']
+        conflicts.append(dict(c, ref=hit[0]['id']))
+    src = json.loads(json.dumps(SOURCES))
+    own = [d for d in decisions if not d['src']]
+    src[0]['what'] = '%d decisions from screen notes, %d with a why. %d open questions and options. Also holds the backfill from the two project docs.' % (
+        len(own), sum(1 for d in own if d['why']), len(logq))
+    for i, k in ((1, 'int'), (2, 'onb')):
+        src[i]['what'] = '%d decisions, split into single lines in DECISIONS.md on Nov 11. %s' % (sum(1 for d in decisions if d['src'] == k), src[i]['what'])
+    # "Last written" in the header: the day DECISIONS.md last changed, Sydney time
+    import datetime
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo('Australia/Sydney')
+    except Exception:
+        tz = None
+    w = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(ROOT, 'DECISIONS.md')), tz)
+    data = {'decisions': decisions, 'questions': qs, 'conflicts': conflicts, 'sources': src,
+            'written': '%s %d' % (w.strftime('%b'), w.day)}
+    blob = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
+    out = os.path.join(ROOT, 'decisions.html')
+    if os.path.exists(out):
+        subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'snapshot.py'), 'decisions'], check=True)
+    open(out, 'w', encoding='utf-8').write(TEMPLATE.replace('__DATA__', blob))
+    print('Wrote decisions.html: %d decisions, %d questions, %d conflicts' % (len(decisions), len(qs), len(conflicts)))
+
+TEMPLATE = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Neuma · Decision log</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="shared/tailwind-config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/neuma.css">
+<style>
+  /* ── Screen 12 · Decision log ── */
+  .dl-tab { cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .dl-tab.on { border-bottom-color:#0f172a; }
+  .dl-tab .n { margin-left:5px; font-size:11.5px; color:#94a3b8; font-weight:500; }
+  .dl-wash { background:linear-gradient(90deg,#fff6f1 0%,#fdf4f7 50%,#f8f4ff 100%); }
+  .dl-rank { background:linear-gradient(90deg,#e4602f 0%,#d9677f 50%,#9a72d1 100%); -webkit-background-clip:text; background-clip:text; color:transparent; font-family:'Geist',Inter,sans-serif; font-weight:600; }
+  .dl-rv { display:inline-flex; align-items:center; gap:4px; height:26px; padding:0 9px; border-radius:6px; border:1px solid #e2e8f0; background:#fff; font-size:12px; font-weight:500; color:#64748b; white-space:nowrap; }
+  .dl-rv:hover { border-color:#cbd5e1; color:#0f172a; }
+  .dl-rv.ok { background:#ecfdf5; border-color:#a7f3d0; color:#047857; }
+  .dl-rv.pb { background:#fffbeb; border-color:#fcd34d; color:#b45309; }
+  .dl-om { display:inline-flex; align-items:center; gap:4px; height:22px; padding:0 7px; border-radius:9999px; font-size:11px; font-weight:500; white-space:nowrap; }
+  .dl-om.ok { background:#ecfdf5; color:#047857; }
+  .dl-om.pb { background:#fffbeb; color:#b45309; }
+  .dl-pill { cursor:pointer; }
+  .dl-pill .num { color:#94a3b8; }
+  .dl-agent { display:inline-flex; align-items:center; gap:4px; color:#64748b; }
+  .dl-drawer { position:fixed; top:0; right:0; bottom:0; width:460px; background:#fff; border-left:1px solid #e2e8f0; box-shadow:-24px 0 60px -20px rgba(15,23,42,.25); z-index:80; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .18s cubic-bezier(.2,.7,.1,1); }
+  .dl-drawer.open { transform:none; }
+  .dl-scrim { position:fixed; inset:0; background:rgba(15,23,42,.18); z-index:70; display:none; }
+  .dl-scrim.open { display:block; }
+  .dl-note { width:100%; min-height:84px; border:1px solid #cbd5e1; border-radius:8px; padding:8px 10px; font-size:13px; line-height:1.5; color:#0f172a; outline:none; resize:vertical; }
+  .dl-note:focus { border-color:#4a5bff; box-shadow:0 0 0 3px rgba(74,91,255,.15); }
+  .dl-in { border:0; outline:0; background:transparent; width:100%; font-size:13px; color:#0f172a; }
+  .dl-pre { font-family:'JetBrains Mono',ui-monospace,Menlo,monospace; font-size:11px; line-height:1.55; color:#334155; white-space:pre-wrap; }
+  mark { background:#fef3c7; color:inherit; border-radius:2px; }
+</style>
+</head>
+<body class="antialiased">
+<script>document.write('<scr'+'ipt src="shared/nav.js?t='+Date.now()+'"></scr'+'ipt>')</script>
+
+<!-- ═════════════════════  SCREEN 12 — DECISION LOG · AGENTS WRITE TO A CONTEXT  ═════════════════════ -->
+<section id="decisions" class="max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <span id="decisions-list"></span><span id="decisions-questions"></span><span id="decisions-sources"></span>
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 12 · Prototype</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Decision log · Agents write to a Context</h2></div>
+    <div class="text-sm text-slate-500 max-w-[760px] text-right">A Context that agents write to. Claude logged every line here from the design chats. Jared and Jason review each one: agree, or push back with a note. Marks save in this browser only. Copy review to send them on. Built from DECISIONS.md by tools/build_decisions.py. Run it again after the log changes.</div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-card">
+    <div class="flex min-h-[900px]">
+      <aside class="w-[240px] shrink-0 border-r border-slate-200 bg-slate-50/50 px-4 pt-8 pb-6 flex flex-col">
+        <div class="flex items-center gap-2 mb-8 px-2">
+          <svg class="nm-aperture" width="28" height="28" viewBox="0 0 64 64"><defs><linearGradient id="nm-sidebar-s12" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#nm-sidebar-s12)" fill-rule="evenodd"/></svg>
+          <div class="nm-wordmark text-[18px]">neuma</div>
+        </div>
+        <nav class="flex flex-col gap-0.5">
+          <a class="nav-link on cursor-pointer" style="background:#f1f5f9;font-weight:500">Contexts</a>
+          <a class="nav-link">Settings</a>
+        </nav>
+        <div class="mt-auto pt-4 border-t border-slate-200">
+          <div class="flex items-center gap-2 text-xs px-2 py-1.5">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center text-white text-[11px] font-semibold shrink-0" data-me-av>JK</div>
+            <div class="flex-1 min-w-0"><div class="font-medium text-slate-800 truncate" data-me-name>Jared K.</div><div class="text-slate-500 truncate">neumaos.com</div></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="flex-1 min-w-0 px-12 pt-8 pb-14">
+        <a class="inline-flex items-center gap-1 text-[13px] text-slate-500 hover:text-slate-900 cursor-pointer" href="contexts.html#contexts"><svg style="margin-left:-3px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Contexts</a>
+        <div class="mt-3 flex items-center justify-between gap-6">
+          <div class="flex items-center gap-3 min-w-0"><span class="text-[28px] leading-none shrink-0">📓</span><h1 class="text-[24px] font-semibold tracking-tight text-slate-900 leading-tight truncate">Neuma product decisions</h1></div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="text-[12px] text-slate-500">Reviewing as</span>
+            <div class="seg" data-who><button type="button" data-w="jared">Jared</button><button type="button" data-w="jason">Jason</button></div>
+            <button type="button" class="btn-out" data-copy><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span data-copy-l>Copy review</span></button>
+          </div>
+        </div>
+        <div class="mt-2 flex items-center gap-2 text-[12.5px] text-slate-500 flex-wrap" data-meta></div>
+
+        <div class="mt-5 flex items-end border-b border-slate-200" data-tabs></div>
+
+        <div class="mt-6" data-pane="summary"></div>
+
+        <div class="mt-6 hidden" data-pane="list">
+          <div class="flex items-center gap-3 flex-wrap">
+            <label class="search" style="width:260px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dl-in" data-search="d" placeholder="Search decisions"></label>
+            <div class="flex items-center gap-1.5 flex-wrap" data-pills="d"></div>
+          </div>
+          <div class="mt-2.5 flex items-center gap-1.5 flex-wrap" data-pills="i"></div>
+          <div class="mt-4 space-y-4" data-list="d"></div>
+        </div>
+
+        <div class="mt-6 hidden" data-pane="questions">
+          <div class="flex items-center gap-3 flex-wrap">
+            <label class="search" style="width:260px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dl-in" data-search="q" placeholder="Search questions"></label>
+            <div class="flex items-center gap-1.5 flex-wrap" data-pills="q"></div>
+          </div>
+          <div class="mt-4 space-y-4" data-list="q"></div>
+        </div>
+
+        <div class="mt-6 hidden" data-pane="sources"></div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<div class="dl-scrim" data-scrim></div>
+<aside class="dl-drawer" data-drawer aria-hidden="true"></aside>
+
+<script>
+(function(){
+  var D = __DATA__;
+  var LS = 'neuma-decision-review-v1', st = {}, who = 'jared';
+  try { st = JSON.parse(localStorage.getItem(LS) || '{}') || {}; who = localStorage.getItem(LS + '-who') || 'jared'; } catch (e) {}
+  function save(){ try { localStorage.setItem(LS, JSON.stringify(st)); localStorage.setItem(LS + '-who', who); } catch (e) {} }
+  var WHO = { jared: ['Jared', 'Jared K.', 'JK'], jason: ['Jason', 'Jason', 'J'] };
+  var LOGS = { log: 'Decision log', int: 'Integrations log', onb: 'Onboarding log' };
+  var BY = { log: 'from screen notes', int: 'Integrations design session', onb: 'Onboarding design session' };
+  var ALL = {}; D.decisions.concat(D.questions).forEach(function(x){ ALL[x.id] = x; });
+  var S = { tab: 'summary', dq: '', df: 'all', di: '', qq: '', qf: 'open', open: null };
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function hl(s, q){ s = esc(s); if (!q) return s; var e = esc(q), i = s.toLowerCase().indexOf(e.toLowerCase()); return i < 0 ? s : s.slice(0, i) + '<mark>' + s.slice(i, i + e.length) + '</mark>' + s.slice(i + e.length); }
+  function other(){ return who === 'jared' ? 'jason' : 'jared'; }
+  function mark(id, w){ return (st[w] || {})[id] || null; }
+  function setMark(id, v){ st[who] = st[who] || {}; var m = st[who][id] || {}; if (m.v === v) delete m.v; else m.v = v; if (!m.v && !m.note) delete st[who][id]; else st[who][id] = m; save(); }
+  function setNote(id, t){ st[who] = st[who] || {}; var m = st[who][id] || {}; if (t) m.note = t; else delete m.note; if (!m.v && !m.note) delete st[who][id]; else st[who][id] = m; save(); }
+  function reviewed(w, list){ return list.filter(function(x){ var m = mark(x.id, w); return m && m.v; }).length; }
+
+  var TICK = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var FLAG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+  var SPARK = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/><path d="M19 16v4M17 18h4"/></svg>';
+  var BADGE = { 'Decided': 'bg-emerald-50 text-emerald-700 ring-emerald-200', 'Later': 'bg-slate-100 text-slate-600 ring-slate-200', 'Excluded from V2': 'bg-slate-100 text-slate-500 ring-slate-200', 'Open': 'bg-amber-50 text-amber-700 ring-amber-200', 'Option': 'bg-brand-50 text-brand-700 ring-brand-200', 'Closed': 'bg-slate-100 text-slate-500 ring-slate-200', 'Superseded': 'bg-slate-100 text-slate-400 ring-slate-200' };
+  function badge(s){ return '<span class="badge ring-1 ring-inset ' + (BADGE[s] || BADGE.Later) + '">' + esc(s) + '</span>'; }
+  function agent(x){ return '<span class="dl-agent">' + SPARK + 'Claude · ' + BY[x.log || x.src || 'log'] + '</span>'; }
+  var IMP = { 'Critical': 'bg-rose-600 text-white', 'Important': 'bg-amber-100 text-amber-800', 'Medium': 'bg-slate-100 text-slate-600', 'Low': 'bg-white text-slate-400 ring-1 ring-inset ring-slate-200' };
+  function imp(v){ return v ? '<span class="badge ' + (IMP[v] || IMP.Medium) + '">' + esc(v) + '</span>' : ''; }
+  function dot(){ return '<span class="text-slate-300">·</span>'; }
+  function pill(k, v, label, n, on){ return '<button type="button" class="filter-pill dl-pill' + (on ? ' on' : '') + '" data-pf="' + k + '" data-v="' + v + '">' + label + '<span class="num">' + n + '</span></button>'; }
+
+  function rv(id, bare){
+    var me = mark(id, who) || {}, o = mark(id, other()), ow = WHO[other()][0], h = '<div class="flex items-center gap-1.5 shrink-0" data-stop>';
+    if (!bare && o && o.v) h += '<span class="dl-om ' + (o.v === 'agree' ? 'ok' : 'pb') + '" title="' + esc(ow + (o.v === 'agree' ? ' agreed' : ' pushed back') + (o.note ? ': ' + o.note : '')) + '">' + (o.v === 'agree' ? TICK : FLAG) + ow + '</span>';
+    h += '<button type="button" class="dl-rv' + (me.v === 'agree' ? ' ok' : '') + '" data-rv="agree" data-id="' + id + '">' + TICK + (me.v === 'agree' ? 'Agreed' : 'Agree') + '</button>';
+    h += '<button type="button" class="dl-rv' + (me.v === 'push' ? ' pb' : '') + '" data-rv="push" data-id="' + id + '">' + FLAG + (me.v === 'push' ? 'Pushed back' : 'Push back') + '</button>';
+    return h + '</div>';
+  }
+  function noteLine(id){ var m = mark(id, who); return m && m.note ? '<div class="mt-1.5 text-[12px] text-amber-800 bg-amber-50 rounded-md px-2 py-1 inline-block">Your note: ' + esc(m.note) + '</div>' : ''; }
+
+  /* ── Decisions ── */
+  function dMatch(d){
+    var m = mark(d.id, who), q = S.dq.toLowerCase();
+    if (q && (d.t + ' ' + d.why + ' ' + d.area).toLowerCase().indexOf(q) < 0) return false;
+    if (S.di && d.imp !== S.di) return false;
+    if (S.df === 'all') return true;
+    if (S.df === 'todo') return !(m && m.v);
+    if (S.df === 'push') return ['jared', 'jason'].some(function(w){ var x = mark(d.id, w); return x && x.v === 'push'; });
+    if (S.df === 'why') return !d.why;
+    if (S.df === 'cf') return !!d.cf;
+    if (S.df === 'log' || S.df === 'int' || S.df === 'onb') return (d.src || 'log') === S.df;
+    return d.status === S.df;
+  }
+  function dRow(d){
+    return '<div class="flex items-start gap-4 px-4 py-3 hover:bg-slate-50 cursor-pointer" data-open="' + d.id + '"><div class="min-w-0 flex-1">'
+      + '<div class="text-[13.5px] font-medium text-slate-900 leading-snug">' + hl(d.t, S.dq) + '</div>'
+      + (d.why ? '<div class="mt-1 text-[12.5px] text-slate-600 leading-[1.5]"><span class="text-slate-400">Why</span> ' + hl(d.why, S.dq) + '</div>' : '<div class="mt-1 text-[12.5px] text-slate-400">Why not recorded</div>')
+      + '<div class="mt-1.5 flex items-center gap-2 text-[11.5px] text-slate-500 flex-wrap">' + imp(d.imp) + badge(d.status) + '<span>First seen ' + esc(d.seen) + '</span>' + dot() + agent(d)
+      + (d.cf ? '<span class="badge bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-200">Logs disagree</span>' : '') + '</div>' + noteLine(d.id)
+      + '</div>' + rv(d.id) + '</div>';
+  }
+  function renderD(){
+    var L = D.decisions, c = function(f){ var k = S.df; S.df = f; var q = S.dq; S.dq = ''; var n = L.filter(dMatch).length; S.df = k; S.dq = q; return n; };
+    var p = pill('d', 'all', 'All', L.length, S.df === 'all');
+    ['Decided', 'Later', 'Excluded from V2'].forEach(function(s){ p += pill('d', s, s, c(s), S.df === s); });
+    p += '<span class="w-px h-4 bg-slate-200 mx-1"></span>' + pill('d', 'todo', 'Not reviewed by you', c('todo'), S.df === 'todo') + pill('d', 'push', 'Pushed back', c('push'), S.df === 'push') + pill('d', 'why', 'No why', c('why'), S.df === 'why') + pill('d', 'cf', 'Logs disagree', c('cf'), S.df === 'cf') + '<span class="w-px h-4 bg-slate-200 mx-1"></span>' + pill('d', 'log', 'From screen notes', c('log'), S.df === 'log') + pill('d', 'int', 'From Integrations log', c('int'), S.df === 'int') + pill('d', 'onb', 'From Onboarding log', c('onb'), S.df === 'onb');
+    $('[data-pills="d"]').innerHTML = p;
+    var ic = function(v){ var k = S.di; S.di = v; var n = L.filter(dMatch).length; S.di = k; return n; };
+    $('[data-pills="i"]').innerHTML = '<span class="text-[12px] text-slate-500 mr-1">Importance</span>' + ['Critical', 'Important', 'Medium', 'Low'].map(function(v){ return pill('i', v, v, ic(v), S.di === v); }).join('');
+    var rows = L.filter(dMatch), areas = [], by = {};
+    rows.forEach(function(d){ if (!by[d.area]) { by[d.area] = []; areas.push(d.area); } by[d.area].push(d); });
+    $('[data-list="d"]').innerHTML = areas.map(function(a){
+      var f = by[a][0].file;
+      return '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 bg-slate-50/60"><span class="text-[13px] font-semibold text-slate-900">' + esc(a) + '</span><span class="num text-[12px] text-slate-400">' + by[a].length + '</span>'
+        + (f ? '<a href="' + f + '" class="ml-auto text-[12px] text-brand-700 hover:underline" data-stop>Open ' + esc(f) + '</a>' : '') + '</div><div class="divide-y divide-slate-100">' + by[a].map(dRow).join('') + '</div></div>';
+    }).join('') || empty('No decisions match these filters', 'd');
+  }
+  function empty(t, k){ return '<div class="rounded-xl border border-dashed border-slate-200 py-14 text-center text-[13px] text-slate-500">' + t + ' · <button type="button" class="text-brand-700 hover:underline" data-reset="' + k + '">Reset filters</button></div>'; }
+
+  /* ── Questions ── */
+  function qMatch(x){
+    var q = S.qq.toLowerCase();
+    if (q && (x.t + ' ' + x.d + ' ' + x.p).toLowerCase().indexOf(q) < 0) return false;
+    if (S.qf === 'all') return true;
+    if (S.qf === 'open') return x.status !== 'Closed';
+    if (S.qf === 'prop') return x.status !== 'Closed' && !!x.p;
+    if (S.qf === 'jason') return x.jason;
+    if (S.qf === 'closed') return x.status === 'Closed';
+    if (S.qf === 'todo') { var m = mark(x.id, who); return x.status !== 'Closed' && !(m && m.v); }
+    return true;
+  }
+  function qRow(x){
+    return '<div class="flex items-start gap-4 px-4 py-3 hover:bg-slate-50 cursor-pointer" data-open="' + x.id + '"><span class="w-[22px] shrink-0 pt-[2px] num font-mono text-[11px] text-slate-400 text-right">' + x.n + '</span><div class="min-w-0 flex-1">'
+      + '<div class="text-[13.5px] font-medium leading-snug ' + (x.status === 'Closed' ? 'text-slate-500' : 'text-slate-900') + '">' + hl(x.t, S.qq) + '</div>'
+      + (x.d ? '<div class="mt-1 text-[12.5px] text-slate-600 leading-[1.5]">' + hl(x.d, S.qq) + '</div>' : '')
+      + (x.p ? '<div class="mt-1 text-[12.5px] text-slate-800 leading-[1.5]"><span class="font-medium text-brand-700">Proposed</span> ' + hl(x.p, S.qq) + '</div>' : '')
+      + '<div class="mt-1.5 flex items-center gap-2 text-[11.5px] text-slate-500 flex-wrap">' + imp(x.imp) + badge(x.status) + agent(x)
+      + (x.jason ? '<span class="badge bg-brand-50 text-brand-700 ring-1 ring-inset ring-brand-200">Confirm with Jason</span>' : '') + (x.cf ? '<span class="badge bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-200">Logs disagree</span>' : '') + '</div>' + noteLine(x.id)
+      + '</div>' + rv(x.id) + '</div>';
+  }
+  function renderQ(){
+    var L = D.questions, c = function(f){ var k = S.qf; S.qf = f; var q = S.qq; S.qq = ''; var n = L.filter(qMatch).length; S.qf = k; S.qq = q; return n; };
+    $('[data-pills="q"]').innerHTML = pill('q', 'open', 'Open', c('open'), S.qf === 'open') + pill('q', 'prop', 'Has a proposal', c('prop'), S.qf === 'prop') + pill('q', 'jason', 'Confirm with Jason', c('jason'), S.qf === 'jason') + pill('q', 'todo', 'Not reviewed by you', c('todo'), S.qf === 'todo') + pill('q', 'closed', 'Closed', c('closed'), S.qf === 'closed') + pill('q', 'all', 'All', L.length, S.qf === 'all');
+    var rows = L.filter(qMatch);
+    $('[data-list="q"]').innerHTML = ['log', 'int', 'onb'].map(function(k){
+      var r = rows.filter(function(x){ return x.log === k; }); if (!r.length) return '';
+      return '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 bg-slate-50/60"><span class="text-[13px] font-semibold text-slate-900">' + LOGS[k] + '</span><span class="num text-[12px] text-slate-400">' + r.length + '</span></div><div class="divide-y divide-slate-100">' + r.map(qRow).join('') + '</div></div>';
+    }).join('') || empty('No questions match these filters', 'q');
+  }
+
+  /* ── Summary ── */
+  function stat(n, l){ return '<div class="rounded-lg border border-slate-200 px-3 py-2.5"><div class="num text-[20px] font-semibold tracking-tight text-slate-900">' + n + '</div><div class="mt-0.5 text-[11.5px] text-slate-500">' + l + '</div></div>'; }
+  function renderS(){
+    var dn = D.decisions.length, openQ = D.questions.filter(function(x){ return x.status !== 'Closed'; }), items = D.decisions.concat(openQ);
+    var h = '<div class="grid grid-cols-[1fr_360px] gap-6 items-start"><div class="space-y-5 min-w-0">';
+    h += '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 dl-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#nm-sidebar-s12)" fill-rule="evenodd"/></svg><span class="text-[13px] font-semibold text-slate-900">Needs attention</span><span class="text-[11px] font-semibold dl-rank">the logs disagree</span></div><div class="divide-y divide-slate-100">';
+    D.conflicts.forEach(function(c, i){
+      h += '<div class="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer" data-open="' + c.ref + '"><span class="w-[20px] shrink-0 text-center dl-rank text-[14px] leading-[20px]">' + (i + 1) + '</span><div class="min-w-0 flex-1"><div class="flex items-center gap-2"><span class="text-[13.5px] font-medium text-slate-900 leading-snug">' + esc(c.t) + '</span><span class="badge ' + (c.kind === 'Conflict' ? 'bg-rose-50 text-rose-700' : c.kind === 'Naming' ? 'bg-slate-100 text-slate-600' : 'bg-amber-50 text-amber-700') + '">' + esc(c.kind) + '</span></div>'
+        + [c.a, c.b].map(function(s){ return '<div class="mt-1 text-[12.5px] leading-[1.5] text-slate-600"><span class="text-slate-400">' + esc(s[0]) + '</span> ' + esc(s[1]) + '</div>'; }).join('') + '</div>' + rv(c.ref) + '</div>';
+    });
+    h += '</div></div>';
+    h += '<div class="rounded-xl border border-slate-200 bg-white p-4"><div class="text-[13px] font-semibold text-slate-900">Where the log stands</div><div class="mt-3 grid grid-cols-4 gap-3">'
+      + stat(dn, 'Decisions') + stat(D.decisions.filter(function(d){ return d.why; }).length + ' of ' + dn, 'Have a why') + stat(openQ.length, 'Open questions') + stat(openQ.filter(function(x){ return x.p; }).length, 'Have a proposal')
+      + '</div><div class="mt-3 grid grid-cols-4 gap-3">' + ['Critical', 'Important', 'Medium', 'Low'].map(function(v){ return stat(D.decisions.filter(function(d){ return d.imp === v; }).length, v + ' decisions'); }).join('') + '</div><div class="mt-3 grid grid-cols-2 gap-3">' + ['jared', 'jason'].map(function(w){ var n = reviewed(w, items), pct = Math.round(100 * n / items.length); return '<div class="rounded-lg border border-slate-200 px-3 py-2.5"><div class="flex items-center justify-between text-[12.5px]"><span class="font-medium text-slate-800">' + WHO[w][1] + '</span><span class="num text-slate-500">' + n + ' of ' + items.length + ' reviewed</span></div><div class="dotbar mt-2"><span style="right:' + (100 - pct) + '%"></span></div></div>'; }).join('') + '</div></div>';
+    h += '</div><div class="space-y-5">';
+    h += '<div class="rounded-xl border border-slate-200 bg-white p-4"><div class="flex items-center gap-2"><span class="text-[13px] font-semibold text-slate-900">How agents write here</span><span class="badge bg-brand-50 text-brand-700">Proposed</span></div>'
+      + '<ul class="mt-2.5 space-y-2 text-[12.5px] leading-[1.5] text-slate-600"><li>An agent writes one line when a chat settles something: date, decision, why, status and importance.</li><li>A write never edits or deletes. A changed decision is a new line, and the old one is marked Superseded.</li><li>Every line names the agent and the chat it came from.</li><li>People review. Agree keeps the line. Push back sends your note to the next chat.</li></ul>'
+      + '<div class="mt-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5"><div class="eyebrow">log_decision</div><div class="dl-pre mt-1.5">{\n  "context": "Neuma product decisions",\n  "decision": "Only the owner can delete a Context.",\n  "why": null,\n  "status": "Decided",\n  "importance": "Critical",\n  "area": "Contexts directory",\n  "written_by": "Claude",\n  "session": "Contexts design chat"\n}</div></div>'
+      + '<div class="mt-3 text-[12.5px] leading-[1.5] text-amber-800 bg-amber-50 rounded-lg px-3 py-2.5">The MCP server is read only in v1, logged Nov 10. Agent writes need that decision reopened.</div></div>';
+    h += '<div class="rounded-xl border border-slate-200 bg-white p-4"><div class="text-[13px] font-semibold text-slate-900">Written by</div><div class="mt-2 divide-y divide-slate-100">' + D.sources.map(function(s){ return '<div class="py-2.5"><div class="font-mono text-[12px] text-slate-800">' + esc(s.name) + '</div><div class="mt-0.5 text-[12px] text-slate-500">' + esc(s.by) + ' · ' + esc(s.when) + '</div></div>'; }).join('') + '</div></div>';
+    h += '</div></div>';
+    $('[data-pane="summary"]').innerHTML = h;
+  }
+
+  /* ── Sources ── */
+  function renderSrc(){
+    $('[data-pane="sources"]').innerHTML = '<div class="max-w-[920px] space-y-4">' + D.sources.map(function(s){
+      return '<div class="rounded-xl border border-slate-200 bg-white p-4"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-[13px] font-medium text-slate-900">' + esc(s.name) + '</span><span class="badge bg-slate-100 text-slate-600">' + esc(s.where) + '</span><span class="ml-auto text-[12px] text-slate-500">' + esc(s.when) + '</span></div>'
+        + '<div class="mt-1.5 flex items-center gap-2 text-[12.5px] text-slate-600"><span class="dl-agent">' + SPARK + 'Written by ' + esc(s.by) + '</span></div><div class="mt-1 text-[12.5px] text-slate-600">' + esc(s.what) + '</div>'
+        + (s.sections.length ? '<div class="mt-3 text-[11.5px] text-slate-400">Sections</div><div class="mt-1.5 flex flex-wrap gap-1.5">' + s.sections.map(function(x){ return '<span class="badge bg-slate-100 text-slate-600">' + esc(x) + '</span>'; }).join('') + '</div>' : '') + '</div>';
+    }).join('') + '</div>';
+  }
+
+  /* ── Drawer ── */
+  function renderDrawer(){
+    var el = $('[data-drawer]'), x = ALL[S.open];
+    el.classList.toggle('open', !!x); $('[data-scrim]').classList.toggle('open', !!x); el.setAttribute('aria-hidden', x ? 'false' : 'true');
+    if (!x) return;
+    var isQ = !!x.log, me = mark(x.id, who) || {}, o = mark(x.id, other()), cf = D.conflicts.filter(function(c){ return c.ref === x.id; })[0];
+    var h = '<div class="px-6 pt-5 pb-4 border-b border-slate-100"><div class="flex items-center gap-2"><span class="eyebrow">' + (isQ ? 'Question' : 'Decision') + ' · ' + x.id + '</span><button type="button" class="ml-auto w-8 h-8 -mr-2 rounded-lg flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-close aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'
+      + '<h3 class="mt-2 text-[17px] font-semibold tracking-tight text-slate-900 leading-snug">' + esc(x.t) + '</h3><div class="mt-2.5 flex items-center gap-2 flex-wrap text-[12px] text-slate-500">' + imp(x.imp) + badge(x.status) + (x.seen ? '<span>First seen ' + esc(x.seen) + '</span>' : '') + (x.jason ? '<span class="badge bg-brand-50 text-brand-700 ring-1 ring-inset ring-brand-200">Confirm with Jason</span>' : '') + '</div></div>';
+    h += '<div class="flex-1 overflow-y-auto px-6 py-5 space-y-5">';
+    if (isQ) { if (x.d) h += sec('Detail', esc(x.d)); if (x.p) h += sec('Proposed', esc(x.p)); }
+    else h += sec('Why', x.why ? esc(x.why) : '<span class="text-slate-400">Not recorded. The screen states no reason.</span>');
+    if (cf) h += '<div class="rounded-lg border border-rose-200 bg-rose-50/60 px-3 py-2.5"><div class="text-[12px] font-semibold text-rose-700">' + esc(cf.kind === 'Conflict' ? 'The logs disagree' : cf.kind) + ' · ' + esc(cf.t) + '</div>' + [cf.a, cf.b].map(function(s){ return '<div class="mt-1.5 text-[12.5px] leading-[1.5] text-slate-700"><span class="text-slate-500">' + esc(s[0]) + '</span> ' + esc(s[1]) + '</div>'; }).join('') + '</div>';
+    h += sec('Written by', '<span class="dl-agent" style="color:#334155">' + SPARK + 'Claude · ' + BY[x.log || x.src || 'log'] + '</span><div class="mt-1 text-slate-500">' + (isQ ? LOGS[x.log] + ', question ' + x.n + (x.log === 'log' ? '' : '. Kept in the Claude project.') : (x.src ? LOGS[x.src] + '. Added to DECISIONS.md in the Nov 11 backfill.' : 'DECISIONS.md, built Nov 11 from the notes on the screen.')) + '</div>');
+    if (x.area) h += sec('Where', esc(x.area) + (x.file ? ' · <a class="text-brand-700 hover:underline" href="' + x.file + '">Open ' + esc(x.file) + '</a>' : ''));
+    h += '<div><div class="eyebrow">Review</div>' + (o && (o.v || o.note) ? '<div class="mt-2 rounded-lg border border-slate-200 px-3 py-2 text-[12.5px] text-slate-700"><span class="font-medium">' + WHO[other()][1] + '</span> ' + (o.v === 'agree' ? 'agreed.' : o.v === 'push' ? 'pushed back.' : 'left a note.') + (o.note ? '<div class="mt-1 text-slate-600">' + esc(o.note) + '</div>' : '') + '</div>' : '')
+      + '<div class="mt-2 flex items-center gap-2"><span class="text-[12px] text-slate-500 mr-1">You are ' + WHO[who][1] + '</span>' + rv(x.id, true) + '</div>'
+      + '<textarea class="dl-note mt-2.5" data-note="' + x.id + '" placeholder="' + (isQ ? 'Your answer, or what is missing' : 'What should change, and why') + '">' + esc(me.note || '') + '</textarea><div class="mt-1 text-[11.5px] text-slate-400">Notes save as you type. They go out with Copy review.</div></div>';
+    el.innerHTML = h + '</div>';
+  }
+  function sec(l, body){ return '<div><div class="eyebrow">' + l + '</div><div class="mt-1.5 text-[13px] leading-[1.55] text-slate-700">' + body + '</div></div>'; }
+
+  /* ── Frame ── */
+  function renderFrame(){
+    var openQ = D.questions.filter(function(x){ return x.status !== 'Closed'; }).length;
+    $('[data-meta]').innerHTML = '<span><span class="num text-slate-800">' + D.decisions.length + '</span> decisions</span>' + dot() + '<span><span class="num text-slate-800">' + openQ + '</span> open questions</span>' + dot() + '<span>Last written ' + D.written + '</span>' + dot() + '<span class="badge bg-brand-50 text-brand-700">' + SPARK + 'Written by agents</span><span class="badge bg-slate-100 text-slate-600">Product</span>';
+    $('[data-tabs]').innerHTML = [['summary', 'Summary', ''], ['list', 'Decisions', D.decisions.length], ['questions', 'Questions', openQ], ['sources', 'Sources', D.sources.length]].map(function(t){ return '<button type="button" class="tab dl-tab' + (S.tab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + (t[2] === '' ? '' : '<span class="n num">' + t[2] + '</span>') + '</button>'; }).join('');
+    document.querySelectorAll('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== S.tab); });
+    document.querySelectorAll('[data-who] button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-w') === who); });
+    $('[data-me-av]').textContent = WHO[who][2]; $('[data-me-name]').textContent = WHO[who][1];
+  }
+  function render(){ renderFrame(); if (S.tab === 'summary') renderS(); if (S.tab === 'list') renderD(); if (S.tab === 'questions') renderQ(); if (S.tab === 'sources') renderSrc(); renderDrawer(); }
+
+  function exportText(){
+    var out = ['# Decision log review · ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), ''];
+    ['jared', 'jason'].forEach(function(w){
+      var m = st[w] || {}, ids = Object.keys(m).filter(function(id){ return ALL[id]; }); if (!ids.length) return;
+      var grp = function(f){ return ids.filter(function(id){ return f(m[id]); }); };
+      var line = function(id){ return '- [' + id + '] ' + ALL[id].t + (m[id].note ? '\n  Note: ' + m[id].note : ''); };
+      out.push('## ' + WHO[w][1]);
+      [['Pushed back', grp(function(x){ return x.v === 'push'; })], ['Notes only', grp(function(x){ return !x.v && x.note; })], ['Agreed', grp(function(x){ return x.v === 'agree'; })]].forEach(function(g){ if (g[1].length) { out.push('', '### ' + g[0] + ' (' + g[1].length + ')'); g[1].forEach(function(id){ out.push(line(id)); }); } });
+      out.push('');
+    });
+    return out.length > 2 ? out.join('\n') : '';
+  }
+  function copy(text, done){
+    function fb(){ var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} t.remove(); done(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target, b;
+    if ((b = t.closest('[data-rv]'))) { e.preventDefault(); var id = b.getAttribute('data-id'), v = b.getAttribute('data-rv'); setMark(id, v); var m = mark(id, who); if (v === 'push' && m && m.v === 'push') S.open = id; render(); if (S.open === id && v === 'push') { var n = $('[data-note]'); if (n) n.focus(); } return; }
+    if (t.closest('[data-close]') || t.closest('[data-scrim]')) { S.open = null; render(); return; }
+    if ((b = t.closest('[data-tab]'))) { S.tab = b.getAttribute('data-tab'); try { history.replaceState(null, '', '#decisions' + (S.tab === 'summary' ? '' : '-' + S.tab)); } catch (err) {} render(); return; }
+    if ((b = t.closest('[data-pf]'))) { var pk = b.getAttribute('data-pf'), pv = b.getAttribute('data-v'); if (pk === 'i') S.di = S.di === pv ? '' : pv; else S[pk === 'd' ? 'df' : 'qf'] = pv; render(); return; }
+    if ((b = t.closest('[data-reset]'))) { if (b.getAttribute('data-reset') === 'd') { S.df = 'all'; S.di = ''; S.dq = ''; $('[data-search="d"]').value = ''; } else { S.qf = 'all'; S.qq = ''; $('[data-search="q"]').value = ''; } render(); return; }
+    if ((b = t.closest('[data-w]'))) { who = b.getAttribute('data-w'); save(); render(); return; }
+    if (t.closest('[data-copy]')) { var txt = exportText(), l = $('[data-copy-l]'); if (!txt) { l.textContent = 'Nothing to copy yet'; } else copy(txt, function(){ l.textContent = 'Copied'; }); setTimeout(function(){ l.textContent = 'Copy review'; }, 1800); return; }
+    if (t.closest('[data-stop]')) return;
+    if ((b = t.closest('[data-open]'))) { S.open = b.getAttribute('data-open'); renderDrawer(); }
+  });
+  document.addEventListener('input', function(e){
+    var t = e.target;
+    if (t.matches('[data-search]')) { if (t.getAttribute('data-search') === 'd') { S.dq = t.value.trim(); renderD(); } else { S.qq = t.value.trim(); renderQ(); } }
+    if (t.matches('[data-note]')) setNote(t.getAttribute('data-note'), t.value.trim());
+  });
+  document.addEventListener('focusout', function(e){ if (e.target.matches && e.target.matches('[data-note]')) { if (S.tab === 'list') renderD(); if (S.tab === 'questions') renderQ(); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && S.open) { S.open = null; render(); } });
+
+  var h = location.hash.replace('#decisions', '').replace('-', ''); if (['list', 'questions', 'sources'].indexOf(h) > -1) S.tab = h;
+  render();
+})();
+</script>
+</body>
+</html>
+"""
+
+if __name__ == '__main__':
+    build()

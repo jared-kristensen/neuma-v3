@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Neuma · Context Roll Up</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="shared/tailwind-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/neuma.css">
+</head>
+<body class="antialiased">
+<script>document.write('<scr'+'ipt src="shared/nav.js?t='+Date.now()+'"></scr'+'ipt>')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ru-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs></svg>
+<!-- ═════════════════════  SCREEN 4 · ROLL UP DETAIL (v153)  ═════════════════════ -->
+<style>
+  /* ── Screen 4 · Roll up (v153). Reuses the Context detail styles. ── */
+  .ru-sw { padding:4px 11px; border-radius:9999px; border:1px solid #e2e8f0; background:#fff; color:#475569; font-size:12px; cursor:pointer; white-space:nowrap; }
+  .ru-sw:hover { border-color:#cbd5e1; color:#0f172a; }
+  .ru-sw.on { background:#0f172a; border-color:#0f172a; color:#fff; }
+  #contexts [data-dir-tab] { cursor:pointer; }
+</style>
+<section id="rollup" class="mb max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ru-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs></svg>
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 4</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Roll up · Detail</h2></div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">Same page as a Context. Issues, actions and decisions roll up from the linked Contexts, each showing where it came from. Patterns are found across all of them. Contexts replaces Sources. Share and ⋯ work like the Context page. Share opens Manage access with Roll up roles (Editor changes which Contexts are in it and shares, Viewer sees the full Roll up), a note that sharing doesn’t open the Contexts underneath, and Make private. ⋯ has Edit Roll up, Make private, Hide for me and Delete for everyone for the Owner. Switch to a Roll up Jared doesn’t own (Sarah’s or Daniel’s) to see the Viewer header: no Share or Add Context, and ⋯ shows Hide for me only.</div>
+  </div>
+  <div class="flex items-center gap-1.5 mb-3 flex-wrap" data-ru-switch><span class="text-[11.5px] text-slate-400 mr-1">Example</span></div>
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-card is-host relative" data-mb-panel>
+    <div class="flex min-h-[1100px]">
+      <aside class="w-[240px] border-r border-slate-200 bg-slate-50/50 px-4 pt-8 pb-6 flex flex-col shrink-0">
+        <div class="flex items-center gap-2 mb-8 px-2"><svg width="28" height="28" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#ru-g)" fill-rule="evenodd"/></svg><div class="nm-wordmark text-[18px]">neuma</div></div>
+        <nav class="flex flex-col gap-0.5"><a class="nav-link active">Contexts</a><a class="nav-link">Settings</a></nav>
+        <div class="mt-auto pt-4 border-t border-slate-200"><button class="user-chip w-full flex items-center gap-2 text-xs px-2 py-1.5 rounded-md hover:bg-slate-100 text-left"><div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center text-white text-[11px] font-semibold shrink-0">JK</div><div class="flex-1 min-w-0"><div class="font-medium text-slate-800 truncate">Jared K.</div><div class="text-slate-500 truncate">acmegtm.com</div></div></button></div>
+      </aside>
+      <main class="flex-1 min-w-0 px-12 pt-8 pb-14" data-ru-main></main>
+    </div>
+  </div>
+  <div class="mt-4 grid grid-cols-2 gap-6 text-[12px] text-slate-600 max-w-[900px]">
+    <div><div class="font-semibold text-slate-900 mb-0.5">Items roll up</div>Each issue, action and decision comes from one linked Context and says which. Ticking it here ticks it there.</div>
+    <div><div class="font-semibold text-slate-900 mb-0.5">Patterns don’t</div>Neuma compares all the linked Contexts and finds what repeats. A Context’s own patterns stay in that Context.</div>
+  </div>
+</section>
+
+
+<!-- ═════════════════════  SCREEN 4.2 · ROLL UP · WHERE ITEMS COME FROM (v156)  ═════════════════════ -->
+<section id="rollup-label" class="mb max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 4.2</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Roll up · Where items come from</h2></div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">Three ways to show which Context an item came from on Summary. Same four items in each. Row 4 spans two Contexts. Hover any row.</div>
+  </div>
+  <div class="grid grid-cols-3 gap-5" data-rl-opts></div>
+</section>
+<script>
+// Screen 4.2 · source label options
+(function(){
+  var box = document.querySelector('#rollup-label [data-rl-opts]'); if (!box) return;
+  var ROWS = [
+    ['Globex security review is blocking the renewal','Renewal is due Nov 30. Their security team has not started.',['Globex']],
+    ['Send Acme Corp a date for custom reports','Promised on Oct 21. They asked again on Oct 29.',['Acme Corp']],
+    ['Hooli has no main user since Priya left','Logins are down 48% since Oct 12. No new owner is named.',['Hooli']],
+    ['Share the reporting workaround with Vandelay and Soylent','Both asked for the same export last week.',['Vandelay','Soylent']]
+  ];
+  var AP = '<svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#ru-g)" fill-rule="evenodd"/></svg>';
+  function lbl(c){ return '<span class="inline-flex items-center gap-1 whitespace-nowrap"><span class="text-[11px] leading-none">🏢</span><span class="truncate max-w-[150px]">'+c[0]+'</span>'+(c.length>1?'<span class="text-slate-400" title="'+c.slice(1).join(', ')+'">+'+(c.length-1)+'</span>':'')+'</span>'; }
+  function row(i, mode){
+    var r = ROWS[i], hover = i===1 && mode===2;
+    var from = mode===3 ? '<div class="mb-0.5 text-[11.5px] text-slate-500">'+lbl(r[2])+'</div>' : '';
+    var right = mode===2 ? '<span class="shrink-0 pt-[2px] text-[11.5px] text-slate-500 '+(hover?'':'hidden group-hover:inline')+'">'+lbl(r[2])+'</span>' : '';
+    return '<div class="group flex items-start gap-3 px-4 py-3 '+(hover?'bg-slate-50':'hover:bg-slate-50')+'"><span class="w-[20px] shrink-0 flex justify-center pt-[3px]"><span class="mb-rk nm-rank-text" style="font-size:14px">'+(i+1)+'</span></span>'
+      + '<div class="min-w-0 flex-1">'+from+'<div class="flex items-start gap-3"><div class="flex-1 text-[13.5px] font-medium text-slate-900 leading-snug">'+r[0]+'</div>'+right+'</div>'
+      + '<p class="mt-1 text-[12.5px] leading-[1.5] text-slate-500 truncate">Why: '+r[1]+'</p></div></div>';
+  }
+  var OPTS = [
+    [1,'Option 1','Name it in the title','No label. Neuma writes titles that name the Context. Rows match the Context page exactly.'],
+    [2,'Option 2','Show it on hover','Rows match the Context page. The source appears on the right when you hover. Row 2 shows the hover state.'],
+    [3,'Option 3','“From” line above the title','Like the sender in an inbox. Origin is read first. One extra short line per row.']
+  ];
+  box.innerHTML = OPTS.map(function(o){
+    return '<div><div class="eyebrow">'+o[1]+'</div><div class="mt-1 text-[15px] font-semibold text-slate-900">'+o[2]+'</div><p class="mt-1 mb-3 text-[12.5px] leading-[1.5] text-slate-500 min-h-[38px]">'+o[3]+'</p>'
+      + '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden mb-card shadow-card"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 mb-wash">'+AP+'<span class="text-[13px] font-semibold text-slate-900">Needs attention</span><span class="text-[11px] font-semibold nm-rank-text">suggested by Neuma</span></div>'
+      + '<div class="divide-y divide-slate-100">'+ROWS.map(function(_,i){ return row(i,o[0]); }).join('')+'</div></div></div>';
+  }).join('');
+})();
+</script>
+
+<!-- ═════════════════════  SCREEN 4.3 · ROLL UP · CREATE (v153)  ═════════════════════ -->
+<section id="rollup-create" class="max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0"><div class="eyebrow">Screen 4.3</div><h2 class="text-[22px] font-semibold tracking-tight mt-1">Roll up · Create</h2></div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">+ New Context offers Context or Roll up. A Roll up uses the same slide-over as Create Context (Screen 2.1). In the first version you pick Contexts by hand. Rules, where new matches join on their own, are later.</div>
+  </div>
+
+  <!-- Step 1 · the New menu -->
+  <div class="rounded-2xl border border-slate-200 bg-white shadow-card px-12 pt-8 pb-6 mb-5">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex items-baseline gap-2"><h1 class="text-[22px] font-semibold tracking-tight text-slate-900">Contexts</h1><span class="text-[13px] text-slate-500"><span class="num font-mono text-slate-800">47</span> total</span></div>
+      <div class="flex items-center gap-2">
+        <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 shrink-0" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="flex-1 bg-transparent outline-none placeholder:text-slate-400" placeholder="Search Contexts…" /><span class="kbd">⌘K</span></div>
+        <div class="relative">
+          <div class="inline-flex items-stretch"><button class="btn-out" style="background:#0f172a;color:#fff;border-color:#0f172a;white-space:nowrap;border-top-right-radius:0;border-bottom-right-radius:0;">+ New Context</button><button type="button" class="btn-out inline-flex items-center justify-center" aria-label="More ways to create" style="background:#0f172a;color:#fff;border-color:#0f172a;white-space:nowrap;border-top-left-radius:0;border-bottom-left-radius:0;border-left:1px solid rgba(255,255,255,.28);padding-left:8px;padding-right:8px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></div>
+          <div class="absolute right-0 top-full mt-1 w-max min-w-[260px] rounded-lg border border-slate-200 bg-white py-1 z-40 text-left" style="box-shadow:0 16px 40px -8px rgba(15,23,42,.2), 0 2px 8px -2px rgba(15,23,42,.1);">
+            <button class="w-full flex items-start gap-3 px-3.5 py-2.5 hover:bg-slate-50 text-left"><span><span class="block text-[13px] font-medium text-slate-900">Context</span><span class="block text-[12px] text-slate-500 mt-0.5 whitespace-nowrap">For meetings, a team, a project or an account.</span></span></button>
+            <button class="w-full flex items-start gap-3 px-3.5 py-2.5 bg-slate-50 text-left"><span><span class="block text-[13px] font-medium text-slate-900">Roll up</span><span class="block text-[12px] text-slate-500 mt-0.5 whitespace-nowrap">Multiple Contexts as one view.</span></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="h-[120px]"></div>
+  </div>
+
+  <!-- Step 2 · the slide-over -->
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-card" data-rc>
+    <div class="flex min-h-[860px] relative">
+      <aside class="w-[240px] border-r border-slate-200 bg-slate-50/50 px-4 pt-8 pb-6 flex flex-col shrink-0">
+        <div class="flex items-center gap-2 mb-8 px-2"><svg width="28" height="28" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#ru-g)" fill-rule="evenodd"/></svg><div class="nm-wordmark text-[18px]">neuma</div></div>
+        <nav class="flex flex-col gap-0.5"><a class="nav-link on">Contexts</a><a class="nav-link">Settings</a></nav>
+      </aside>
+      <main class="flex-1 min-w-0 px-12 pt-10 pb-14">
+        <div class="flex items-baseline gap-2"><h1 class="text-[22px] font-semibold tracking-tight text-slate-900">Contexts</h1><span class="text-[13px] text-slate-500"><span class="num font-mono text-slate-800">47</span> total</span></div>
+        <div class="mt-8 space-y-3"><div class="h-11 rounded-lg bg-slate-50"></div><div class="h-11 rounded-lg bg-slate-50"></div><div class="h-11 rounded-lg bg-slate-50"></div><div class="h-11 rounded-lg bg-slate-50"></div><div class="h-11 rounded-lg bg-slate-50"></div><div class="h-11 rounded-lg bg-slate-50"></div></div>
+      </main>
+      <div class="absolute inset-0 bg-slate-900/30 z-20"></div>
+      <aside class="absolute top-0 right-0 bottom-0 w-[520px] bg-white z-30 flex flex-col" style="box-shadow:-24px 0 48px -16px rgba(15,23,42,0.25);">
+        <div class="px-7 pt-6 pb-5 border-b border-slate-200 flex items-start justify-between gap-4">
+          <div><h2 class="text-[17px] font-semibold tracking-tight text-slate-900">New Roll up</h2><p class="text-[12.5px] text-slate-500 mt-1">Group Contexts you already have. Their items roll up here, and Neuma finds patterns across them.</p></div>
+          <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 shrink-0" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-7 py-6 space-y-5">
+          <div>
+            <label class="eyebrow">Name</label>
+            <div class="mt-1.5 flex items-center gap-2.5"><button class="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-[22px] shrink-0 hover:bg-slate-100" title="Choose icon" data-rc-icon>🏆</button><input class="flex-1 px-3 py-2 border border-slate-300 rounded-md text-sm bg-white" value="Top 10 accounts" data-rc-name /></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between"><label class="eyebrow">Contexts</label>
+            </div>
+            <!-- Pick by hand -->
+            <div class="mt-2" data-rc-pane="hand">
+              <div class="relative mb-2"><svg class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg><input class="w-full pl-8 pr-3 py-2 text-[13px] rounded-md border border-slate-300 bg-white focus:outline-none focus:border-brand-500" placeholder="Search Contexts…"></div>
+              <div class="rounded-lg border border-slate-200 bg-white divide-y divide-slate-100 overflow-hidden" data-rc-list></div>
+            </div>
+          </div>
+          <div><button class="text-[12px] text-slate-500 hover:text-brand-700 font-medium">+ Add description</button></div>
+        </div>
+        <div class="px-7 py-4 border-t border-slate-200 bg-slate-50/60 flex items-center justify-between gap-2">
+          <span class="text-[12px] text-slate-500" data-rc-sum>10 Contexts</span>
+          <div class="flex items-center gap-2"><button class="btn-out">Cancel</button><button class="btn-out" style="background:#0f172a;color:#fff;border-color:#0f172a;">Create</button></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+<script>
+// Screen 4.3 · New Roll up slide-over
+(function(){
+  var box = document.querySelector('#rollup-create [data-rc]'); if (!box) return;
+  var CTX = [['🏢','Acme Corp',42,1],['🏢','Globex',29,1],['🏢','Hooli',51,1],['🏢','Initech',11,1],['🏢','Umbrella',47,1],['🏢','Wayne Enterprises',51,1],['⭐','Pendo',87,0],['💰','Q4 Pricing Change',18,0]];
+  var list = box.querySelector('[data-rc-list]'), count = box.querySelector('[data-rc-count]'), sum = box.querySelector('[data-rc-sum]');
+  list.innerHTML = CTX.map(function(c){ return '<label class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-slate-50 cursor-pointer"><input type="checkbox" class="accent-brand-600 w-3.5 h-3.5"'+(c[3]?' checked':'')+'><span class="text-[15px] leading-none">'+c[0]+'</span><span class="flex-1 text-[13px] text-slate-900 truncate">'+c[1]+'</span><span class="text-[11.5px] text-slate-400">'+c[2]+' sources</span></label>'; }).join('');
+  var extra = 4; // selected Contexts not in the visible 8
+  function tally(){ var n = list.querySelectorAll('input:checked').length + extra; if (count) count.textContent = n; sum.textContent = n+' Contexts'; }
+  list.addEventListener('change', tally);
+  box.addEventListener('click', function(e){
+    var b = e.target.closest('[data-rc-mode]'); if (!b) return;
+    var m = b.getAttribute('data-rc-mode');
+    box.querySelectorAll('[data-rc-mode]').forEach(function(x){ var on = x===b; x.classList.toggle('bg-white', on); x.classList.toggle('text-slate-900', on); x.classList.toggle('shadow-sm', on); x.classList.toggle('text-slate-500', !on); });
+    box.querySelectorAll('[data-rc-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-rc-pane')!==m); });
+    box.querySelector('[data-rc-name]').value = m==='rule' ? 'Sales demos' : 'Top 10 accounts';
+    box.querySelector('[data-rc-icon]').textContent = m==='rule' ? '🖥️' : '🏆';
+    if (m==='rule') sum.textContent = '23 Contexts · updates on its own'; else tally();
+  });
+})();
+</script>
+
+
+
+
+<script src="shared/rollup.js"></script>
+<script src="shared/neuma.js"></script>
+</body>
+</html>
