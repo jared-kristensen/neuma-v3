@@ -86,3 +86,4 @@ File: `contexts.html`
 | Nov 18 | A People Context has no Emails tab. Emails feed issues, actions and decisions, and show as their source. | Jared: the Emails tab is not useful. The Meetings tab is. | Decided | Important |
 | Nov 18 | The Issues, Actions and Decisions tabs on a People Context use the Screen 3 cards and rows. Tabs show no counts. | Consistency with Screen 3. | Decided | Low |
 | Nov 18 | What goes in the right column of the Issues, Actions and Decisions tabs on a People Context? On Screen 3 it holds Patterns, which here became Needs attention. It is empty for now. | Not recorded | Open | Low |
+| Nov 18 | On a People Context, an action row's second line is the owner's initials, when it was raised, then its source as a link: the meeting title or the email subject. A meeting link opens that meeting on the Meetings tab. Action rows show no priority. | Jared's format. The source is what you need to recall the context. | Decided | Medium |

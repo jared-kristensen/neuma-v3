@@ -25,6 +25,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 17 | `person.html` · 13 People Context | CHANGED | Summary shows each item once. Actions skips the two already in Needs attention and says "2 more in Needs attention". Open between you is gone. New Recent decisions card: last three, dated, See all. Might be useful rows open their source and have a hover dismiss with Undo. | Review scored the page 7/10 for repeats and dead ends. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Recent decisions removed from Summary. Needs attention holds 5, shows 3, with Show 2 more. Emails tab removed. Issues, Actions and Decisions tabs use the Screen 3 cards: sparkle header with search, sort and filter; severity dots and basis on issues; date blocks on decisions; resolved and done hidden behind Show. Tab counts removed. | Jared's review of the tabs. |
 | Nov 18 | `person.html` · 13 People Context | CHANGED | Action rows drop the detail line: title, then owner, date, priority and source. Sample data has 9 open actions and 3 done. | Jared asked for more actions and one less line per row. |
+| Nov 18 | `person.html` · 13 People Context | CHANGED | Action rows: second line is owner initials, "5 days ago", then the source as a link (meeting title or "Email: subject"). Meeting links open the meeting on the Meetings tab. No priority badge, no due date. Meeting titles are now descriptive, such as "Weekly 1:1 Sarah / Jared: Q1 targets and Initech". | Jared's format for the action row. |
 
 ## Not product
 

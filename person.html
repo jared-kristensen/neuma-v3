@@ -166,40 +166,42 @@
   var THUMB = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>';
   // One list. Owner is shown on each row with their initials.
   var WHO = {JK:['Jared K.', 'from-amber-400 to-pink-500'], SM:['Sarah M.', 'from-emerald-400 to-teal-500']};
+  // Source of each action: a meeting (opens it on the Meetings tab) or an email thread.
+  var SRC = {m1:'Weekly 1:1 Sarah / Jared: Q1 targets and Initech', m2:'Sales team standup: Initech handover', m3:'Weekly 1:1 Sarah / Jared: promotion case', m4:'Weekly 1:1 Sarah / Jared: Pendo and Figma renewals', m5:'Sales team standup: Initech onboarding question',
+    e1:'Email: Pendo renewal quote', e2:'Email: Book of business numbers', e3:'Email: January offsite', e4:'Email: Pendo champion contact'};
   var ACTS = {open:[
-      ['JK', 'Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1, 'na'],
-      ['SM', 'Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1, 'na'],
-      ['JK', 'Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14'],
-      ['SM', 'Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13'],
-      ['SM', 'Chase Pendo on the renewal date', '', 'Due Nov 20', 'High', '1:1 · Nov 12'],
-      ['JK', 'Put a date on Sarah’s promotion case', '', 'Due Nov 26', 'Medium', '1:1 · Nov 12'],
-      ['SM', 'Answer Initech on onboarding time', '', 'Due Nov 19', 'Medium', 'Sales standup · Oct 27'],
-      ['JK', 'Add Sarah to the January offsite invite', '', 'Due Nov 24', 'Low', 'Email · Nov 11'],
-      ['SM', 'Send the Figma renewal health check', '', 'Due Nov 27', 'Low', '1:1 · Oct 29']],
+      ['JK', 'Send the Q1 targets draft', '5 days ago', 'm1', 'na'],
+      ['SM', 'Initech handover plan', '1 week ago', 'm2', 'na'],
+      ['JK', 'Reply on the Pendo renewal quote', '3 days ago', 'e1'],
+      ['SM', 'Book of business numbers for Q4', '4 days ago', 'e2'],
+      ['SM', 'Chase Pendo on the renewal date', '5 days ago', 'm1'],
+      ['JK', 'Put a date on Sarah’s promotion case', '5 days ago', 'm1'],
+      ['SM', 'Answer Initech on onboarding time', '3 weeks ago', 'm5'],
+      ['JK', 'Add Sarah to the January offsite invite', '6 days ago', 'e3'],
+      ['SM', 'Send the Figma renewal health check', '3 weeks ago', 'm4']],
     done:[
-      ['JK', 'Intro Sarah to the Figma admin', '', 'Done Nov 6', 'Medium', '1:1 · Nov 5'],
-      ['SM', 'Share the Pendo usage report', '', 'Done Nov 4', 'Medium', '1:1 · Oct 29'],
-      ['SM', 'Update the Pendo champion contact', '', 'Done Oct 30', 'Low', 'Email · Oct 28']]};
+      ['JK', 'Intro Sarah to the Figma admin', '2 weeks ago', 'm3'],
+      ['SM', 'Share the Pendo usage report', '3 weeks ago', 'm4'],
+      ['SM', 'Update the Pendo champion contact', '3 weeks ago', 'e4']]};
   var SPARK = '<span class="text-brand-500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span>';
   var TOOLS = '<div class="ml-auto flex items-center gap-1.5"><button type="button" class="btn-out inline-flex items-center justify-center bg-slate-50" style="width:28px;height:26px;padding:0;" title="Search"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><span class="text-slate-400">Sort:</span><span>Default</span>' + '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="6 9 12 15 18 9"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button></div>';
   function head(title, n, full, tab){ return '<div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100">' + (full ? SPARK : '') + '<span class="text-[13px] font-semibold text-slate-900">' + title + '</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + n + '</span>' + (full ? TOOLS : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="' + tab + '">See all →</a>') + '</div>'; }
   function hiddenBtn(n, word){ return '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle data-word="' + word + '">' + n + ' ' + word + ' hidden <span class="text-brand-600 ml-1">Show</span></button>'; }
   function actRow(a, done){
-    var w = WHO[a[0]], late = !done && a[6];
+    var w = WHO[a[0]], isMeet = a[3].charAt(0) === 'm';
     return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow data-owner="' + a[0] + '"><div class="flex items-start gap-2.5">'
       + '<span class="w-[18px] shrink-0 flex justify-center pt-[2px]"><button type="button" class="zl-tick" data-zltick title="Mark complete">' + TICK + '</button></span>'
       + '<div class="flex-1 min-w-0"><div class="zl-ttl text-[13.5px] font-medium text-slate-900 leading-snug">' + e(a[1]) + '</div>'
-      + '<div class="mt-1 flex items-center gap-1.5 text-[11px] text-slate-400">'
-      + '<span class="inline-flex items-center gap-1 text-slate-600"><span class="w-4 h-4 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold">' + a[0] + '</span>' + w[0] + '</span><span class="text-slate-300">·</span>'
-      + '<span' + (late ? ' class="text-rose-600 font-medium"' : '') + '>' + e(a[3]) + '</span><span class="text-slate-300">·</span>'
-      + '<button type="button" class="badge ' + PRI[a[4]] + ' inline-flex items-center gap-0.5" style="padding:1px 4px 1px 6px;font-size:10.5px;" title="Change priority">' + a[4] + CHEV + '</button>'
-      + '<span class="text-slate-300">·</span><span>' + e(a[5]) + '</span>'
-      + '<span class="ml-auto flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
+      + '<div class="mt-1 flex items-center gap-1.5 text-[11.5px] text-slate-400 min-w-0">'
+      + '<span class="w-4 h-4 shrink-0 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold" title="' + w[0] + '">' + a[0] + '</span>'
+      + '<span class="whitespace-nowrap">' + e(a[2]) + '</span><span class="text-slate-300">·</span>'
+      + '<a class="truncate text-brand-600 hover:underline cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + (isMeet ? 'Open the meeting' : 'Open in Gmail') + '">' + e(SRC[a[3]]) + '</a>'
+      + '<span class="ml-auto shrink-0 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
       + '</div></div></div></div>';
   }
   $$('[data-acts]').forEach(function(box){
     var full = box.hasAttribute('data-full');
-    var rows = full ? ACTS.open : ACTS.open.filter(function(a){ return a[7] !== 'na'; }), inNA = ACTS.open.length - rows.length;
+    var rows = full ? ACTS.open : ACTS.open.filter(function(a){ return a[4] !== 'na'; }), inNA = ACTS.open.length - rows.length;
     box.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden">' + head(full ? 'Detected actions' : 'Actions', ACTS.open.length, full, 'actions')
       + '<div class="divide-y divide-slate-100">' + rows.map(function(a){ return actRow(a, false); }).join('') + '</div>'
       + (inNA ? '<div class="px-4 py-1.5 border-t border-slate-100 text-[11.5px] text-slate-400">' + inNA + ' more in Needs attention</div>' : '')
@@ -248,27 +250,27 @@
 
   // ── Meetings
   var MEET = [
-    {id:'m1', topic:'Q1 targets', date:'Nov 12', day:'Thursday, Nov 12', n:2, title:'Sarah / Jared 1:1', sum:'Q1 targets set per account. Initech lead still open.', tool:'Zoom', lines:204, shared:false,
+    {id:'m1', topic:'Q1 targets', date:'Nov 12', day:'Thursday, Nov 12', n:2, title:'Weekly 1:1 Sarah / Jared: Q1 targets and Initech', sum:'Q1 targets set per account. Initech lead still open.', tool:'Zoom', lines:204, shared:false,
      notes:['Q1 targets will be set per account, not per CSM.', 'Sarah asked again for a decision on who leads Initech.', 'Pendo renewal quote is with Jared for sign-off.'],
      actions:[['Send the Q1 targets draft', 'Jared K. · due Nov 17'], ['Chase Pendo on the renewal date', 'Sarah M. · due Nov 20']],
      decisions:['Q1 targets are set per account, not per CSM'],
      tr:[['00:00', 'Jared K.', 'Let’s start with targets. I’d rather set them per account this time, so the Pendo and Figma renewals carry their own number.'], ['00:41', 'Sarah M.', 'That works for me. It also makes the Initech question matter more, because whoever leads it carries that target.'], ['01:12', 'Jared K.', 'Fair. I’ll send a draft by Tuesday and we can settle Initech once you’ve seen the numbers.'], ['01:30', 'Sarah M.', 'Okay. I’d like to lead it, for what it’s worth. I’ve said that twice now.']]},
-    {id:'m2', topic:'Initech deal', date:'Nov 10', day:'Tuesday, Nov 10', n:1, title:'Sales team standup', sum:'Sarah to write the Initech handover plan by Nov 15.', tool:'Zoom', lines:38, shared:true,
+    {id:'m2', topic:'Initech deal', date:'Nov 10', day:'Tuesday, Nov 10', n:1, title:'Sales team standup: Initech handover', sum:'Sarah to write the Initech handover plan by Nov 15.', tool:'Zoom', lines:38, shared:true,
      notes:['Sarah will write the Initech handover plan.', 'Jared wants one point of contact for Initech through the handover.'],
      actions:[['Write the Initech handover plan', 'Sarah M. · due Nov 15']],
      decisions:['Initech handover moves to the Sales standup agenda'],
      tr:[['14:02', 'Jared K.', 'Sarah, can you own the handover plan for Initech? One page is fine.'], ['14:10', 'Sarah M.', 'Yes. I’ll have it to you by the fifteenth.']]},
-    {id:'m3', topic:'Promotion case', date:'Nov 5', day:'Thursday, Nov 5', n:1, title:'Sarah / Jared 1:1', sum:'Promotion case goes to Mia in Q1. Sarah wants to lead Initech.', tool:'Zoom', lines:187, shared:false,
+    {id:'m3', topic:'Promotion case', date:'Nov 5', day:'Thursday, Nov 5', n:1, title:'Weekly 1:1 Sarah / Jared: promotion case', sum:'Promotion case goes to Mia in Q1. Sarah wants to lead Initech.', tool:'Zoom', lines:187, shared:false,
      notes:['Sarah’s promotion case goes to Mia R. in Q1.', 'Sarah raised leading the Initech deal for the first time.'],
      actions:[['Intro Sarah to the Figma admin', 'Jared K. · done Nov 6']],
      decisions:['Sarah’s promotion case goes to Mia R. in Q1'],
      tr:[['00:00', 'Sarah M.', 'I want to talk about the promotion timeline before we get into accounts.'], ['00:18', 'Jared K.', 'Sure. I’ll take the case to Mia in Q1. I need two more renewals closed to make it easy.']]},
-    {id:'m4', topic:'Pendo renewal', date:'Oct 29', day:'Thursday, Oct 29', n:1, title:'Sarah / Jared 1:1', sum:'Sarah keeps Pendo and Figma through the renewals.', tool:'Zoom', lines:161, shared:false,
+    {id:'m4', topic:'Pendo renewal', date:'Oct 29', day:'Thursday, Oct 29', n:1, title:'Weekly 1:1 Sarah / Jared: Pendo and Figma renewals', sum:'Sarah keeps Pendo and Figma through the renewals.', tool:'Zoom', lines:161, shared:false,
      notes:['Sarah keeps Pendo and Figma through both renewals.', 'Pendo usage report to be shared before the next call.'],
      actions:[['Share the Pendo usage report', 'Sarah M. · done Nov 4']],
      decisions:['Sarah keeps Pendo and Figma through the renewals'],
      tr:[['00:00', 'Jared K.', 'I don’t want to move Pendo or Figma mid-renewal. Are you good to keep both?'], ['00:12', 'Sarah M.', 'Yes. I’ll send the usage report so we go in with numbers.']]},
-    {id:'m5', topic:'Initech deal', date:'Oct 27', day:'Tuesday, Oct 27', n:0, title:'Sales team standup', sum:'Initech asked about onboarding time. Sarah took the question.', tool:'Zoom', lines:12, shared:true,
+    {id:'m5', topic:'Initech deal', date:'Oct 27', day:'Tuesday, Oct 27', n:0, title:'Sales team standup: Initech onboarding question', sum:'Initech asked about onboarding time. Sarah took the question.', tool:'Zoom', lines:12, shared:true,
      notes:['Initech asked how long onboarding takes. Sarah will answer.'], actions:[], decisions:[],
      tr:[['09:40', 'Jared K.', 'Initech asked about onboarding time. Sarah, can you take that one?'], ['09:46', 'Sarah M.', 'I’ll reply today.']]}
   ];
@@ -317,6 +319,7 @@
   // ── Wiring
   function tab(t){ $$('[data-ptabs] .tab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
   sec.addEventListener('click', function(ev){
+    var gm = ev.target.closest('[data-goto-m]'); if (gm) { st.topic = 'all'; $('[data-mtopic]').value = 'all'; st.m = gm.getAttribute('data-goto-m'); st.mtab = 'notes'; tab('meetings'); mlist(); history.replaceState(null, '', '#meetings'); return; }
     var nm = ev.target.closest('[data-na-more]'); if (nm) { var open = nm.textContent === 'Show 2 more'; $$('[data-na-row]').forEach(function(r, i){ if (i > 2) r.classList.toggle('hidden', !open); }); nm.textContent = open ? 'Show less' : 'Show 2 more'; return; }
     var tk = ev.target.closest('[data-zltick]'); if (tk) { tk.closest('[data-zlrow]').classList.toggle('is-done'); return; }
     var dt = ev.target.closest('[data-done-toggle]'); if (dt) { var box = dt.parentNode, rows = box.querySelector('[data-done-rows]'), on = rows.classList.toggle('hidden'); var wd = dt.getAttribute('data-word'); dt.innerHTML = on ? rows.children.length + ' ' + wd + ' hidden <span class="text-brand-600 ml-1">Show</span>' : '<span class="text-brand-600">Hide ' + wd + '</span>'; return; }
