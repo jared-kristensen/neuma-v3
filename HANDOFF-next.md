@@ -16,6 +16,7 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 17 | `contexts.html` · 2 Contexts directory | CHANGED | Sub nav below Shared with you is People, Accounts, Meetings, Projects, Teams. Each filters the table by Context type (`data-ctype` on the row). The old sample views (1/1s, Sales, Clients, Recruitment) are gone. Tags are unchanged. | The five are Context types and saved views. |
 | Nov 17 | `contexts.html` · 2 Contexts directory | NEW (rows) | Two sample rows: Weekly leadership sync (Meetings) and Customer Success team (Teams), each with hover peek content. | Meetings and Teams had no visible rows. |
 | Nov 17 | `decisions.html` · 12 Decision log | CHANGED (data only) | Rebuilt from the fresh V3 log: 12 decisions, 5 open questions, no conflicts. The Sources tab lists `DECISIONS.md` only. | Jared started a fresh decision log for V3. The V2 log is reference only. |
+| Nov 17 | `contexts.html` · 2 Contexts directory | CHANGED | The People view lists 9 people, one row per person: 7 colleagues and 2 outside contacts, with the company in grey beside the name. "Sarah M. 1:1" and "Daniel K. 1:1" are now "Sarah M." and "Daniel K.". Each new row has hover peek content. "Priya S. · Senior PM candidate" moved to Projects. | A People Context is between two individuals, not a 1:1 meeting series. |
 
 ## Not product
 
