@@ -195,7 +195,7 @@
       + '<div class="mt-1 flex items-center gap-1.5 text-[11.5px] text-slate-400 min-w-0">'
       + '<span class="w-4 h-4 shrink-0 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold" title="' + w[0] + '">' + a[0] + '</span>'
       + '<span class="whitespace-nowrap">' + e(a[2]) + '</span><span class="text-slate-300">·</span>'
-      + '<a class="truncate text-brand-600 hover:underline cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + (isMeet ? 'Open the meeting' : 'Open in Gmail') + '">' + e(SRC[a[3]]) + '</a>'
+      + '<a class="truncate text-slate-500 hover:text-slate-900 hover:underline underline-offset-2 cursor-pointer"' + (isMeet ? ' data-goto-m="' + a[3] + '"' : '') + ' title="' + (isMeet ? 'Open the meeting' : 'Open in Gmail') + '">' + e(SRC[a[3]]) + '</a>'
       + '<span class="ml-auto shrink-0 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><button type="button" class="inline-flex items-center justify-center rounded-md text-slate-400 hover:text-brand-600 hover:bg-brand-50 w-6 h-6" title="Useful">' + THUMB + '</button></span>'
       + '</div></div></div></div>';
   }
@@ -215,7 +215,7 @@
   ];
   var XI = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   $('[data-useful]').innerHTML = USEFUL.map(function(x){ return '<div class="row group relative pr-10 cursor-pointer" data-useful-row title="Open ' + e(x[1].split(' · ')[0]) + '">'
-    + '<div data-u-body><div class="rt">' + e(x[0]) + '</div><div class="rm"><span class="text-brand-600 font-medium">' + e(x[1].split(' · ')[0]) + ' ›</span> · ' + e(x[1].split(' · ')[1]) + ' · ' + x[2] + '</div></div>'
+    + '<div data-u-body><div class="rt">' + e(x[0]) + '</div><div class="rm"><span class="text-slate-600 font-medium group-hover:underline underline-offset-2">' + e(x[1].split(' · ')[0]) + '</span> · ' + e(x[1].split(' · ')[1]) + ' · ' + x[2] + '</div></div>'
     + '<div data-u-gone class="hidden items-center gap-2 text-[12px] text-slate-400"><span class="flex-1">Dismissed</span><button type="button" class="underline hover:text-slate-700" data-u-undo>Undo</button></div>'
     + '<button type="button" data-u-x class="absolute right-3 top-2.5 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 w-6 h-6" title="Dismiss">' + XI + '</button></div>'; }).join('');
 
