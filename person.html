@@ -170,10 +170,16 @@
       ['JK', 'Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1, 'na'],
       ['SM', 'Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1, 'na'],
       ['JK', 'Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14'],
-      ['SM', 'Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13']],
+      ['SM', 'Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13'],
+      ['SM', 'Chase Pendo on the renewal date', '', 'Due Nov 20', 'High', '1:1 · Nov 12'],
+      ['JK', 'Put a date on Sarah’s promotion case', '', 'Due Nov 26', 'Medium', '1:1 · Nov 12'],
+      ['SM', 'Answer Initech on onboarding time', '', 'Due Nov 19', 'Medium', 'Sales standup · Oct 27'],
+      ['JK', 'Add Sarah to the January offsite invite', '', 'Due Nov 24', 'Low', 'Email · Nov 11'],
+      ['SM', 'Send the Figma renewal health check', '', 'Due Nov 27', 'Low', '1:1 · Oct 29']],
     done:[
       ['JK', 'Intro Sarah to the Figma admin', '', 'Done Nov 6', 'Medium', '1:1 · Nov 5'],
-      ['SM', 'Share the Pendo usage report', '', 'Done Nov 4', 'Medium', '1:1 · Oct 29']]};
+      ['SM', 'Share the Pendo usage report', '', 'Done Nov 4', 'Medium', '1:1 · Oct 29'],
+      ['SM', 'Update the Pendo champion contact', '', 'Done Oct 30', 'Low', 'Email · Oct 28']]};
   var SPARK = '<span class="text-brand-500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span>';
   var TOOLS = '<div class="ml-auto flex items-center gap-1.5"><button type="button" class="btn-out inline-flex items-center justify-center bg-slate-50" style="width:28px;height:26px;padding:0;" title="Search"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><span class="text-slate-400">Sort:</span><span>Default</span>' + '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="6 9 12 15 18 9"/></svg></button><button type="button" class="btn-out flex items-center gap-1 bg-slate-50" style="padding:3px 9px;font-size:12px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button></div>';
   function head(title, n, full, tab){ return '<div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100">' + (full ? SPARK : '') + '<span class="text-[13px] font-semibold text-slate-900">' + title + '</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + n + '</span>' + (full ? TOOLS : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="' + tab + '">See all →</a>') + '</div>'; }
@@ -183,8 +189,7 @@
     return '<div class="group px-4 py-3 cursor-pointer hover:bg-slate-50' + (done ? ' is-done' : '') + '" data-zlrow data-owner="' + a[0] + '"><div class="flex items-start gap-2.5">'
       + '<span class="w-[18px] shrink-0 flex justify-center pt-[2px]"><button type="button" class="zl-tick" data-zltick title="Mark complete">' + TICK + '</button></span>'
       + '<div class="flex-1 min-w-0"><div class="zl-ttl text-[13.5px] font-medium text-slate-900 leading-snug">' + e(a[1]) + '</div>'
-      + (done ? '' : '<p class="zl-clamp1 mt-0.5 text-[12.5px] leading-[1.5] text-slate-500">' + e(a[2]) + '</p>')
-      + '<div class="mt-1.5 flex items-center gap-1.5 text-[11px] text-slate-400">'
+      + '<div class="mt-1 flex items-center gap-1.5 text-[11px] text-slate-400">'
       + '<span class="inline-flex items-center gap-1 text-slate-600"><span class="w-4 h-4 rounded-full bg-gradient-to-br ' + w[1] + ' inline-flex items-center justify-center text-white text-[7.5px] font-semibold">' + a[0] + '</span>' + w[0] + '</span><span class="text-slate-300">·</span>'
       + '<span' + (late ? ' class="text-rose-600 font-medium"' : '') + '>' + e(a[3]) + '</span><span class="text-slate-300">·</span>'
       + '<button type="button" class="badge ' + PRI[a[4]] + ' inline-flex items-center gap-0.5" style="padding:1px 4px 1px 6px;font-size:10.5px;" title="Change priority">' + a[4] + CHEV + '</button>'
