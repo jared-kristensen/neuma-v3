@@ -9,6 +9,7 @@ Design mockups for Neuma. Open `index.html` to see every screen.
 | `feed.html` | 1 Feed |
 | `contexts.html` | 2 Empty (first visit), 2 Contexts directory, 2.1 Create Context, 2.2 Sources drawer states |
 | `context.html` | 3 Context detail, 3.1 Edit Context |
+| `person.html` | 13 People Context: Summary, Issues, Actions, Decisions, Meetings, Emails, Ask panel |
 | `rollup.html` | 4 Context Roll Up detail, 4 Discovery (Roll up of first calls), 4.2 Label options, 4.3 New Roll up |
 | `meeting-brief.html` | 5 Entry, 5.1 Prep, 5.2 Zoom app, 5.3 Other platforms, 5.4 States |
 | `slack.html` | 6 Ask in a channel, 6.1 Direct message, 6.2 Ask about a customer, 6.3 States |

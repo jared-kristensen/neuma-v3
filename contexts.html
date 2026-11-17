@@ -827,5 +827,7 @@ document.addEventListener('keydown', function(e){ if (e.key==='Escape') document
   window.__cxHiddenSync();
 })();
 </script>
+<script>/* V3: a People row opens the People Context page (Screen 13) */
+document.addEventListener("click",function(e){var tr=e.target.closest('#contexts tr[data-ctype="people"]');if(!tr||e.target.closest("button,input,a,[data-rowmenu],[data-more]"))return;e.stopPropagation();e.preventDefault();location.href="person.html";},true);</script>
 </body>
 </html>

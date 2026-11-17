@@ -4,6 +4,7 @@
     ['onboarding.html',    'Onboarding'],
     ['contexts.html',      'Contexts'],
     ['context.html',       'Context'],
+    ['person.html',        'People Context'],
     ['rollup.html',        'Context Roll Up'],
     ['claude.html',        'AI Tools MCP'],
     ['integrations.html',  'Integrations'],

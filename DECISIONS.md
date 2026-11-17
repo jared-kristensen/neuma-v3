@@ -67,7 +67,13 @@ File: `contexts.html`
 | Nov 17 | An item from a shared meeting shows in a People Context only when it involves both people. | Otherwise every pair in the room gets the same team items. | Decided | Critical |
 | Nov 17 | The People Context page leads with a two-way ledger on Summary: You owe them, They owe you, Open between you. The Issues, Actions and Decisions tabs stay as on other Contexts. | Jared picked layout A of three. A relationship has two directions, and one Actions list hides that. | Decided | Important |
 | Nov 17 | Meetings and emails on a People Context get their own display, not a plain Sources tab. | Jared's call. | Decided | Important |
-| Nov 17 | How are meetings and emails displayed on a People Context? Sketched: by topic, as a mixed timeline, or by medium. | Not recorded | Open | Important |
+| Nov 17 | How are meetings and emails displayed on a People Context? Sketched: by topic, as a mixed timeline, or by medium. | Not recorded | Superseded | Important |
 | Nov 17 | A People Context has an Ask button. It asks an AI version of the other person, which answers from the context that person has. | Jared's call. | Decided | Critical |
 | Nov 17 | What can the AI version of a person draw on: only this People Context, everything both people can open, or everything that person has? The third reaches Contexts the asker cannot open, including the person's other People Contexts. | That conflicts with "Only the two people can open their People Context". | Open | Critical |
-| Nov 17 | Who sees patterns on a People Context: each person only their own, both the same, or nobody at first? | A pattern about one person would be shown to that person. | Open | Critical |
+| Nov 17 | Who sees patterns on a People Context: each person only their own, both the same, or nobody at first? | A pattern about one person would be shown to that person. | Superseded | Critical |
+| Nov 17 | On a People Context, patterns show as Needs attention. Both people see the same list. It works like an agenda made ahead of time. | Jared's call. | Decided | Critical |
+| Nov 17 | Each person has their own Might be useful list on a People Context. It draws on other Contexts that person can open, and only that person sees it. | Jared's call. Each side brings context the other may not have, without leaking it. | Decided | Critical |
+| Nov 17 | Meetings have their own tab on a People Context: a list with a topic filter on the left, and the meeting on the right with Notes and actions, Transcript and a Follow-up agent button. | Jared's mockup. | Decided | Important |
+| Nov 17 | The meeting transcript can be read inside Neuma on the Meetings tab. | It is in Jared's mockup. V2 had no transcript reader. | Decided | Critical |
+| Nov 17 | Emails have their own tab, separate from Meetings: threads on the left with Waiting on you, Waiting on them or Done, and the thread on the right with what Neuma found above the emails. | Claude's design, at Jared's request. Not yet reviewed. | Option | Important |
+| Nov 17 | What does the Follow-up agent on a meeting do? | Not recorded | Open | Medium |

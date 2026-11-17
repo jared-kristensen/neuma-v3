@@ -17,6 +17,9 @@ Last export: Nov 11, 2026, 18:15 AEDT (`HANDOFF-2026-11-11.md`). That file could
 | Nov 17 | `contexts.html` · 2 Contexts directory | NEW (rows) | Two sample rows: Weekly leadership sync (Meetings) and Customer Success team (Teams), each with hover peek content. | Meetings and Teams had no visible rows. |
 | Nov 17 | `decisions.html` · 12 Decision log | CHANGED (data only) | Rebuilt from the fresh V3 log: 12 decisions, 5 open questions, no conflicts. The Sources tab lists `DECISIONS.md` only. | Jared started a fresh decision log for V3. The V2 log is reference only. |
 | Nov 17 | `contexts.html` · 2 Contexts directory | CHANGED | The People view lists 9 people, one row per person: 7 colleagues and 2 outside contacts, with the company in grey beside the name. "Sarah M. 1:1" and "Daniel K. 1:1" are now "Sarah M." and "Daniel K.". Each new row has hover peek content. "Priya S. · Senior PM candidate" moved to Projects. | A People Context is between two individuals, not a 1:1 meeting series. |
+| Nov 17 | `person.html` · 13 People Context | NEW | The People Context page for Sarah M. Header with rhythm line, lock and Ask button. Tabs: Summary, Issues, Actions, Decisions, Meetings, Emails. Summary has Needs attention (both people), the two-way ledger, Open between you, and Might be useful (only you). Meetings and Emails are list and detail. Ask opens a right panel with cited answers. | V3 People Context decisions. The Ask scope and the Follow-up agent are open questions. |
+| Nov 17 | `contexts.html` · 2 Contexts directory | CHANGED | A People row opens `person.html`. | The People Context page exists now. |
+| Nov 17 | `shared/nav.js` | CHANGED | People Context added to the top bar. | New screen. |
 
 ## Not product
 

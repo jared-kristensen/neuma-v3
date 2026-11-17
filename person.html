@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Neuma · People Context</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="shared/tailwind-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/neuma.css">
+<style>
+  #person .ptab { padding:10px 2px; margin-right:22px; font-size:14px; color:#64748b; border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap; }
+  #person .ptab:hover { color:#0f172a; }
+  #person .ptab.on { color:#0f172a; font-weight:600; border-bottom-color:#0f172a; }
+  #person .ptab .n { font-size:12px; color:#94a3b8; font-weight:400; margin-left:4px; }
+  #person .card { border:1px solid #e2e8f0; border-radius:12px; background:#fff; }
+  #person .card-h { padding:12px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:8px; }
+  #person .card-t { font-size:13px; font-weight:600; color:#0f172a; }
+  #person .who { font-size:11.5px; color:#94a3b8; margin-left:auto; display:inline-flex; align-items:center; gap:5px; }
+  #person .row { padding:11px 16px; border-top:1px solid #f1f5f9; }
+  #person .row:first-child { border-top:0; }
+  #person .rt { font-size:13.5px; color:#0f172a; line-height:1.4; }
+  #person .rm { font-size:12px; color:#64748b; margin-top:2px; }
+  #person .late { color:#be123c; }
+  #person .pill { font-size:11px; font-weight:500; padding:1px 8px; border-radius:999px; white-space:nowrap; }
+  #person .p-you { background:#fff7ed; color:#c2410c; }
+  #person .p-them { background:#eef1ff; color:#2a2fa6; }
+  #person .p-done { background:#f1f5f9; color:#64748b; }
+  #person .li { padding:14px 18px; border-top:1px solid #f1f5f9; cursor:pointer; border-left:2px solid transparent; }
+  #person .li:first-child { border-top:0; }
+  #person .li:hover { background:#f8fafc; }
+  #person .li.on { background:#f5f7ff; border-left-color:#3a48e6; }
+  #person .li.on .lt { color:#2a2fa6; }
+  #person .lt { font-size:14px; font-weight:500; color:#0f172a; line-height:1.35; margin-top:3px; }
+  #person .ls { font-size:12.5px; color:#64748b; line-height:1.45; margin-top:3px; }
+  #person .lm { font-size:12px; color:#94a3b8; display:flex; align-items:center; gap:6px; }
+  #person .dot { width:6px; height:6px; border-radius:50%; background:#22c55e; display:inline-block; }
+  #person .itab { padding:8px 0; margin-right:22px; font-size:14px; color:#64748b; border-bottom:2px solid transparent; cursor:pointer; }
+  #person .itab.on { color:#0f172a; font-weight:600; border-bottom-color:#0f172a; }
+  #person .sec { font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#94a3b8; margin:18px 0 6px; }
+  #person .ts { font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#94a3b8; width:52px; flex:none; padding-top:3px; }
+</style>
+</head>
+<body class="antialiased">
+<script>document.write('<scr'+'ipt src="shared/nav.js?t='+Date.now()+'"></scr'+'ipt>')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pc-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs></svg>
+
+<!-- ═════════════════════  SCREEN 13 · PEOPLE CONTEXT  ═════════════════════ -->
+<section id="person" class="max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+  <div class="flex items-end justify-between mb-4 gap-8">
+    <div class="shrink-0">
+      <div class="eyebrow">Screen 13</div>
+      <h2 class="text-[22px] font-semibold tracking-tight mt-1">People Context · Sarah M.</h2>
+    </div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">A People Context is made automatically between two people. Only the two of them can open it. Summary leads with Needs attention, which both people see, like an agenda made ahead of time. Under it is the two-way ledger: what you owe, what they owe, what is open between you. Might be useful is different for each person: it draws on other Contexts that person can open, and only they see it. Meetings and Emails each have a tab. A shared meeting shows only what involves both people. Ask opens a panel that answers as Sarah’s AI. <span class="rounded-md bg-amber-50 px-2 py-0.5 text-[11.5px] font-medium text-amber-700 ring-1 ring-inset ring-amber-200 whitespace-nowrap">Open</span> What Sarah’s AI can draw on is not decided. This mock uses what both people can open.</div>
+  </div>
+
+  <div class="relative rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-card">
+    <div class="flex min-h-[920px]">
+      <aside class="w-[240px] border-r border-slate-200 bg-slate-50/50 px-4 pt-8 pb-6 flex flex-col shrink-0">
+        <div class="flex items-center gap-2 mb-8 px-2"><svg width="28" height="28" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><div class="nm-wordmark text-[18px]">neuma</div></div>
+        <nav class="flex flex-col gap-0.5">
+          <a class="nav-link" href="feed.html">Feed</a>
+          <a class="nav-link on" href="contexts.html#contexts">Contexts</a>
+          <a class="nav-link">Agents</a>
+          <a class="nav-link">Automations</a>
+          <a class="nav-link">Sources</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="mt-auto pt-4 border-t border-slate-200"><div class="w-full flex items-center gap-2 text-xs px-2 py-1.5"><div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center text-white text-[10px] font-semibold">JK</div><div class="text-left"><div class="font-medium text-slate-900">Jared K.</div><div class="text-slate-500">acmegtm.com</div></div></div></div>
+      </aside>
+
+      <main class="flex-1 min-w-0 px-10 pt-8 pb-10">
+        <a href="contexts.html#contexts" class="text-[13px] text-slate-500 hover:text-slate-800">‹ Contexts · People</a>
+        <div class="mt-4 flex items-start gap-4">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[14px] font-semibold shrink-0">SM</div>
+          <div class="flex-1 min-w-0">
+            <h1 class="text-[24px] font-semibold tracking-tight text-slate-900 leading-tight">Sarah M.</h1>
+            <div class="mt-1 text-[13px] text-slate-500 flex items-center gap-2 flex-wrap"><span>Customer Success</span><span class="text-slate-300">·</span><span>You meet weekly</span><span class="text-slate-300">·</span><span>Last spoke 5d ago</span><span class="text-slate-300">·</span><span class="text-slate-700">Next: 1:1 on Thu, Nov 19</span></div>
+          </div>
+          <span class="mt-2 text-[12px] text-slate-400 inline-flex items-center gap-1.5 whitespace-nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you and Sarah</span>
+          <button type="button" data-ask-open class="btn-out flex items-center gap-1.5 whitespace-nowrap" style="padding:6px 12px;font-size:13px;border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/><path d="M18 13l.9 2.6L21.5 16.5l-2.6.9L18 20l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Ask Sarah’s AI</button>
+        </div>
+
+        <div class="mt-6 flex border-b border-slate-200" data-ptabs>
+          <a class="ptab on" data-t="summary">Summary</a>
+          <a class="ptab" data-t="issues">Issues<span class="n">3</span></a>
+          <a class="ptab" data-t="actions">Actions<span class="n">6</span></a>
+          <a class="ptab" data-t="decisions">Decisions<span class="n">5</span></a>
+          <a class="ptab" data-t="meetings">Meetings<span class="n">24</span></a>
+          <a class="ptab" data-t="emails">Emails<span class="n">61</span></a>
+        </div>
+
+        <!-- Summary -->
+        <div data-pane="summary" class="mt-6 grid grid-cols-[1fr_320px] gap-6 items-start">
+          <div class="space-y-5 min-w-0">
+            <div class="card overflow-hidden">
+              <div class="card-h" style="background:linear-gradient(90deg,#fff7f3,#f6f3ff)"><svg width="15" height="15" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Needs attention</span><span class="who">You and Sarah both see this</span></div>
+              <div data-na></div>
+            </div>
+            <div class="grid grid-cols-2 gap-5">
+              <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span><span class="text-[12px] text-slate-400">2</span></div><div data-owe="you"></div></div>
+              <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span><span class="text-[12px] text-slate-400">2</span></div><div data-owe="them"></div></div>
+            </div>
+            <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="text-[12px] text-slate-400">2</span></div><div data-open></div></div>
+          </div>
+          <div class="card">
+            <div class="card-h"><span class="card-t">Might be useful</span><span class="who"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you</span></div>
+            <div data-useful></div>
+            <div class="px-4 py-3 border-t border-slate-100 text-[11.5px] leading-[1.5] text-slate-400">From other Contexts you can open. Sarah has her own list.</div>
+          </div>
+        </div>
+
+        <div data-pane="issues" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="issues"></div></div>
+        <div data-pane="actions" class="hidden mt-6 max-w-[820px] space-y-5">
+          <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span></div><div data-list="actYou"></div></div>
+          <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span></div><div data-list="actThem"></div></div>
+          <div class="card"><div class="card-h"><span class="card-t">Done</span></div><div data-list="actDone"></div></div>
+        </div>
+        <div data-pane="decisions" class="hidden mt-6 max-w-[820px]"><div class="card" data-list="decisions"></div></div>
+
+        <!-- Meetings -->
+        <div data-pane="meetings" class="hidden mt-6 grid grid-cols-[340px_1fr] gap-5 items-start">
+          <div class="card overflow-hidden">
+            <div class="p-3 border-b border-slate-100"><div class="relative"><select data-mtopic class="w-full appearance-none text-[13.5px] text-slate-800 border border-slate-200 rounded-lg pl-3 pr-8 py-2 bg-white"></select><svg class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+            <div data-mlist></div>
+          </div>
+          <div class="card" data-mdetail></div>
+        </div>
+
+        <!-- Emails -->
+        <div data-pane="emails" class="hidden mt-6 grid grid-cols-[340px_1fr] gap-5 items-start">
+          <div class="card overflow-hidden">
+            <div class="p-3 border-b border-slate-100"><div class="relative"><select data-efilter class="w-full appearance-none text-[13.5px] text-slate-800 border border-slate-200 rounded-lg pl-3 pr-8 py-2 bg-white"><option value="all">All threads · 61 emails</option><option value="you">Waiting on you · 2</option><option value="them">Waiting on Sarah · 1</option></select><svg class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+            <div data-elist></div>
+          </div>
+          <div class="card" data-edetail></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Ask panel -->
+    <div data-ask class="hidden">
+      <div class="absolute inset-0 bg-slate-900/20 z-20" data-ask-close></div>
+      <aside class="absolute top-0 right-0 bottom-0 w-[460px] bg-white border-l border-slate-200 z-30 shadow-2xl flex flex-col">
+        <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[11px] font-semibold">SM</div>
+          <div class="flex-1"><div class="text-[15px] font-semibold text-slate-900">Ask Sarah’s AI</div><div class="text-[12px] text-slate-500">Sarah did not write these answers.</div></div>
+          <button type="button" data-ask-close aria-label="Close" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 text-[18px] leading-none">×</button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-6 py-5 space-y-4" data-ask-log></div>
+        <div class="px-6 pb-3 flex flex-wrap gap-2" data-ask-chips></div>
+        <div class="px-6 pb-4"><div class="flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 focus-within:border-brand-400"><input data-ask-in type="text" placeholder="Where does Sarah stand on the Pendo renewal?" class="flex-1 text-[13.5px] outline-none bg-transparent"><button type="button" data-ask-send class="btn-out" style="padding:3px 12px;font-size:12.5px;background:#0f172a;color:#fff;border-color:#0f172a">Ask</button></div>
+        <div class="mt-2 text-[11.5px] leading-[1.5] text-slate-400">Answers come from what Sarah said and wrote in Contexts you can both open.</div></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var sec = document.getElementById('person');
+  function $(q){ return sec.querySelector(q); }
+  function $$(q){ return [].slice.call(sec.querySelectorAll(q)); }
+  function e(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function row(t, m, late){ return '<div class="row"><div class="rt">' + e(t) + '</div><div class="rm' + (late ? ' late' : '') + '">' + e(m) + '</div></div>'; }
+
+  // ── Summary
+  var NA = [
+    ['Decide who leads the Initech deal', 'Raised in 3 meetings since Nov 5. No decision yet.'],
+    ['The Initech handover plan is 2 days late', 'Sarah owes it. Due Nov 15, from the Sales standup.'],
+    ['The Q1 targets draft is due today', 'You owe it. Agreed in your 1:1 on Nov 12.']
+  ];
+  $('[data-na]').innerHTML = NA.map(function(x, i){ return '<div class="row flex gap-3"><span class="w-5 shrink-0 text-center text-[13px] font-semibold" style="color:#ff7a4d">' + (i + 1) + '</span><div><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + '</div></div></div>'; }).join('');
+  $('[data-owe="you"]').innerHTML = row('Send the Q1 targets draft', 'Due today · 1:1, Nov 12', true) + row('Reply on the Pendo renewal quote', 'Email · waiting 3 days');
+  $('[data-owe="them"]').innerHTML = row('Initech handover plan', '2 days late · Sales standup, Nov 10', true) + row('Book of business numbers for Q4', 'Email · asked Nov 13');
+  $('[data-open]').innerHTML = row('Who leads the Initech deal', 'Raised in 3 meetings · last on Nov 12') + row('Timeline for Sarah’s promotion case', 'Raised Nov 5 · goes to Mia R. in Q1');
+  var USEFUL = [
+    ['Initech asked for one point of contact through the handover.', 'Initech · Account', 'Nov 11'],
+    ['Pendo’s champion flagged budget pressure before the renewal.', 'Pendo · Account', 'Nov 13'],
+    ['Mia R. wants promotion cases in by Dec 5.', 'Weekly leadership sync · Meeting', 'Nov 9']
+  ];
+  $('[data-useful]').innerHTML = USEFUL.map(function(x){ return '<div class="row"><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + ' · ' + x[2] + '</div></div>'; }).join('');
+
+  // ── Issues, Actions, Decisions
+  var LISTS = {
+    issues: [['Who leads the Initech deal', 'Said by Sarah M. · Nov 5 · raised in 3 meetings'], ['Timeline for Sarah’s promotion case', 'Said by Sarah M. · Nov 5'], ['Handover dates keep slipping', 'Identified by Neuma · seen across 4 meetings']],
+    actYou: [['Send the Q1 targets draft', 'Due today · 1:1, Nov 12', 1], ['Reply on the Pendo renewal quote', 'Email · waiting 3 days']],
+    actThem: [['Initech handover plan', '2 days late · Sales standup, Nov 10', 1], ['Book of business numbers for Q4', 'Email · asked Nov 13']],
+    actDone: [['Intro Sarah to the Figma admin', 'You · done Nov 6'], ['Share the Pendo usage report', 'Sarah · done Nov 4']],
+    decisions: [['Sarah’s promotion case goes to Mia R. in Q1', '1:1 · Nov 5'], ['Sarah keeps Pendo and Figma through the renewals', '1:1 · Oct 29'], ['Initech handover moves to the Sales standup agenda', 'Sales standup · Nov 10'], ['1:1s move to Thursdays', 'Email · Oct 22'], ['Q1 targets are set per account, not per CSM', '1:1 · Nov 12']]
+  };
+  Object.keys(LISTS).forEach(function(k){ $('[data-list="' + k + '"]').innerHTML = LISTS[k].map(function(x){ return row(x[0], x[1], x[2]); }).join(''); });
+
+  // ── Meetings
+  var MEET = [
+    {id:'m1', topic:'Q1 targets', date:'Nov 12', day:'Thursday, Nov 12', n:2, title:'Sarah / Jared 1:1', sum:'Q1 targets set per account. Initech lead still open.', tool:'Zoom', lines:204, shared:false,
+     notes:['Q1 targets will be set per account, not per CSM.', 'Sarah asked again for a decision on who leads Initech.', 'Pendo renewal quote is with Jared for sign-off.'],
+     actions:[['Send the Q1 targets draft', 'Jared K. · due Nov 17'], ['Chase Pendo on the renewal date', 'Sarah M. · due Nov 20']],
+     decisions:['Q1 targets are set per account, not per CSM'],
+     tr:[['00:00', 'Jared K.', 'Let’s start with targets. I’d rather set them per account this time, so the Pendo and Figma renewals carry their own number.'], ['00:41', 'Sarah M.', 'That works for me. It also makes the Initech question matter more, because whoever leads it carries that target.'], ['01:12', 'Jared K.', 'Fair. I’ll send a draft by Tuesday and we can settle Initech once you’ve seen the numbers.'], ['01:30', 'Sarah M.', 'Okay. I’d like to lead it, for what it’s worth. I’ve said that twice now.']]},
+    {id:'m2', topic:'Initech deal', date:'Nov 10', day:'Tuesday, Nov 10', n:1, title:'Sales team standup', sum:'Sarah to write the Initech handover plan by Nov 15.', tool:'Zoom', lines:38, shared:true,
+     notes:['Sarah will write the Initech handover plan.', 'Jared wants one point of contact for Initech through the handover.'],
+     actions:[['Write the Initech handover plan', 'Sarah M. · due Nov 15']],
+     decisions:['Initech handover moves to the Sales standup agenda'],
+     tr:[['14:02', 'Jared K.', 'Sarah, can you own the handover plan for Initech? One page is fine.'], ['14:10', 'Sarah M.', 'Yes. I’ll have it to you by the fifteenth.']]},
+    {id:'m3', topic:'Promotion case', date:'Nov 5', day:'Thursday, Nov 5', n:1, title:'Sarah / Jared 1:1', sum:'Promotion case goes to Mia in Q1. Sarah wants to lead Initech.', tool:'Zoom', lines:187, shared:false,
+     notes:['Sarah’s promotion case goes to Mia R. in Q1.', 'Sarah raised leading the Initech deal for the first time.'],
+     actions:[['Intro Sarah to the Figma admin', 'Jared K. · done Nov 6']],
+     decisions:['Sarah’s promotion case goes to Mia R. in Q1'],
+     tr:[['00:00', 'Sarah M.', 'I want to talk about the promotion timeline before we get into accounts.'], ['00:18', 'Jared K.', 'Sure. I’ll take the case to Mia in Q1. I need two more renewals closed to make it easy.']]},
+    {id:'m4', topic:'Pendo renewal', date:'Oct 29', day:'Thursday, Oct 29', n:1, title:'Sarah / Jared 1:1', sum:'Sarah keeps Pendo and Figma through the renewals.', tool:'Zoom', lines:161, shared:false,
+     notes:['Sarah keeps Pendo and Figma through both renewals.', 'Pendo usage report to be shared before the next call.'],
+     actions:[['Share the Pendo usage report', 'Sarah M. · done Nov 4']],
+     decisions:['Sarah keeps Pendo and Figma through the renewals'],
+     tr:[['00:00', 'Jared K.', 'I don’t want to move Pendo or Figma mid-renewal. Are you good to keep both?'], ['00:12', 'Sarah M.', 'Yes. I’ll send the usage report so we go in with numbers.']]},
+    {id:'m5', topic:'Initech deal', date:'Oct 27', day:'Tuesday, Oct 27', n:0, title:'Sales team standup', sum:'Initech asked about onboarding time. Sarah took the question.', tool:'Zoom', lines:12, shared:true,
+     notes:['Initech asked how long onboarding takes. Sarah will answer.'], actions:[], decisions:[],
+     tr:[['09:40', 'Jared K.', 'Initech asked about onboarding time. Sarah, can you take that one?'], ['09:46', 'Sarah M.', 'I’ll reply today.']]}
+  ];
+  var st = {m:'m1', mtab:'notes', topic:'all', e:'e1', ef:'all'};
+  var topics = []; MEET.forEach(function(m){ if (topics.indexOf(m.topic) < 0) topics.push(m.topic); });
+  $('[data-mtopic]').innerHTML = '<option value="all">All topics · 24 meetings</option>' + topics.map(function(t){ return '<option value="' + e(t) + '">' + e(t) + ' · ' + MEET.filter(function(m){ return m.topic === t; }).length + ' meetings</option>'; }).join('');
+  function mlist(){
+    var ms = MEET.filter(function(m){ return st.topic === 'all' || m.topic === st.topic; });
+    if (!ms.some(function(m){ return m.id === st.m; })) st.m = ms[0].id;
+    $('[data-mlist]').innerHTML = ms.map(function(m){ return '<div class="li' + (m.id === st.m ? ' on' : '') + '" data-m="' + m.id + '"><div class="lm"><span class="dot"></span>' + m.date + ' · ' + m.n + (m.n === 1 ? ' decision' : ' decisions') + '</div><div class="lt">' + e(m.title) + '</div><div class="ls">' + e(m.sum) + '</div></div>'; }).join('');
+    mdetail();
+  }
+  function mdetail(){
+    var m = MEET.filter(function(x){ return x.id === st.m; })[0];
+    var h = '<div class="px-7 pt-6"><div class="flex items-center gap-2 text-[13px] text-slate-500"><span class="w-2 h-2 rounded-full" style="background:#2D8CFF"></span>' + m.tool + '<span class="text-slate-300">·</span>' + m.day + '<span class="text-slate-300">·</span>' + e(m.topic)
+      + '<button type="button" class="btn-out ml-auto flex items-center gap-1.5" style="padding:5px 12px;font-size:12.5px;border-radius:999px"><svg width="13" height="13" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/></svg>Follow-up agent</button></div>'
+      + '<h3 class="mt-3 text-[20px] font-semibold tracking-tight text-slate-900">' + e(m.title) + '</h3>'
+      + (m.shared ? '<div class="mt-2 text-[12px] text-slate-500">A shared meeting. You see only what involves you and Sarah.</div>' : '')
+      + '<div class="mt-4 flex border-b border-slate-200"><a class="itab' + (st.mtab === 'notes' ? ' on' : '') + '" data-mtab="notes">Notes and actions</a><a class="itab' + (st.mtab === 'tr' ? ' on' : '') + '" data-mtab="tr">Transcript</a></div></div><div class="px-7 pb-7">';
+    if (st.mtab === 'notes') {
+      h += '<div class="sec">Notes</div><ul class="space-y-1.5">' + m.notes.map(function(n){ return '<li class="text-[13.5px] leading-[1.5] text-slate-700 flex gap-2"><span class="text-slate-300">•</span><span>' + e(n) + '</span></li>'; }).join('') + '</ul>';
+      if (m.actions.length) h += '<div class="sec">Actions</div>' + m.actions.map(function(a){ return '<div class="py-1.5"><div class="text-[13.5px] text-slate-900">' + e(a[0]) + '</div><div class="text-[12px] text-slate-500">' + e(a[1]) + '</div></div>'; }).join('');
+      if (m.decisions.length) h += '<div class="sec">Decisions</div>' + m.decisions.map(function(d){ return '<div class="py-1 text-[13.5px] text-slate-900">' + e(d) + '</div>'; }).join('');
+    } else {
+      h += '<div class="mt-4 text-[12.5px] text-slate-400">' + m.lines + ' lines from ' + m.tool + ' · saved ' + (m.id === 'm1' ? 'yesterday' : m.date) + ' · <a class="text-brand-600 font-medium cursor-pointer">Fetch again</a></div>'
+        + m.tr.map(function(l){ return '<div class="mt-5 flex gap-3"><span class="ts">' + l[0] + '</span><div><div class="text-[13.5px] font-semibold" style="color:#2a2fa6">' + e(l[1]) + '</div><div class="mt-0.5 text-[13.5px] leading-[1.6] text-slate-700">' + e(l[2]) + '</div></div></div>'; }).join('');
+    }
+    $('[data-mdetail]').innerHTML = h + '</div>';
+  }
+
+  // ── Emails
+  var PL = {you:['Waiting on you', 'p-you'], them:['Waiting on Sarah', 'p-them'], done:['Done', 'p-done']};
+  var MAIL = [
+    {id:'e1', w:'you', subj:'Pendo renewal quote', n:5, date:'Nov 14', sum:'Sarah needs your sign-off on the quote before Nov 20.',
+     pulled:[['Sarah asked you to sign off the Pendo quote', 'Asked Nov 14 · no reply yet'], ['Pendo wants the renewal date confirmed by Nov 20', 'From Sarah · Nov 13']],
+     msgs:[['Sarah M.', 'Nov 14, 4:12 PM', 'Quote attached. It holds the current price for 12 months. Can you sign off so I can send it Monday?'], ['Jared K.', 'Nov 13, 9:30 AM', 'Happy to hold price if they commit to 12 months. Send me the draft.'], ['Sarah M.', 'Nov 13, 8:54 AM', 'Pendo want the renewal date confirmed by the 20th. Their champion mentioned budget pressure.']]},
+    {id:'e2', w:'them', subj:'Handover plan?', n:2, date:'Nov 14', sum:'You asked for the Initech handover plan. No reply yet.',
+     pulled:[['You asked Sarah for the Initech handover plan', 'Asked Nov 14 · due Nov 15']],
+     msgs:[['Jared K.', 'Nov 14, 11:05 AM', 'Any update on the Initech handover plan? I’d like to share it at Tuesday’s standup.']]},
+    {id:'e3', w:'you', subj:'Book of business numbers', n:3, date:'Nov 13', sum:'Sarah asked which quarter you want. You have not answered.',
+     pulled:[['Sarah asked which quarter the numbers should cover', 'Asked Nov 13 · no reply yet']],
+     msgs:[['Sarah M.', 'Nov 13, 2:20 PM', 'Do you want Q3 actuals or the Q4 forecast? I can do both, the forecast takes longer.'], ['Jared K.', 'Nov 13, 1:48 PM', 'Can you send me your book of business numbers before the board pack goes out?']]},
+    {id:'e4', w:'done', subj:'Moving our 1:1', n:4, date:'Oct 22', sum:'1:1s moved to Thursdays.',
+     pulled:[['Decision: 1:1s move to Thursdays', 'Agreed Oct 22']],
+     msgs:[['Sarah M.', 'Oct 22, 10:02 AM', 'Thursday at 10 works. I’ll update the invite.'], ['Jared K.', 'Oct 22, 9:40 AM', 'Can we move our 1:1 to Thursdays? Mondays keep getting hit by the leadership sync.']]}
+  ];
+  function elist(){
+    var es = MAIL.filter(function(m){ return st.ef === 'all' || m.w === st.ef; });
+    if (!es.some(function(m){ return m.id === st.e; })) st.e = es[0].id;
+    $('[data-elist]').innerHTML = es.map(function(m){ return '<div class="li' + (m.id === st.e ? ' on' : '') + '" data-e="' + m.id + '"><div class="lm">' + m.date + ' · ' + m.n + ' emails<span class="pill ' + PL[m.w][1] + ' ml-auto">' + PL[m.w][0] + '</span></div><div class="lt">' + e(m.subj) + '</div><div class="ls">' + e(m.sum) + '</div></div>'; }).join('');
+    var m = MAIL.filter(function(x){ return x.id === st.e; })[0];
+    $('[data-edetail]').innerHTML = '<div class="px-7 pt-6 pb-7"><div class="flex items-center gap-2 text-[13px] text-slate-500"><span>Gmail</span><span class="text-slate-300">·</span>' + m.n + ' emails<span class="text-slate-300">·</span>last on ' + m.date + '<span class="pill ' + PL[m.w][1] + '">' + PL[m.w][0] + '</span><a class="ml-auto text-[12.5px] font-medium text-brand-600 cursor-pointer">Open in Gmail ↗</a></div>'
+      + '<h3 class="mt-3 text-[20px] font-semibold tracking-tight text-slate-900">' + e(m.subj) + '</h3>'
+      + '<div class="sec">What Neuma found</div>' + m.pulled.map(function(p){ return '<div class="py-1.5"><div class="text-[13.5px] text-slate-900">' + e(p[0]) + '</div><div class="text-[12px] text-slate-500">' + e(p[1]) + '</div></div>'; }).join('')
+      + '<div class="sec">Thread</div>' + m.msgs.map(function(g){ return '<div class="py-3 border-t border-slate-100 first:border-t-0"><div class="flex items-baseline gap-2"><span class="text-[13.5px] font-semibold" style="color:#2a2fa6">' + e(g[0]) + '</span><span class="text-[12px] text-slate-400">' + g[1] + '</span></div><div class="mt-1 text-[13.5px] leading-[1.6] text-slate-700">' + e(g[2]) + '</div></div>'; }).join('')
+      + (m.n > m.msgs.length ? '<div class="pt-3 border-t border-slate-100 text-[12.5px] text-slate-400">' + (m.n - m.msgs.length) + ' earlier emails</div>' : '') + '</div>';
+  }
+
+  // ── Ask
+  var QA = {
+    'Where does Sarah stand on who leads Initech?': ['Sarah wants to lead it. She said so on Nov 5 and again on Nov 12, and asked for a decision before the handover plan is due.', ['1:1 · Nov 5', '1:1 · Nov 12']],
+    'What is blocking the handover plan?': ['Nothing Sarah has named. She committed to Nov 15 in the Sales standup and has not replied to your email of Nov 14.', ['Sales standup · Nov 10', 'Email · Nov 14']],
+    'What does Sarah need from me this week?': ['Two things: your sign-off on the Pendo renewal quote, and which quarter you want for the book of business numbers.', ['Email · Nov 14', 'Email · Nov 13']]
+  };
+  var asked = ['Where does Sarah stand on who leads Initech?'];
+  function ask(){
+    $('[data-ask-log]').innerHTML = asked.map(function(q){ var a = QA[q] || ['Sarah has not said anything on that in the Contexts you both can open.', []];
+      return '<div class="flex justify-end"><div class="max-w-[85%] rounded-xl bg-slate-100 px-3.5 py-2 text-[13.5px] text-slate-800">' + e(q) + '</div></div>'
+        + '<div class="text-[13.5px] leading-[1.6] text-slate-800">' + e(a[0]) + (a[1].length ? '<div class="mt-2 flex flex-wrap gap-1.5">' + a[1].map(function(s){ return '<span class="rounded-md border border-slate-200 px-2 py-0.5 text-[11.5px] text-slate-500">' + e(s) + '</span>'; }).join('') + '</div>' : '') + '</div>'; }).join('');
+    $('[data-ask-chips]').innerHTML = Object.keys(QA).filter(function(q){ return asked.indexOf(q) < 0; }).map(function(q){ return '<button type="button" data-ask-q="' + e(q) + '" class="rounded-full border border-slate-200 px-3 py-1 text-[12px] text-slate-600 hover:bg-slate-50">' + e(q) + '</button>'; }).join('');
+    var log = $('[data-ask-log]'); log.scrollTop = log.scrollHeight;
+  }
+
+  // ── Wiring
+  function tab(t){ $$('[data-ptabs] .ptab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
+  sec.addEventListener('click', function(ev){
+    var t = ev.target.closest('[data-t]'); if (t) { tab(t.getAttribute('data-t')); history.replaceState(null, '', '#' + t.getAttribute('data-t')); return; }
+    var m = ev.target.closest('[data-m]'); if (m) { st.m = m.getAttribute('data-m'); mlist(); return; }
+    var mt = ev.target.closest('[data-mtab]'); if (mt) { st.mtab = mt.getAttribute('data-mtab'); mdetail(); return; }
+    var em = ev.target.closest('[data-e]'); if (em) { st.e = em.getAttribute('data-e'); elist(); return; }
+    if (ev.target.closest('[data-ask-open]')) { $('[data-ask]').classList.remove('hidden'); ask(); return; }
+    if (ev.target.closest('[data-ask-close]')) { $('[data-ask]').classList.add('hidden'); return; }
+    var q = ev.target.closest('[data-ask-q]'); if (q) { asked.push(q.getAttribute('data-ask-q')); ask(); return; }
+    if (ev.target.closest('[data-ask-send]')) { var i = $('[data-ask-in]'); if (i.value.trim()) { asked.push(i.value.trim()); i.value = ''; ask(); } }
+  });
+  $('[data-ask-in]').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') $('[data-ask-send]').click(); });
+  $('[data-mtopic]').addEventListener('change', function(ev){ st.topic = ev.target.value; mlist(); });
+  $('[data-efilter]').addEventListener('change', function(ev){ st.ef = ev.target.value; elist(); });
+  mlist(); elist();
+  var h = location.hash.replace('#', ''); if (/^(issues|actions|decisions|meetings|emails)$/.test(h)) tab(h);
+})();
+</script>
+</body>
+</html>
