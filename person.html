@@ -11,36 +11,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared/neuma.css">
 <style>
-  #person .ptab { padding:10px 2px; margin-right:22px; font-size:14px; color:#64748b; border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap; }
-  #person .ptab:hover { color:#0f172a; }
-  #person .ptab.on { color:#0f172a; font-weight:600; border-bottom-color:#0f172a; }
-  #person .ptab .n { font-size:12px; color:#94a3b8; font-weight:400; margin-left:4px; }
-  #person .card { border:1px solid #e2e8f0; border-radius:12px; background:#fff; }
-  #person .card-h { padding:12px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:8px; }
+  /* Same parts as the Context page (Screen 3): .mb cards, wash headers, rank text, tabs. Only list and detail rules are new. */
+  #person .tab { cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; background:none; }
+  #person .tab:hover { color:#0f172a; }
+  #person .tab.on { color:#05061a; border-bottom-color:#05061a; }
+  #person .tab .mb-cnt { margin-left:4px; font-family:'JetBrains Mono',monospace; font-size:10px; color:#94a3b8; font-weight:400; }
+  #person .card { border:1px solid #e2e8f0; border-radius:12px; background:#fff; overflow:hidden; }
+  #person .card-h { padding:10px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:8px; }
   #person .card-t { font-size:13px; font-weight:600; color:#0f172a; }
-  #person .who { font-size:11.5px; color:#94a3b8; margin-left:auto; display:inline-flex; align-items:center; gap:5px; }
-  #person .row { padding:11px 16px; border-top:1px solid #f1f5f9; }
+  #person .who { font-size:11px; color:#94a3b8; margin-left:auto; display:inline-flex; align-items:center; gap:4px; }
+  #person .row { padding:12px 16px; border-top:1px solid #f1f5f9; }
   #person .row:first-child { border-top:0; }
-  #person .rt { font-size:13.5px; color:#0f172a; line-height:1.4; }
-  #person .rm { font-size:12px; color:#64748b; margin-top:2px; }
-  #person .late { color:#be123c; }
-  #person .pill { font-size:11px; font-weight:500; padding:1px 8px; border-radius:999px; white-space:nowrap; }
-  #person .p-you { background:#fff7ed; color:#c2410c; }
-  #person .p-them { background:#eef1ff; color:#2a2fa6; }
-  #person .p-done { background:#f1f5f9; color:#64748b; }
-  #person .li { padding:14px 18px; border-top:1px solid #f1f5f9; cursor:pointer; border-left:2px solid transparent; }
+  #person .row:hover { background:#f8fafc; }
+  #person .rt { font-size:13.5px; font-weight:500; color:#0f172a; line-height:1.375; }
+  #person .rm { font-size:12.5px; line-height:1.5; color:#64748b; margin-top:4px; }
+  #person .sm .row { padding:10px 16px; }
+  #person .sm .rt { font-size:12.5px; }
+  #person .sm .rm { font-size:11.5px; line-height:1.45; margin-top:2px; }
+  #person .late { color:#e11d48; font-weight:500; }
+  #person .li { padding:14px 16px; border-top:1px solid #f1f5f9; cursor:pointer; border-left:2px solid transparent; }
   #person .li:first-child { border-top:0; }
   #person .li:hover { background:#f8fafc; }
-  #person .li.on { background:#f5f7ff; border-left-color:#3a48e6; }
-  #person .li.on .lt { color:#2a2fa6; }
-  #person .lt { font-size:14px; font-weight:500; color:#0f172a; line-height:1.35; margin-top:3px; }
-  #person .ls { font-size:12.5px; color:#64748b; line-height:1.45; margin-top:3px; }
-  #person .lm { font-size:12px; color:#94a3b8; display:flex; align-items:center; gap:6px; }
-  #person .dot { width:6px; height:6px; border-radius:50%; background:#22c55e; display:inline-block; }
-  #person .itab { padding:8px 0; margin-right:22px; font-size:14px; color:#64748b; border-bottom:2px solid transparent; cursor:pointer; }
-  #person .itab.on { color:#0f172a; font-weight:600; border-bottom-color:#0f172a; }
-  #person .sec { font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#94a3b8; margin:18px 0 6px; }
-  #person .ts { font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#94a3b8; width:52px; flex:none; padding-top:3px; }
+  #person .li.on { background:#eef1ff; border-left-color:#4a5bff; }
+  #person .lt { font-size:13.5px; font-weight:500; color:#0f172a; line-height:1.375; margin-top:3px; }
+  #person .ls { font-size:12.5px; color:#64748b; line-height:1.5; margin-top:3px; }
+  #person .lm { font-size:11.5px; color:#94a3b8; display:flex; align-items:center; gap:6px; }
+  #person .dot { width:6px; height:6px; border-radius:50%; background:#10b981; display:inline-block; }
+  #person .sec { font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#94a3b8; margin:18px 0 6px; }
+  #person .ts { font-family:'JetBrains Mono',monospace; font-size:11px; color:#94a3b8; width:48px; flex:none; padding-top:3px; }
 </style>
 </head>
 <body class="antialiased">
@@ -48,7 +46,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pc-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF7A4D"/><stop offset="45%" stop-color="#F59DA6"/><stop offset="100%" stop-color="#C5A6E8"/></linearGradient></defs></svg>
 
 <!-- ═════════════════════  SCREEN 13 · PEOPLE CONTEXT  ═════════════════════ -->
-<section id="person" class="max-w-[1440px] mx-auto px-8 pt-12 pb-12">
+<section id="person" class="mb max-w-[1440px] mx-auto px-8 pt-12 pb-12">
   <div class="flex items-end justify-between mb-4 gap-8">
     <div class="shrink-0">
       <div class="eyebrow">Screen 13</div>
@@ -73,43 +71,41 @@
       </aside>
 
       <main class="flex-1 min-w-0 px-10 pt-8 pb-10">
-        <a href="contexts.html#contexts" class="text-[13px] text-slate-500 hover:text-slate-800">‹ Contexts · People</a>
-        <div class="mt-4 flex items-start gap-4">
-          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[14px] font-semibold shrink-0">SM</div>
-          <div class="flex-1 min-w-0">
-            <h1 class="text-[24px] font-semibold tracking-tight text-slate-900 leading-tight">Sarah M.</h1>
-            <div class="mt-1 text-[13px] text-slate-500 flex items-center gap-2 flex-wrap"><span>Customer Success</span><span class="text-slate-300">·</span><span>You meet weekly</span><span class="text-slate-300">·</span><span>Last spoke 5d ago</span><span class="text-slate-300">·</span><span class="text-slate-700">Next: 1:1 on Thu, Nov 19</span></div>
-          </div>
-          <span class="mt-2 text-[12px] text-slate-400 inline-flex items-center gap-1.5 whitespace-nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you and Sarah</span>
-          <button type="button" data-ask-open class="btn-out flex items-center gap-1.5 whitespace-nowrap" style="padding:6px 12px;font-size:13px;border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/><path d="M18 13l.9 2.6L21.5 16.5l-2.6.9L18 20l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Ask Sarah’s AI</button>
+        <a href="contexts.html#contexts" class="inline-flex items-center gap-1 text-[13px] text-slate-500 hover:text-slate-900 cursor-pointer"><svg style="margin-left:-3px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Contexts</a>
+        <div class="mt-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[12px] font-semibold shrink-0">SM</div>
+          <h1 class="flex-1 min-w-0 text-[24px] font-semibold tracking-tight text-slate-900 leading-tight truncate">Sarah M.</h1>
+          <span class="text-[12px] text-slate-400 inline-flex items-center gap-1.5 whitespace-nowrap mr-1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you and Sarah</span>
+          <button type="button" data-ask-open class="btn-out inline-flex items-center gap-1.5 whitespace-nowrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/><path d="M18 13l.9 2.6L21.5 16.5l-2.6.9L18 20l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Ask Sarah’s AI</button>
         </div>
 
-        <div class="mt-6 flex border-b border-slate-200" data-ptabs>
-          <a class="ptab on" data-t="summary">Summary</a>
-          <a class="ptab" data-t="issues">Issues<span class="n">3</span></a>
-          <a class="ptab" data-t="actions">Actions<span class="n">6</span></a>
-          <a class="ptab" data-t="decisions">Decisions<span class="n">5</span></a>
-          <a class="ptab" data-t="meetings">Meetings<span class="n">24</span></a>
-          <a class="ptab" data-t="emails">Emails<span class="n">61</span></a>
+        <div class="mt-2 flex items-center gap-2 text-[13px] text-slate-500"><span>Customer Success</span><span class="text-slate-300">·</span><span>You meet weekly</span><span class="text-slate-300">·</span><span>Last spoke 5d ago</span><span class="text-slate-300">·</span><span>Next 1:1 on Thu, Nov 19</span></div>
+        <div class="mt-5 flex items-end border-b border-slate-200" data-ptabs>
+          <button type="button" class="tab on" data-t="summary">Summary</button>
+          <button type="button" class="tab" data-t="issues">Issues<span class="mb-cnt">3</span></button>
+          <button type="button" class="tab" data-t="actions">Actions<span class="mb-cnt">6</span></button>
+          <button type="button" class="tab" data-t="decisions">Decisions<span class="mb-cnt">5</span></button>
+          <button type="button" class="tab" data-t="meetings">Meetings<span class="mb-cnt">24</span></button>
+          <button type="button" class="tab" data-t="emails">Emails<span class="mb-cnt">61</span></button>
         </div>
 
         <!-- Summary -->
-        <div data-pane="summary" class="mt-6 grid grid-cols-[1fr_320px] gap-6 items-start">
+        <div data-pane="summary" class="mt-6 grid grid-cols-[1fr_360px] gap-6 items-start">
           <div class="space-y-5 min-w-0">
-            <div class="card overflow-hidden">
-              <div class="card-h" style="background:linear-gradient(90deg,#fff7f3,#f6f3ff)"><svg width="15" height="15" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Needs attention</span><span class="who">You and Sarah both see this</span></div>
+            <div class="card mb-card">
+              <div class="card-h mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Needs attention</span><span class="text-[11px] font-semibold nm-rank-text">suggested by Neuma</span><span class="who">You and Sarah</span></div>
               <div data-na></div>
             </div>
             <div class="grid grid-cols-2 gap-5">
-              <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span><span class="text-[12px] text-slate-400">2</span></div><div data-owe="you"></div></div>
-              <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span><span class="text-[12px] text-slate-400">2</span></div><div data-owe="them"></div></div>
+              <div class="card"><div class="card-h"><span class="card-t">You owe Sarah</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-owe="you"></div></div>
+              <div class="card"><div class="card-h"><span class="card-t">Sarah owes you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-owe="them"></div></div>
             </div>
-            <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="text-[12px] text-slate-400">2</span></div><div data-open></div></div>
+            <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-open></div></div>
           </div>
-          <div class="card">
-            <div class="card-h"><span class="card-t">Might be useful</span><span class="who"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you</span></div>
+          <div class="card mb-card sm">
+            <div class="card-h mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Might be useful</span><span class="text-[11px] font-semibold nm-rank-text">found by Neuma</span><span class="who" title="Only you see this"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you</span></div>
             <div data-useful></div>
-            <div class="px-4 py-3 border-t border-slate-100 text-[11.5px] leading-[1.5] text-slate-400">From other Contexts you can open. Sarah has her own list.</div>
+            <div class="px-4 py-2.5 border-t border-slate-100 text-[11px] leading-[1.45] text-slate-400">From other Contexts you can open. Sarah has her own list.</div>
           </div>
         </div>
 
@@ -123,7 +119,7 @@
 
         <!-- Meetings -->
         <div data-pane="meetings" class="hidden mt-6 grid grid-cols-[340px_1fr] gap-5 items-start">
-          <div class="card overflow-hidden">
+          <div class="card">
             <div class="p-3 border-b border-slate-100"><div class="relative"><select data-mtopic class="w-full appearance-none text-[13.5px] text-slate-800 border border-slate-200 rounded-lg pl-3 pr-8 py-2 bg-white"></select><svg class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
             <div data-mlist></div>
           </div>
@@ -132,7 +128,7 @@
 
         <!-- Emails -->
         <div data-pane="emails" class="hidden mt-6 grid grid-cols-[340px_1fr] gap-5 items-start">
-          <div class="card overflow-hidden">
+          <div class="card">
             <div class="p-3 border-b border-slate-100"><div class="relative"><select data-efilter class="w-full appearance-none text-[13.5px] text-slate-800 border border-slate-200 rounded-lg pl-3 pr-8 py-2 bg-white"><option value="all">All threads · 61 emails</option><option value="you">Waiting on you · 2</option><option value="them">Waiting on Sarah · 1</option></select><svg class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
             <div data-elist></div>
           </div>
@@ -173,7 +169,7 @@
     ['The Initech handover plan is 2 days late', 'Sarah owes it. Due Nov 15, from the Sales standup.'],
     ['The Q1 targets draft is due today', 'You owe it. Agreed in your 1:1 on Nov 12.']
   ];
-  $('[data-na]').innerHTML = NA.map(function(x, i){ return '<div class="row flex gap-3"><span class="w-5 shrink-0 text-center text-[13px] font-semibold" style="color:#ff7a4d">' + (i + 1) + '</span><div><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + '</div></div></div>'; }).join('');
+  $('[data-na]').innerHTML = NA.map(function(x, i){ return '<div class="row flex items-start gap-3"><span class="w-[20px] shrink-0 flex justify-center pt-[3px]"><span class="mb-rk nm-rank-text" style="font-size:14px">' + (i + 1) + '</span></span><div><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + '</div></div></div>'; }).join('');
   $('[data-owe="you"]').innerHTML = row('Send the Q1 targets draft', 'Due today · 1:1, Nov 12', true) + row('Reply on the Pendo renewal quote', 'Email · waiting 3 days');
   $('[data-owe="them"]').innerHTML = row('Initech handover plan', '2 days late · Sales standup, Nov 10', true) + row('Book of business numbers for Q4', 'Email · asked Nov 13');
   $('[data-open]').innerHTML = row('Who leads the Initech deal', 'Raised in 3 meetings · last on Nov 12') + row('Timeline for Sarah’s promotion case', 'Raised Nov 5 · goes to Mia R. in Q1');
@@ -232,10 +228,10 @@
   function mdetail(){
     var m = MEET.filter(function(x){ return x.id === st.m; })[0];
     var h = '<div class="px-7 pt-6"><div class="flex items-center gap-2 text-[13px] text-slate-500"><span class="w-2 h-2 rounded-full" style="background:#2D8CFF"></span>' + m.tool + '<span class="text-slate-300">·</span>' + m.day + '<span class="text-slate-300">·</span>' + e(m.topic)
-      + '<button type="button" class="btn-out ml-auto flex items-center gap-1.5" style="padding:5px 12px;font-size:12.5px;border-radius:999px"><svg width="13" height="13" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/></svg>Follow-up agent</button></div>'
-      + '<h3 class="mt-3 text-[20px] font-semibold tracking-tight text-slate-900">' + e(m.title) + '</h3>'
+      + '<button type="button" class="btn-out ml-auto inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="#6c7aff"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/></svg>Follow-up agent</button></div>'
+      + '<h3 class="mt-3 text-[18px] font-semibold tracking-tight text-slate-900">' + e(m.title) + '</h3>'
       + (m.shared ? '<div class="mt-2 text-[12px] text-slate-500">A shared meeting. You see only what involves you and Sarah.</div>' : '')
-      + '<div class="mt-4 flex border-b border-slate-200"><a class="itab' + (st.mtab === 'notes' ? ' on' : '') + '" data-mtab="notes">Notes and actions</a><a class="itab' + (st.mtab === 'tr' ? ' on' : '') + '" data-mtab="tr">Transcript</a></div></div><div class="px-7 pb-7">';
+      + '<div class="mt-4 flex items-end border-b border-slate-200"><button type="button" class="tab' + (st.mtab === 'notes' ? ' on' : '') + '" data-mtab="notes">Notes and actions</button><button type="button" class="tab' + (st.mtab === 'tr' ? ' on' : '') + '" data-mtab="tr">Transcript</button></div></div><div class="px-7 pb-7">';
     if (st.mtab === 'notes') {
       h += '<div class="sec">Notes</div><ul class="space-y-1.5">' + m.notes.map(function(n){ return '<li class="text-[13.5px] leading-[1.5] text-slate-700 flex gap-2"><span class="text-slate-300">•</span><span>' + e(n) + '</span></li>'; }).join('') + '</ul>';
       if (m.actions.length) h += '<div class="sec">Actions</div>' + m.actions.map(function(a){ return '<div class="py-1.5"><div class="text-[13.5px] text-slate-900">' + e(a[0]) + '</div><div class="text-[12px] text-slate-500">' + e(a[1]) + '</div></div>'; }).join('');
@@ -248,7 +244,7 @@
   }
 
   // ── Emails
-  var PL = {you:['Waiting on you', 'p-you'], them:['Waiting on Sarah', 'p-them'], done:['Done', 'p-done']};
+  var PL = {you:['Waiting on you', 'bg-amber-50 text-amber-700'], them:['Waiting on Sarah', 'bg-brand-50 text-brand-700'], done:['Done', 'bg-slate-100 text-slate-600']};
   var MAIL = [
     {id:'e1', w:'you', subj:'Pendo renewal quote', n:5, date:'Nov 14', sum:'Sarah needs your sign-off on the quote before Nov 20.',
      pulled:[['Sarah asked you to sign off the Pendo quote', 'Asked Nov 14 · no reply yet'], ['Pendo wants the renewal date confirmed by Nov 20', 'From Sarah · Nov 13']],
@@ -266,10 +262,10 @@
   function elist(){
     var es = MAIL.filter(function(m){ return st.ef === 'all' || m.w === st.ef; });
     if (!es.some(function(m){ return m.id === st.e; })) st.e = es[0].id;
-    $('[data-elist]').innerHTML = es.map(function(m){ return '<div class="li' + (m.id === st.e ? ' on' : '') + '" data-e="' + m.id + '"><div class="lm">' + m.date + ' · ' + m.n + ' emails<span class="pill ' + PL[m.w][1] + ' ml-auto">' + PL[m.w][0] + '</span></div><div class="lt">' + e(m.subj) + '</div><div class="ls">' + e(m.sum) + '</div></div>'; }).join('');
+    $('[data-elist]').innerHTML = es.map(function(m){ return '<div class="li' + (m.id === st.e ? ' on' : '') + '" data-e="' + m.id + '"><div class="lm">' + m.date + ' · ' + m.n + ' emails<span class="badge ' + PL[m.w][1] + ' ml-auto whitespace-nowrap">' + PL[m.w][0] + '</span></div><div class="lt">' + e(m.subj) + '</div><div class="ls">' + e(m.sum) + '</div></div>'; }).join('');
     var m = MAIL.filter(function(x){ return x.id === st.e; })[0];
-    $('[data-edetail]').innerHTML = '<div class="px-7 pt-6 pb-7"><div class="flex items-center gap-2 text-[13px] text-slate-500"><span>Gmail</span><span class="text-slate-300">·</span>' + m.n + ' emails<span class="text-slate-300">·</span>last on ' + m.date + '<span class="pill ' + PL[m.w][1] + '">' + PL[m.w][0] + '</span><a class="ml-auto text-[12.5px] font-medium text-brand-600 cursor-pointer">Open in Gmail ↗</a></div>'
-      + '<h3 class="mt-3 text-[20px] font-semibold tracking-tight text-slate-900">' + e(m.subj) + '</h3>'
+    $('[data-edetail]').innerHTML = '<div class="px-7 pt-6 pb-7"><div class="flex items-center gap-2 text-[13px] text-slate-500"><span>Gmail</span><span class="text-slate-300">·</span>' + m.n + ' emails<span class="text-slate-300">·</span>last on ' + m.date + '<span class="badge ' + PL[m.w][1] + '">' + PL[m.w][0] + '</span><a class="ml-auto text-[12.5px] font-medium text-brand-600 cursor-pointer">Open in Gmail ↗</a></div>'
+      + '<h3 class="mt-3 text-[18px] font-semibold tracking-tight text-slate-900">' + e(m.subj) + '</h3>'
       + '<div class="sec">What Neuma found</div>' + m.pulled.map(function(p){ return '<div class="py-1.5"><div class="text-[13.5px] text-slate-900">' + e(p[0]) + '</div><div class="text-[12px] text-slate-500">' + e(p[1]) + '</div></div>'; }).join('')
       + '<div class="sec">Thread</div>' + m.msgs.map(function(g){ return '<div class="py-3 border-t border-slate-100 first:border-t-0"><div class="flex items-baseline gap-2"><span class="text-[13.5px] font-semibold" style="color:#2a2fa6">' + e(g[0]) + '</span><span class="text-[12px] text-slate-400">' + g[1] + '</span></div><div class="mt-1 text-[13.5px] leading-[1.6] text-slate-700">' + e(g[2]) + '</div></div>'; }).join('')
       + (m.n > m.msgs.length ? '<div class="pt-3 border-t border-slate-100 text-[12.5px] text-slate-400">' + (m.n - m.msgs.length) + ' earlier emails</div>' : '') + '</div>';
@@ -291,7 +287,7 @@
   }
 
   // ── Wiring
-  function tab(t){ $$('[data-ptabs] .ptab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
+  function tab(t){ $$('[data-ptabs] .tab').forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-t') === t); }); $$('[data-pane]').forEach(function(p){ p.classList.toggle('hidden', p.getAttribute('data-pane') !== t); }); }
   sec.addEventListener('click', function(ev){
     var t = ev.target.closest('[data-t]'); if (t) { tab(t.getAttribute('data-t')); history.replaceState(null, '', '#' + t.getAttribute('data-t')); return; }
     var m = ev.target.closest('[data-m]'); if (m) { st.m = m.getAttribute('data-m'); mlist(); return; }
