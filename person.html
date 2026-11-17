@@ -53,7 +53,7 @@
       <div class="eyebrow">Screen 13</div>
       <h2 class="text-[22px] font-semibold tracking-tight mt-1">People Context · Sarah M.</h2>
     </div>
-    <div class="text-sm text-slate-500 max-w-[860px] text-right">A People Context is made automatically between two people. Only the two of them can open it. Summary leads with Needs attention, which both people see, like an agenda made ahead of time. Under it is the two-way ledger: what you owe, what they owe, what is open between you. Might be useful is different for each person: it draws on other Contexts that person can open, and only they see it. Meetings and Emails each have a tab. A shared meeting shows only what involves both people. Ask opens a panel that answers as Sarah’s AI. <span class="rounded-md bg-amber-50 px-2 py-0.5 text-[11.5px] font-medium text-amber-700 ring-1 ring-inset ring-amber-200 whitespace-nowrap">Open</span> What Sarah’s AI can draw on is not decided. This mock uses what both people can open.</div>
+    <div class="text-sm text-slate-500 max-w-[860px] text-right">A People Context is made automatically between two people. Only the two of them can open it. Summary leads with Needs attention, which both people see, like an agenda made ahead of time. Under it, Actions shows each owner’s initials and skips anything already in Needs attention, then the last three decisions. Might be useful is different for each person: it draws on other Contexts that person can open, and only they see it. Each item opens its source and can be dismissed. Meetings and Emails each have a tab. A shared meeting shows only what involves both people. Ask opens a panel that answers as Sarah’s AI. <span class="rounded-md bg-amber-50 px-2 py-0.5 text-[11.5px] font-medium text-amber-700 ring-1 ring-inset ring-amber-200 whitespace-nowrap">Open</span> What Sarah’s AI can draw on is not decided. This mock uses what both people can open.</div>
   </div>
 
   <div class="relative rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-card">
@@ -98,7 +98,7 @@
               <div data-na></div>
             </div>
             <div data-s3-mirror data-acts></div>
-            <div class="card"><div class="card-h"><span class="card-t">Open between you</span><span class="font-mono text-[10px] text-slate-400">2</span></div><div data-open></div></div>
+            <div class="card"><div class="card-h"><span class="card-t">Recent decisions</span><span class="ml-1 num font-mono text-[11px] text-slate-400">5</span><a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="decisions">See all →</a></div><div class="divide-y divide-slate-100" data-recent-dec></div></div>
           </div>
           <div class="card mb-card sm">
             <div class="card-h mb-wash"><svg width="16" height="16" viewBox="0 0 64 64"><path d="M 8 8 H 56 V 56 H 8 Z M 34 14 V 30 H 50 V 14 Z" fill="url(#pc-g)" fill-rule="evenodd"/></svg><span class="card-t">Might be useful</span><span class="text-[11px] font-semibold nm-rank-text">found by Neuma</span><span class="who" title="Only you see this"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Only you</span></div>
@@ -174,8 +174,8 @@
   // One list. Owner is shown on each row with their initials.
   var WHO = {JK:['Jared K.', 'from-amber-400 to-pink-500'], SM:['Sarah M.', 'from-emerald-400 to-teal-500']};
   var ACTS = {open:[
-      ['JK', 'Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1],
-      ['SM', 'Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1],
+      ['JK', 'Send the Q1 targets draft', 'Targets per account, so the Pendo and Figma renewals carry their own number. Sarah wants it before the Initech call.', 'Due today', 'Critical', '1:1 · Nov 12', 1, 'na'],
+      ['SM', 'Initech handover plan', 'One page on who owns what through the handover. You want it for Tuesday’s Sales standup.', '2 days late', 'High', 'Sales standup · Nov 10', 1, 'na'],
       ['JK', 'Reply on the Pendo renewal quote', 'Sarah needs your sign-off to send the quote on Monday. It holds the current price for 12 months.', 'Waiting 3d', 'High', 'Email · Nov 14'],
       ['SM', 'Book of business numbers for Q4', 'For the board pack. Sarah asked whether you want Q3 actuals or the Q4 forecast.', 'Asked Nov 13', 'Medium', 'Email · Nov 13']],
     done:[
@@ -197,19 +197,26 @@
   }
   $$('[data-acts]').forEach(function(box){
     var full = box.hasAttribute('data-full');
+    var rows = full ? ACTS.open : ACTS.open.filter(function(a){ return a[7] !== 'na'; }), inNA = ACTS.open.length - rows.length;
     box.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"><div class="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100"><span class="text-[13px] font-semibold text-slate-900">Actions</span><span class="ml-1 num font-mono text-[11px] text-slate-400">' + ACTS.open.length + '</span>'
       + (full ? '' : '<a class="ml-auto text-[12px] text-brand-600 font-medium cursor-pointer" data-t="actions">See all →</a>') + '</div>'
-      + '<div class="divide-y divide-slate-100">' + ACTS.open.map(function(a){ return actRow(a, false); }).join('') + '</div>'
+      + '<div class="divide-y divide-slate-100">' + rows.map(function(a){ return actRow(a, false); }).join('') + '</div>'
+      + (inNA ? '<div class="px-4 py-1.5 border-t border-slate-100 text-[11.5px] text-slate-400">' + inNA + ' more in Needs attention</div>' : '')
       + '<div class="hidden divide-y divide-slate-100 border-t border-slate-100" data-done-rows>' + ACTS.done.map(function(a){ return actRow(a, true); }).join('') + '</div>'
-      + '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle>' + ACTS.done.length + ' done hidden <span class="text-brand-600 ml-1">Show</span></button></div>';
+      + (full ? '<button type="button" class="w-full flex items-center gap-1 px-4 py-1.5 border-t border-slate-100 text-[11.5px] font-medium text-slate-500 hover:bg-slate-50" data-done-toggle>' + ACTS.done.length + ' done hidden <span class="text-brand-600 ml-1">Show</span></button>' : '') + '</div>';
   });
-  $('[data-open]').innerHTML = row('Who leads the Initech deal', 'Raised in 3 meetings · last on Nov 12') + row('Timeline for Sarah’s promotion case', 'Raised Nov 5 · goes to Mia R. in Q1');
+  var DEC = [['Nov', '12', 'Q1 targets are set per account, not per CSM', '1:1 with Sarah'], ['Nov', '10', 'Initech handover moves to the Sales standup agenda', 'Sales standup'], ['Nov', '5', 'Sarah’s promotion case goes to Mia R. in Q1', '1:1 with Sarah']];
+  $('[data-recent-dec]').innerHTML = DEC.map(function(d){ return '<div class="flex gap-3 px-4 py-3"><div class="w-7 shrink-0 text-center"><div class="font-mono text-[9.5px] uppercase text-slate-400">' + d[0] + '</div><div class="text-[14px] font-semibold text-slate-800 leading-none mt-0.5">' + d[1] + '</div></div><div class="min-w-0 flex-1"><div class="text-[13px] font-medium text-slate-900 leading-snug">' + e(d[2]) + '</div><div class="mt-0.5 text-[12px] text-slate-500">' + e(d[3]) + '</div></div></div>'; }).join('');
   var USEFUL = [
     ['Initech asked for one point of contact through the handover.', 'Initech · Account', 'Nov 11'],
     ['Pendo’s champion flagged budget pressure before the renewal.', 'Pendo · Account', 'Nov 13'],
     ['Mia R. wants promotion cases in by Dec 5.', 'Weekly leadership sync · Meeting', 'Nov 9']
   ];
-  $('[data-useful]').innerHTML = USEFUL.map(function(x){ return '<div class="row"><div class="rt">' + e(x[0]) + '</div><div class="rm">' + e(x[1]) + ' · ' + x[2] + '</div></div>'; }).join('');
+  var XI = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  $('[data-useful]').innerHTML = USEFUL.map(function(x){ return '<div class="row group relative pr-10 cursor-pointer" data-useful-row title="Open ' + e(x[1].split(' · ')[0]) + '">'
+    + '<div data-u-body><div class="rt">' + e(x[0]) + '</div><div class="rm"><span class="text-brand-600 font-medium">' + e(x[1].split(' · ')[0]) + ' ›</span> · ' + e(x[1].split(' · ')[1]) + ' · ' + x[2] + '</div></div>'
+    + '<div data-u-gone class="hidden items-center gap-2 text-[12px] text-slate-400"><span class="flex-1">Dismissed</span><button type="button" class="underline hover:text-slate-700" data-u-undo>Undo</button></div>'
+    + '<button type="button" data-u-x class="absolute right-3 top-2.5 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 w-6 h-6" title="Dismiss">' + XI + '</button></div>'; }).join('');
 
   // ── Issues, Actions, Decisions
   var LISTS = {
@@ -319,6 +326,9 @@
   sec.addEventListener('click', function(ev){
     var tk = ev.target.closest('[data-zltick]'); if (tk) { tk.closest('[data-zlrow]').classList.toggle('is-done'); return; }
     var dt = ev.target.closest('[data-done-toggle]'); if (dt) { var box = dt.parentNode, rows = box.querySelector('[data-done-rows]'), on = rows.classList.toggle('hidden'); dt.innerHTML = on ? rows.children.length + ' done hidden <span class="text-brand-600 ml-1">Show</span>' : '<span class="text-brand-600">Hide done</span>'; return; }
+    var ux = ev.target.closest('[data-u-x]'); if (ux) { var r = ux.parentNode; r.querySelector('[data-u-body]').classList.add('hidden'); var g = r.querySelector('[data-u-gone]'); g.classList.remove('hidden'); g.classList.add('flex'); ux.classList.add('hidden'); return; }
+    var uu = ev.target.closest('[data-u-undo]'); if (uu) { var r2 = uu.closest('[data-useful-row]'); r2.querySelector('[data-u-body]').classList.remove('hidden'); var g2 = r2.querySelector('[data-u-gone]'); g2.classList.add('hidden'); g2.classList.remove('flex'); r2.querySelector('[data-u-x]').classList.remove('hidden'); return; }
+    var ur = ev.target.closest('[data-useful-row]'); if (ur) { location.href = 'contexts.html#contexts'; return; }
     var t = ev.target.closest('[data-t]'); if (t) { tab(t.getAttribute('data-t')); history.replaceState(null, '', '#' + t.getAttribute('data-t')); return; }
     var m = ev.target.closest('[data-m]'); if (m) { st.m = m.getAttribute('data-m'); mlist(); return; }
     var mt = ev.target.closest('[data-mtab]'); if (mt) { st.mtab = mt.getAttribute('data-mtab'); mdetail(); return; }

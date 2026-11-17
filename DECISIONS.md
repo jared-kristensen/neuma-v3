@@ -77,4 +77,7 @@ File: `contexts.html`
 | Nov 17 | The meeting transcript can be read inside Neuma on the Meetings tab. | It is in Jared's mockup. V2 had no transcript reader. | Decided | Critical |
 | Nov 17 | Emails have their own tab, separate from Meetings: threads on the left with Waiting on you, Waiting on them or Done, and the thread on the right with what Neuma found above the emails. | Claude's design, at Jared's request. Not yet reviewed. | Option | Important |
 | Nov 17 | What does the Follow-up agent on a meeting do? | Not recorded | Open | Medium |
-| Nov 17 | People Context actions are one list, not two. Each row shows its owner with an initials avatar and name. Rows use the Screen 3 Actions row. Open between you stays its own card. | Jared's call. Replaces the You owe and They owe split. | Decided | Important |
+| Nov 17 | People Context actions are one list, not two. Each row shows its owner with an initials avatar and name. Rows use the Screen 3 Actions row. | Jared's call. Replaces the You owe and They owe split. | Decided | Important |
+| Nov 17 | People Context Summary shows each item once. Actions already in Needs attention are left out of the Actions card, which says how many. Open between you is removed; Issues covers it. | Three of nine Summary rows were repeats. | Decided | Important |
+| Nov 17 | People Context Summary has a Recent decisions card: the last three, dated, with See all. | The record of what the two people agreed should not be a tab away. | Decided | Medium |
+| Nov 17 | Each Might be useful item opens its source Context and can be dismissed, with Undo. | It was a dead end. | Decided | Medium |
